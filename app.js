@@ -6,6 +6,43 @@
 
 const STORAGE_KEY = 'ensign_key_projects_data_v2';
 
+// Official CIS All Team roster from Outlook group (cis_all_team@ensign.edu)
+const CIS_TEAM_MEMBERS = [
+  { name: 'Rob Bagley', role: 'Associate Director' },
+  { name: 'Mike Ray', role: 'Director' },
+  { name: 'Gregory Fox', role: 'Assoc Director Employer/Alumni' },
+  { name: 'Rodrigo Moll (Victor Mendoza)', role: 'DevOps Lead / Mentor' },
+  { name: 'Karla Groom', role: 'Internship Coordinator' },
+  { name: 'Joseph Bonilla Abarca', role: 'Alumni Network' },
+  { name: '(Paula) Maria Gutierrez Gonzalez', role: 'Career Services' },
+  { name: 'Alvaro Mendiola Fuenzalida', role: 'Career Services' },
+  { name: 'Miguel Santo', role: 'Career Services' },
+  { name: 'Aqeel Emmanuel', role: 'Team Member' },
+  { name: 'Beverly Chapman', role: 'Team Member' },
+  { name: 'Brenda Wyatt', role: 'Team Member' },
+  { name: 'Dandy Alan De Leon', role: 'Career Mentor' },
+  { name: 'Debbie Whitney', role: 'Team Member' },
+  { name: 'Dennis Watson', role: 'Team Member' },
+  { name: 'Deo Datus Maganga', role: 'Team Member' },
+  { name: 'Douglas Whitney', role: 'Team Member' },
+  { name: 'Elder L. Navarro', role: 'Senior Missionary' },
+  { name: 'Elder M. Baggaley', role: 'Senior Missionary' },
+  { name: 'Erere Iwhi', role: 'Team Member' },
+  { name: 'Fernando Munoz Jimenez', role: 'Team Member' },
+  { name: 'Gessica Velasco Trujillo', role: 'Team Member' },
+  { name: 'Grover Vasquez Pari', role: 'Team Member' },
+  { name: 'Ismael Rodriguez Gomez', role: 'Team Member' },
+  { name: 'Joel Velarde Suxo', role: 'Team Member' },
+  { name: 'Jorge Bracamontes Sotelo', role: 'Team Member' },
+  { name: 'Julio Jaramillo Videla', role: 'Team Member' },
+  { name: 'Kevin Strawn', role: 'Team Member' },
+  { name: 'Kurt Jones', role: 'Senior Missionary / PBWE' },
+  { name: 'Roy Wyatt', role: 'Team Member' },
+  { name: 'Stan Neeleman', role: 'Team Member' },
+  { name: 'Thomas Wang', role: 'Team Member' },
+  { name: 'Trudy Robinson', role: 'Team Member' }
+];
+
 // Initial Canonical Projects from Mem Notes & Director 1:1s
 const DEFAULT_PROJECTS = [
   {
@@ -262,6 +299,8 @@ const modalTitle = document.getElementById('modal-title');
 const formId = document.getElementById('form-id');
 const formTitle = document.getElementById('form-title');
 const formOwner = document.getElementById('form-owner');
+const ownerDropdownList = document.getElementById('owner-dropdown-list');
+const ownerToggleBtn = document.getElementById('owner-toggle-btn');
 const formDepartment = document.getElementById('form-department');
 const formDueDate = document.getElementById('form-due-date');
 const formQuadrant = document.getElementById('form-quadrant');
@@ -273,6 +312,79 @@ const formDescription = document.getElementById('form-description');
 const formLink = document.getElementById('form-link');
 const modalCompleteRemoveBtn = document.getElementById('modal-complete-remove-btn');
 const modalRestoreBtn = document.getElementById('modal-restore-btn');
+
+// Searchable Combobox for Owner/Lead
+function renderOwnerDropdown(filterText = '') {
+  if (!ownerDropdownList) return;
+  const query = filterText.toLowerCase().trim();
+  const filtered = CIS_TEAM_MEMBERS.filter(m => 
+    m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query))
+  );
+
+  ownerDropdownList.innerHTML = '';
+  if (filtered.length === 0) {
+    const li = document.createElement('li');
+    li.className = 'combobox-option';
+    li.style.color = '#94A3B8';
+    li.textContent = `Use custom: "${filterText}"`;
+    li.onmousedown = (e) => {
+      e.preventDefault();
+      formOwner.value = filterText;
+      closeOwnerDropdown();
+    };
+    ownerDropdownList.appendChild(li);
+    ownerDropdownList.style.display = 'block';
+    return;
+  }
+
+  filtered.forEach(m => {
+    const li = document.createElement('li');
+    li.className = 'combobox-option';
+    li.innerHTML = `
+      <span>👤 ${escapeHTML(m.name)}</span>
+      <span class="combobox-option-badge">${escapeHTML(m.role || 'Team')}</span>
+    `;
+    li.onmousedown = (e) => {
+      e.preventDefault();
+      formOwner.value = m.name;
+      closeOwnerDropdown();
+    };
+    ownerDropdownList.appendChild(li);
+  });
+  ownerDropdownList.style.display = 'block';
+}
+
+function closeOwnerDropdown() {
+  if (ownerDropdownList) ownerDropdownList.style.display = 'none';
+}
+
+if (formOwner) {
+  formOwner.addEventListener('input', (e) => {
+    renderOwnerDropdown(e.target.value);
+  });
+
+  formOwner.addEventListener('focus', () => {
+    renderOwnerDropdown(formOwner.value);
+  });
+}
+
+if (ownerToggleBtn) {
+  ownerToggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (ownerDropdownList.style.display === 'block') {
+      closeOwnerDropdown();
+    } else {
+      renderOwnerDropdown('');
+      formOwner.focus();
+    }
+  });
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.combobox-wrapper')) {
+    closeOwnerDropdown();
+  }
+});
 
 formProgress.addEventListener('input', (e) => {
   progressVal.textContent = `${e.target.value}%`;
@@ -325,18 +437,23 @@ function getRemovedCount() {
   return state.projects.filter(p => p.isRemoved).length;
 }
 
-// Populate Owner Filter Dropdown with Unique Leads
+// Populate Owner Filter Dropdown with All CIS Team Members & Existing Leads
 function updateOwnerDropdown() {
+  if (!filterOwner) return;
   const currentVal = filterOwner.value;
   const owners = new Set();
+  
+  // Add all 34 official CIS team members from Outlook
+  CIS_TEAM_MEMBERS.forEach(m => owners.add(m.name));
+
+  // Also include any custom project owners from state
   state.projects.forEach(p => {
     if (p.owner) {
-      // Split combos like "Rob / Greg" or add full
       owners.add(p.owner.trim());
     }
   });
 
-  const sorted = Array.from(owners).sort();
+  const sorted = Array.from(owners).sort((a, b) => a.localeCompare(b));
   filterOwner.innerHTML = '<option value="all">All Team Leads</option>';
   sorted.forEach(owner => {
     const opt = document.createElement('option');
@@ -649,6 +766,7 @@ function openAddModal() {
 
 function closeModal() {
   modal.style.display = 'none';
+  closeOwnerDropdown();
 }
 
 modalClose.addEventListener('click', closeModal);

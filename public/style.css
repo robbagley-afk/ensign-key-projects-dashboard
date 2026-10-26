@@ -883,6 +883,85 @@ body {
   background-color: #15803D;
 }
 
+/* Searchable Combobox for Owner/Lead */
+.combobox-wrapper {
+  position: relative;
+}
+
+.combobox-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.combobox-input {
+  width: 100%;
+  padding-right: 2rem !important;
+}
+
+.combobox-toggle-btn {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  user-select: none;
+}
+
+.combobox-toggle-btn:hover {
+  color: var(--text-main);
+}
+
+.combobox-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #FFFFFF;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 1200;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.combobox-option {
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #F1F5F9;
+  transition: background 0.15s ease;
+}
+
+.combobox-option:last-child {
+  border-bottom: none;
+}
+
+.combobox-option:hover, .combobox-option.highlighted {
+  background-color: #F0FDF4;
+  color: #166534;
+  font-weight: 600;
+}
+
+.combobox-option-badge {
+  font-size: 0.68rem;
+  background-color: #E2E8F0;
+  color: #475569;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
 /* Footer */
 .app-footer {
   background-color: #FFFFFF;
