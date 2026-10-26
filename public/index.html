@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ensign Key Projects | Situational Awareness & Eisenhower Matrix</title>
+  <title>Ensign Key Projects & Situational Awareness Dashboard</title>
+  
+  <!-- Favicon and App Manifest -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#004731">
+
+  <!-- Typography: Montserrat & Inter (Ensign Career Coach Design System) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+
   <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -14,19 +30,6 @@
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
-
-  <!-- Icons & Favorites Branding -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <meta name="theme-color" content="#07132B">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Mission & Strategic Banner -->
@@ -39,9 +42,9 @@
         <span class="strategy-quote">Strategy: Enable Career Success to help disciples become self-reliant and stay on the covenant path.</span>
       </div>
       <div class="mission-pillars">
-        <span class="pillar-tag pillar-capable">🎓 Capable</span>
-        <span class="pillar-tag pillar-trusted">✝️ Trusted</span>
-        <span class="pillar-tag pillar-community">🏛️ Strengthening</span>
+        <span class="pillar-tag pillar-capable" title="Developing professional competence and practical skills">🎓 Capable Disciples</span>
+        <span class="pillar-tag pillar-trusted" title="Developing spiritual integrity and moral character">✝️ Trusted Disciples</span>
+        <span class="pillar-tag pillar-community" title="Dedicated to strengthening Church, family, and community">🏛️ Church & Community</span>
       </div>
     </div>
   </div>
@@ -58,11 +61,11 @@
       </div>
       <div class="header-actions">
         <div class="view-toggle">
-          <button id="view-matrix-btn" class="toggle-btn active">
+          <button id="view-matrix-btn" class="toggle-btn active" title="Eisenhower 2x2 Matrix View">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             Eisenhower Matrix
           </button>
-          <button id="view-list-btn" class="toggle-btn">
+          <button id="view-list-btn" class="toggle-btn" title="All Projects List View">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             All Projects List
           </button>
@@ -85,7 +88,7 @@
             <span class="metric-quadrant-badge">DO FIRST</span>
           </div>
           <span class="metric-value" id="count-q1">0</span>
-          <span class="metric-desc">Immediate Deadlines & Active Fires</span>
+          <span class="metric-desc">Immediate Fires, Deadlines & Canvas Fixes</span>
         </div>
         <div class="metric-card metric-q2">
           <div class="metric-top">
@@ -93,7 +96,7 @@
             <span class="metric-quadrant-badge">DEEP FOCUS</span>
           </div>
           <span class="metric-value" id="count-q2">0</span>
-          <span class="metric-desc">Long-Term Discipleship & AI Systems</span>
+          <span class="metric-desc">Long-Term Discipleship, Curriculum & AI</span>
         </div>
         <div class="metric-card metric-q3">
           <div class="metric-top">
@@ -101,7 +104,7 @@
             <span class="metric-quadrant-badge">DELEGATE</span>
           </div>
           <span class="metric-value" id="count-q3">0</span>
-          <span class="metric-desc">DevOps Requests & Automations</span>
+          <span class="metric-desc">DevOps Requests, /appfix-cis & Scripts</span>
         </div>
         <div class="metric-card metric-q4">
           <div class="metric-top">
@@ -117,28 +120,66 @@
       <div class="controls-bar">
         <div class="search-box">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" id="search-input" placeholder="Search projects, owners, milestones, or apps...">
+          <input type="text" id="search-input" placeholder="Search projects, owners, departments, milestones...">
         </div>
+
+        <!-- Quick "My Projects" Toggle Button -->
+        <button id="my-projects-btn" class="pill-btn" title="Toggle between showing only your projects or all team projects">
+          <span class="pill-icon">👤</span> My Projects (Rob)
+        </button>
+
+        <!-- Department Category Filter -->
+        <div class="filter-group">
+          <label for="filter-department" class="filter-label">Department:</label>
+          <select id="filter-department">
+            <option value="all">All Departments</option>
+            <option value="Career Mentor">Career Mentor</option>
+            <option value="Alumni">Alumni</option>
+            <option value="Employer Relations">Employer Relations</option>
+            <option value="PBWE">PBWE (Prison Education)</option>
+            <option value="Internships">Internships</option>
+            <option value="Training">Training</option>
+            <option value="AI & Operations">AI & Operations</option>
+          </select>
+        </div>
+
+        <!-- Lead / Owner Filter -->
+        <div class="filter-group">
+          <label for="filter-owner" class="filter-label">Lead:</label>
+          <select id="filter-owner">
+            <option value="all">All Team Leads</option>
+          </select>
+        </div>
+
+        <!-- Mission Pillar Filter -->
         <div class="filter-group">
           <label for="filter-pillar" class="filter-label">Mission:</label>
           <select id="filter-pillar">
             <option value="all">All Mission Pillars</option>
             <option value="Capable">Capable Disciples</option>
             <option value="Trusted">Trusted Disciples</option>
-            <option value="Community">Strengthening Community</option>
+            <option value="Community">Church & Community</option>
           </select>
         </div>
+
+        <!-- Status Filter -->
         <div class="filter-group">
           <label for="filter-status" class="filter-label">Status:</label>
           <select id="filter-status">
             <option value="all">All Statuses</option>
-            <option value="On Track">On Track</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Blocked">Blocked / Waiting</option>
-            <option value="Completed">Completed</option>
+            <option value="On Track">🟢 On Track</option>
+            <option value="In Progress">🟡 In Progress</option>
+            <option value="Blocked">🔴 Blocked / Waiting</option>
+            <option value="Completed">✅ Completed</option>
           </select>
         </div>
-        <button id="reset-storage-btn" class="btn btn-outline" title="Reset to default Mem projects">Reset Defaults</button>
+
+        <!-- Toggle Archive / Removed Cards Button -->
+        <button id="toggle-removed-btn" class="pill-btn btn-archive-toggle" title="Show or hide cards marked Complete & Removed">
+          📦 Show Removed (<span id="removed-count">0</span>)
+        </button>
+
+        <button id="reset-storage-btn" class="btn btn-outline" title="Reset to standard Mem project defaults">Reset Defaults</button>
       </div>
     </section>
 
@@ -181,7 +222,7 @@
             <span class="quadrant-indicator q3-ind"></span>
             <div>
               <h2 class="quadrant-title">Q3: Urgent, Not Important</h2>
-              <span class="quadrant-action">DELEGATE & AUTOMATE · Routine Inquiries, /appfix Intake, Scripts</span>
+              <span class="quadrant-action">DELEGATE & AUTOMATE · Routine Inquiries, /appfix-cis Intake, Scripts</span>
             </div>
           </div>
           <span class="quadrant-count" id="count-badge-q3">0</span>
@@ -223,13 +264,33 @@
         <div class="form-row">
           <div class="form-group flex-2">
             <label for="form-title">Project Name</label>
-            <input type="text" id="form-title" required>
+            <input type="text" id="form-title" required placeholder="e.g. CAR 398 Canvas fixes">
           </div>
           <div class="form-group flex-1">
             <label for="form-owner">Owner / Lead</label>
-            <input type="text" id="form-owner" required>
+            <input type="text" id="form-owner" required placeholder="e.g. Rob Bagley">
           </div>
         </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="form-department">Department Category</label>
+            <select id="form-department" required>
+              <option value="Career Mentor">Career Mentor</option>
+              <option value="Alumni">Alumni</option>
+              <option value="Employer Relations">Employer Relations</option>
+              <option value="PBWE">PBWE (Prison Education)</option>
+              <option value="Internships">Internships</option>
+              <option value="Training">Training</option>
+              <option value="AI & Operations">AI & Operations</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="form-due-date">Target Due Date</label>
+            <input type="date" id="form-due-date" required>
+          </div>
+        </div>
+
         <div class="form-row">
           <div class="form-group flex-1">
             <label for="form-quadrant">Eisenhower Quadrant</label>
@@ -245,7 +306,7 @@
             <select id="form-pillar" required>
               <option value="Capable">🎓 Capable Disciples</option>
               <option value="Trusted">✝️ Trusted Disciples</option>
-              <option value="Community">🏛️ Strengthening Community</option>
+              <option value="Community">🏛️ Church & Community</option>
             </select>
           </div>
           <div class="form-group flex-1">
@@ -258,21 +319,35 @@
             </select>
           </div>
         </div>
+
         <div class="form-group">
           <label for="form-progress">Progress (%): <span id="progress-val">50%</span></label>
           <input type="range" id="form-progress" min="0" max="100" value="50">
         </div>
+
         <div class="form-group">
           <label for="form-description">Description & Strategic Intent</label>
-          <textarea id="form-description" rows="3"></textarea>
+          <textarea id="form-description" rows="3" placeholder="Context, blockers, student impact..."></textarea>
         </div>
+
         <div class="form-group">
-          <label for="form-link">Primary Link / URL (GitHub, Vercel, Suite)</label>
+          <label for="form-link">Primary Link / URL (GitHub, Canvas, Vercel)</label>
           <input type="url" id="form-link" placeholder="https://...">
         </div>
+
         <div class="form-actions">
-          <button type="button" id="modal-cancel" class="btn btn-outline">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Project</button>
+          <div class="modal-left-actions">
+            <button type="button" id="modal-complete-remove-btn" class="btn btn-complete-remove-modal" title="Mark 100% complete and remove from active dashboard">
+              ✅ Complete & Remove
+            </button>
+            <button type="button" id="modal-restore-btn" class="btn btn-outline" style="display:none;" title="Restore this card back to the active dashboard">
+              ↩️ Restore Card
+            </button>
+          </div>
+          <div class="modal-right-actions">
+            <button type="button" id="modal-cancel" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Project</button>
+          </div>
         </div>
       </form>
     </div>
@@ -280,8 +355,7 @@
 
   <footer class="app-footer">
     <div class="footer-container">
-      <p>Ensign College Career Services · Situational Awareness & Eisenhower Strategic Management</p>
-      <p>Connected to <code>robbagley-afk</code> Repositories & Mem Mission Protocols</p>
+      <p>Ensign College Career Services · Strategic Situational Awareness Dashboard · Aligned with Elder Kim B. Clark's Deep Learning Framework</p>
     </div>
   </footer>
 
