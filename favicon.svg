@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient: Deep Ensign Navy to Rich Forest Green -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07132B" />
+      <stop offset="45%" stop-color="#003D27" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Border Gradient -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="50%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+
+    <!-- Gold Ensign Star Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="40%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+
+    <!-- 2x2 Matrix Grid Gradient -->
+    <linearGradient id="matrixGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <!-- Base App Tile -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="url(#bgGrad)" filter="url(#shadow)" />
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="none" stroke="url(#borderGrad)" stroke-width="14" />
+
+  <!-- Stylized 2x2 Eisenhower Grid in Background -->
+  <g opacity="0.35">
+    <line x1="120" y1="256" x2="392" y2="256" stroke="#38BDF8" stroke-width="6" stroke-dasharray="8 8" />
+    <line x1="256" y1="120" x2="256" y2="392" stroke="#38BDF8" stroke-width="6" stroke-dasharray="8 8" />
+  </g>
+
+  <!-- 4 Colored Eisenhower Quadrant Blocks (Subtle Glows) -->
+  <rect x="130" y="130" width="105" height="105" rx="18" fill="#EF4444" opacity="0.85" filter="url(#shadow)" />
+  <rect x="277" y="130" width="105" height="105" rx="18" fill="#10B981" opacity="0.9" filter="url(#shadow)" />
+  <rect x="130" y="277" width="105" height="105" rx="18" fill="#F59E0B" opacity="0.85" filter="url(#shadow)" />
+  <rect x="277" y="277" width="105" height="105" rx="18" fill="#64748B" opacity="0.75" filter="url(#shadow)" />
+
+  <!-- Quadrant Icons inside blocks -->
+  <!-- Q1 Fire/Urgent -->
+  <path d="M 182 165 C 182 165 195 180 188 195 C 198 185 198 172 198 172 C 198 172 205 185 202 202 C 198 214 184 218 174 208 C 166 200 170 185 182 165 Z" fill="#FFFFFF" />
+  <!-- Q2 Star/Strategic Mission (Central Focus) -->
+  <polygon points="330,158 335,172 350,175 338,185 342,200 330,190 318,200 322,185 310,175 325,172" fill="#FFFFFF" />
+  <!-- Q3 Fast Clock/Delegate -->
+  <circle cx="182" cy="330" r="22" fill="none" stroke="#FFFFFF" stroke-width="5" />
+  <polyline points="182,316 182,330 194,330" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" />
+  <!-- Q4 Archive/Box -->
+  <rect x="315" y="320" width="30" height="24" rx="4" fill="none" stroke="#FFFFFF" stroke-width="5" />
+
+  <!-- Central Ensign Discipleship Emblem: Golden Compass / Cross Star -->
+  <g filter="url(#shadow)">
+    <circle cx="256" cy="256" r="44" fill="#071E17" stroke="#F59E0B" stroke-width="6" />
+    <!-- 8-point gold compass star -->
+    <polygon points="256,220 264,248 292,256 264,264 256,292 248,264 220,256 248,248" fill="url(#goldGrad)" />
+  </g>
+
+  <!-- Top Accent Label -->
+  <text x="256" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Montserrat', sans-serif" font-size="24" font-weight="800" fill="#E2E8F0" text-anchor="middle" letter-spacing="3">ENSIGN PROJECTS</text>
+</svg>
