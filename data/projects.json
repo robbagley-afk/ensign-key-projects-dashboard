@@ -36,7 +36,8 @@
         "url": "PROMPTS/car398-canvas-fixes.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "inMikesReport": true
   },
   {
     "id": "vmock-ingestion",
@@ -75,7 +76,8 @@
         "url": "PROMPTS/vmock-ingestion.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "inMikesReport": true
   },
   {
     "id": "ens101-polish",
@@ -114,7 +116,8 @@
         "url": "PROMPTS/ens101-polish.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "inMikesReport": true
   },
   {
     "id": "internship-tool",
@@ -153,7 +156,8 @@
         "url": "PROMPTS/internship-tool.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "inMikesReport": true
   },
   {
     "id": "career-ui-suite",
@@ -192,7 +196,8 @@
         "url": "PROMPTS/career-ui-suite.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "inMikesReport": true
   },
   {
     "id": "workshop-redesign",
