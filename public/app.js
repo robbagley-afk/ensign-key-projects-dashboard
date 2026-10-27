@@ -398,55 +398,67 @@ function matchesUserView(project, userView) {
   if (!userView || userView === 'all') return true;
   
   const owner = (project.owner || '').toLowerCase();
-  const delegated = (project.delegatedOwner || '').toLowerCase();
+  const delegated = (project.delegatedLead || project.delegatedOwner || '').toLowerCase();
+  const assisting = (project.assisting || '').toLowerCase();
   const title = (project.title || '').toLowerCase();
   const desc = (project.description || '').toLowerCase();
   const id = (project.id || '').toLowerCase();
 
-  switch (userView) {
+  switch (userView.toLowerCase()) {
     case 'rob':
-      // Rob's view: projects owned by Rob and NOT delegated away, OR explicitly assigned/delegated to Rob
       if (delegated.includes('rob')) return true;
       if (!delegated && (owner.includes('rob') || !owner)) return true;
+      if (assisting.includes('rob')) return true;
       return false;
 
     case 'rodrigo':
-      // Rodrigo Moll / Victor Mendoza: devops lead, ENS 101, appfix, etc.
       if (delegated.includes('rodrigo') || delegated.includes('moll') || delegated.includes('victor') || delegated.includes('mendoza')) return true;
       if (owner.includes('rodrigo') || owner.includes('moll') || owner.includes('victor') || owner.includes('mendoza')) return true;
+      if (assisting.includes('rodrigo') || assisting.includes('moll') || assisting.includes('victor') || assisting.includes('mendoza')) return true;
       if (id.includes('ens101') || id.includes('appfix')) return true;
       return false;
 
     case 'greg':
-      // Gregory Fox: Assoc Director Employer & Alumni, PeopleGrove, Employer Portal
       if (delegated.includes('greg') || delegated.includes('fox')) return true;
       if (owner.includes('greg') || owner.includes('fox')) return true;
+      if (assisting.includes('greg') || assisting.includes('fox')) return true;
       if (id.includes('peoplegrove') || id.includes('employer') || title.includes('employer') || desc.includes('greg fox')) return true;
       return false;
 
     case 'karla':
-      // Karla Groom: Internships Coordinator, CAR 398, Handshake internship tool
       if (delegated.includes('karla') || delegated.includes('groom')) return true;
       if (owner.includes('karla') || owner.includes('groom')) return true;
+      if (assisting.includes('karla') || assisting.includes('groom')) return true;
       if (id.includes('internship') || id.includes('car398') || title.includes('internship') || desc.includes('karla')) return true;
       return false;
 
     case 'kurt':
-      // Kurt Jones: PBWE (Prison Education)
       if (delegated.includes('kurt') || delegated.includes('jones')) return true;
       if (owner.includes('kurt') || owner.includes('jones')) return true;
+      if (assisting.includes('kurt') || assisting.includes('jones')) return true;
       if (id.includes('prison') || title.includes('prison') || desc.includes('prison') || desc.includes('kurt jones')) return true;
       return false;
 
     case 'joseph':
-      // Joseph Bonilla Abarca: Alumni Network
       if (delegated.includes('joseph') || delegated.includes('bonilla') || delegated.includes('abarca')) return true;
       if (owner.includes('joseph') || owner.includes('bonilla') || owner.includes('abarca')) return true;
+      if (assisting.includes('joseph') || assisting.includes('bonilla') || assisting.includes('abarca')) return true;
       if (id.includes('alumni') || title.includes('alumni') || desc.includes('joseph')) return true;
       return false;
 
-    default:
-      return true;
+    case 'aqeel':
+      if (delegated.includes('aqeel') || owner.includes('aqeel') || assisting.includes('aqeel')) return true;
+      return false;
+
+    case 'paula':
+      if (delegated.includes('paula') || owner.includes('paula') || assisting.includes('paula')) return true;
+      return false;
+
+    default: {
+      const q = userView.toLowerCase();
+      if (owner.includes(q) || delegated.includes(q) || assisting.includes(q)) return true;
+      return false;
+    }
   }
 }
 
@@ -500,6 +512,12 @@ function loadProjects() {
           }
           if (p.inMikesReport === undefined) {
             p.inMikesReport = p.quadrant === 'Q1' || p.id === 'career-ui-suite' || p.id === 'ens101-polish' || p.id === 'car398-canvas-fixes';
+          }
+          if (p.delegatedLead === undefined) {
+            p.delegatedLead = p.delegatedOwner || "";
+          }
+          if (p.assisting === undefined) {
+            p.assisting = "";
           }
           if (!Array.isArray(p.attachments)) {
             p.attachments = [];
@@ -633,6 +651,9 @@ const formNeedsDelegation = document.getElementById('form-needs-delegation');
 const formDelegatedOwner = document.getElementById('form-delegated-owner');
 const delegatedDropdownList = document.getElementById('delegated-dropdown-list');
 const delegatedToggleBtn = document.getElementById('delegated-toggle-btn');
+const formAssisting = document.getElementById('form-assisting');
+const assistingDropdownList = document.getElementById('assisting-dropdown-list');
+const assistingToggleBtn = document.getElementById('assisting-toggle-btn');
 const formDepartment = document.getElementById('form-department');
 const formDueDate = document.getElementById('form-due-date');
 const formQuadrant = document.getElementById('form-quadrant');
@@ -817,6 +838,100 @@ if (delegatedToggleBtn) {
   });
 }
 
+// Searchable Combobox for Assisting Coworker(s) in Project Edit Modal
+function renderAssistingDropdown(filterText = '') {
+  if (!assistingDropdownList) return;
+  const query = filterText.toLowerCase().trim();
+  const filtered = CIS_TEAM_MEMBERS.filter(m => 
+    m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query))
+  );
+
+  assistingDropdownList.innerHTML = '';
+
+  // Clear option
+  const clearLi = document.createElement('li');
+  clearLi.className = 'combobox-option';
+  clearLi.style.color = '#64748B';
+  clearLi.innerHTML = `
+    <span>👥 None (Clear Assisting)</span>
+    <span class="combobox-option-badge">Empty</span>
+  `;
+  clearLi.onmousedown = (e) => {
+    e.preventDefault();
+    if (formAssisting) formAssisting.value = '';
+    closeAssistingDropdown();
+  };
+  assistingDropdownList.appendChild(clearLi);
+
+  if (filtered.length === 0) {
+    if (filterText.trim()) {
+      const li = document.createElement('li');
+      li.className = 'combobox-option';
+      li.style.color = '#94A3B8';
+      li.textContent = `Use custom: "${filterText}"`;
+      li.onmousedown = (e) => {
+        e.preventDefault();
+        if (formAssisting) formAssisting.value = filterText;
+        closeAssistingDropdown();
+      };
+      assistingDropdownList.appendChild(li);
+    }
+    assistingDropdownList.style.display = 'block';
+    return;
+  }
+
+  filtered.forEach(m => {
+    const li = document.createElement('li');
+    li.className = 'combobox-option';
+    li.innerHTML = `
+      <span>👥 ${escapeHTML(m.name)}</span>
+      <span class="combobox-option-badge">${escapeHTML(m.role || 'Team')}</span>
+    `;
+    li.onmousedown = (e) => {
+      e.preventDefault();
+      if (formAssisting) {
+        // If already has text and does not include this name, append
+        const cur = formAssisting.value.trim();
+        if (cur && !cur.toLowerCase().includes(m.name.toLowerCase())) {
+          formAssisting.value = `${cur}, ${m.name}`;
+        } else {
+          formAssisting.value = m.name;
+        }
+      }
+      closeAssistingDropdown();
+    };
+    assistingDropdownList.appendChild(li);
+  });
+
+  assistingDropdownList.style.display = 'block';
+}
+
+function closeAssistingDropdown() {
+  if (assistingDropdownList) assistingDropdownList.style.display = 'none';
+}
+
+if (formAssisting) {
+  formAssisting.addEventListener('input', (e) => {
+    renderAssistingDropdown(e.target.value);
+  });
+
+  formAssisting.addEventListener('focus', () => {
+    renderAssistingDropdown(formAssisting.value);
+  });
+}
+
+if (assistingToggleBtn) {
+  assistingToggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (assistingDropdownList.style.display === 'block') {
+      closeAssistingDropdown();
+    } else {
+      renderAssistingDropdown('');
+      if (formAssisting) formAssisting.focus();
+    }
+  });
+}
+
 
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.combobox-wrapper')) {
@@ -948,9 +1063,12 @@ function assignDelegation(projectId, coworkerName) {
   const p = state.projects.find(item => item.id === projectId);
   if (!p) return;
 
+  p.delegatedLead = coworkerName;
   p.delegatedOwner = coworkerName;
-  p.owner = coworkerName;
-  p.needsDelegation = true;
+  if (!p.owner || p.owner === coworkerName) {
+    p.owner = 'Rob Bagley';
+  }
+  p.needsDelegation = false;
   saveProjects();
   closeDelegateModal();
   render();
@@ -960,8 +1078,9 @@ function clearDelegation(projectId) {
   const p = state.projects.find(item => item.id === projectId);
   if (!p) return;
 
+  p.delegatedLead = '';
   p.delegatedOwner = '';
-  p.owner = 'Rob Bagley';
+  if (!p.owner) p.owner = 'Rob Bagley';
   if (delegateFlagCheckbox) {
     p.needsDelegation = delegateFlagCheckbox.checked;
   }
@@ -1092,10 +1211,16 @@ function updateOwnerDropdown() {
   // Add all official CIS team members
   CIS_TEAM_MEMBERS.forEach(m => owners.add(m.name));
 
-  // Also include any custom owners
+  // Also include any custom owners, delegated leads, and assisting members
   state.projects.forEach(p => {
     if (p.owner) owners.add(p.owner.trim());
     if (p.delegatedOwner) owners.add(p.delegatedOwner.trim());
+    if (p.delegatedLead) owners.add(p.delegatedLead.trim());
+    if (p.assisting) {
+      p.assisting.split(',').forEach(a => {
+        if (a.trim()) owners.add(a.trim());
+      });
+    }
   });
 
   const sorted = Array.from(owners).sort((a, b) => a.localeCompare(b));
@@ -1127,11 +1252,20 @@ function getDelegationBadge(p) {
 }
 
 function getOwnerDisplay(p) {
-  if (p.delegatedOwner) {
-    return `<span class="card-owner card-owner-delegated" title="Delegated Owner">🤝 <strong>Delegated:</strong> ${escapeHTML(p.delegatedOwner)}</span>`;
+  const owner = p.owner || 'Rob Bagley';
+  const lead = p.delegatedLead || p.delegatedOwner || '';
+  const assisting = p.assisting || '';
+
+  let html = `<div class="card-team-roles">`;
+  html += `<span class="card-role-badge card-role-owner" title="Accountable Project Owner">👤 <strong>Owner:</strong> ${escapeHTML(owner)}</span>`;
+  if (lead && lead !== owner) {
+    html += `<span class="card-role-badge card-role-lead" title="Delegated Lead (Driving Execution)">🤝 <strong>Lead:</strong> ${escapeHTML(lead)}</span>`;
   }
-  const ownerName = p.owner || 'Rob Bagley';
-  return `<span class="card-owner" title="Project Owner (Assumed Rob)">👤 ${escapeHTML(ownerName)}</span>`;
+  if (assisting) {
+    html += `<span class="card-role-badge card-role-assisting" title="Assisting Team Member(s)">👥 <strong>Assisting:</strong> ${escapeHTML(assisting)}</span>`;
+  }
+  html += `</div>`;
+  return html;
 }
 
 function getPillarBadge(pillar) {
@@ -1260,7 +1394,10 @@ function render() {
     } else if (state.filterOwner === '__rob_owned__') {
       if (p.delegatedOwner) return false;
     } else if (state.filterOwner !== 'all') {
-      const matchOwner = p.owner === state.filterOwner || p.delegatedOwner === state.filterOwner;
+      const matchOwner = (p.owner === state.filterOwner) || 
+                         (p.delegatedOwner === state.filterOwner) || 
+                         (p.delegatedLead === state.filterOwner) || 
+                         (p.assisting && p.assisting.toLowerCase().includes(state.filterOwner.toLowerCase()));
       if (!matchOwner) return false;
     }
 
@@ -1275,10 +1412,11 @@ function render() {
       const q = state.searchQuery.toLowerCase();
       const matchTitle = (p.title || '').toLowerCase().includes(q);
       const matchOwner = (p.owner || '').toLowerCase().includes(q);
-      const matchDelegated = (p.delegatedOwner || '').toLowerCase().includes(q);
+      const matchDelegated = (p.delegatedLead || p.delegatedOwner || '').toLowerCase().includes(q);
+      const matchAssisting = (p.assisting || '').toLowerCase().includes(q);
       const matchDesc = (p.description || '').toLowerCase().includes(q);
       const matchDept = (p.department || '').toLowerCase().includes(q);
-      if (!matchTitle && !matchOwner && !matchDelegated && !matchDesc && !matchDept) return false;
+      if (!matchTitle && !matchOwner && !matchDelegated && !matchAssisting && !matchDesc && !matchDept) return false;
     }
     return true;
   });
@@ -1804,7 +1942,8 @@ function openEditModal(id) {
   formTitle.value = p.title;
   formOwner.value = p.owner || 'Rob Bagley';
   if (formNeedsDelegation) formNeedsDelegation.checked = !!p.needsDelegation;
-  if (formDelegatedOwner) formDelegatedOwner.value = p.delegatedOwner || '';
+  if (formDelegatedOwner) formDelegatedOwner.value = p.delegatedLead || p.delegatedOwner || '';
+  if (formAssisting) formAssisting.value = p.assisting || '';
   formDepartment.value = p.department || 'Career Mentor';
   formDueDate.value = p.dueDate || '';
   formQuadrant.value = p.quadrant;
@@ -1847,6 +1986,7 @@ function openAddModal() {
   formOwner.value = 'Rob Bagley';
   if (formNeedsDelegation) formNeedsDelegation.checked = false;
   if (formDelegatedOwner) formDelegatedOwner.value = '';
+  if (formAssisting) formAssisting.value = '';
   formDepartment.value = 'Career Mentor';
   
   // Default due date to 30 days out
@@ -1895,13 +2035,10 @@ projectForm.addEventListener('submit', (e) => {
     const p = state.projects.find(item => item.id === id);
     if (p) {
       p.title = formTitle.value;
+      p.owner = formOwner.value ? formOwner.value.trim() : 'Rob Bagley';
+      p.delegatedLead = delegatedVal;
       p.delegatedOwner = delegatedVal;
-      // If delegated, owner is the delegated coworker; if not, owner is Rob Bagley (or formOwner)
-      if (delegatedVal) {
-        p.owner = delegatedVal;
-      } else {
-        p.owner = formOwner.value || 'Rob Bagley';
-      }
+      p.assisting = formAssisting ? formAssisting.value.trim() : '';
       p.needsDelegation = needsDelVal;
       p.department = formDepartment.value;
       p.dueDate = formDueDate.value;
@@ -1919,8 +2056,10 @@ projectForm.addEventListener('submit', (e) => {
     const newProj = {
       id: 'proj-' + Date.now(),
       title: formTitle.value,
+      owner: formOwner.value ? formOwner.value.trim() : 'Rob Bagley',
+      delegatedLead: delegatedVal,
       delegatedOwner: delegatedVal,
-      owner: delegatedVal ? delegatedVal : (formOwner.value || 'Rob Bagley'),
+      assisting: formAssisting ? formAssisting.value.trim() : '',
       needsDelegation: needsDelVal,
       department: formDepartment.value,
       dueDate: formDueDate.value,

@@ -392,7 +392,7 @@
             <input type="text" id="form-title" required placeholder="e.g. CAR 398 Canvas fixes">
           </div>
           <div class="form-group flex-1 combobox-wrapper">
-            <label for="form-owner">Owner / Lead (Type to search)</label>
+            <label for="form-owner">Owner (Accountable Lead)</label>
             <div class="combobox-input-container">
               <input type="text" id="form-owner" class="combobox-input" autocomplete="off" placeholder="Type to search team members..." required>
               <button type="button" class="combobox-toggle-btn" id="owner-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
@@ -402,19 +402,27 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group flex-1">
-            <label class="checkbox-label" for="form-needs-delegation" style="margin-top: 1.8rem;">
-              <input type="checkbox" id="form-needs-delegation">
-              <span>⚠️ Flag as <strong>Needs Delegation</strong></span>
-            </label>
-          </div>
-          <div class="form-group flex-2 combobox-wrapper">
-            <label for="form-delegated-owner">Delegated Worker (Type to search)</label>
+          <div class="form-group flex-1 combobox-wrapper">
+            <label for="form-delegated-owner">Delegated Lead (Driving Execution)</label>
             <div class="combobox-input-container">
-              <input type="text" id="form-delegated-owner" class="combobox-input" autocomplete="off" placeholder="Leave blank if owned by Rob, or pick coworker...">
+              <input type="text" id="form-delegated-owner" class="combobox-input" autocomplete="off" placeholder="Leave blank if Rob, or pick coworker (e.g. Aqeel)...">
               <button type="button" class="combobox-toggle-btn" id="delegated-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
             </div>
             <ul id="delegated-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
+          </div>
+          <div class="form-group flex-1 combobox-wrapper">
+            <label for="form-assisting">Assisting (Contributors)</label>
+            <div class="combobox-input-container">
+              <input type="text" id="form-assisting" class="combobox-input" autocomplete="off" placeholder="Pick or type coworker (e.g. Paula)...">
+              <button type="button" class="combobox-toggle-btn" id="assisting-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
+            </div>
+            <ul id="assisting-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
+          </div>
+          <div class="form-group" style="flex: 0 0 auto; display: flex; align-items: flex-end; padding-bottom: 0.5rem;">
+            <label class="checkbox-label" for="form-needs-delegation">
+              <input type="checkbox" id="form-needs-delegation">
+              <span>⚠️ Flag <strong>Needs Delegation</strong></span>
+            </label>
           </div>
         </div>
 

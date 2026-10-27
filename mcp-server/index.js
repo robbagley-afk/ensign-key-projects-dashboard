@@ -37,7 +37,8 @@ function saveProjects(projects) {
 function matchesUserView(project, userView) {
   if (!userView || userView === 'all') return true;
   const owner = (project.owner || '').toLowerCase();
-  const delegated = (project.delegatedOwner || '').toLowerCase();
+  const delegated = (project.delegatedLead || project.delegatedOwner || '').toLowerCase();
+  const assisting = (project.assisting || '').toLowerCase();
   const title = (project.title || '').toLowerCase();
   const desc = (project.description || '').toLowerCase();
   const id = (project.id || '').toLowerCase();
@@ -46,34 +47,49 @@ function matchesUserView(project, userView) {
     case 'rob':
       if (delegated.includes('rob')) return true;
       if (!delegated && (owner.includes('rob') || !owner)) return true;
+      if (assisting.includes('rob')) return true;
       return false;
     case 'rodrigo':
       if (delegated.includes('rodrigo') || delegated.includes('moll') || delegated.includes('victor') || delegated.includes('mendoza')) return true;
       if (owner.includes('rodrigo') || owner.includes('moll') || owner.includes('victor') || owner.includes('mendoza')) return true;
+      if (assisting.includes('rodrigo') || assisting.includes('moll') || assisting.includes('victor') || assisting.includes('mendoza')) return true;
       if (id.includes('ens101') || id.includes('appfix')) return true;
       return false;
     case 'greg':
       if (delegated.includes('greg') || delegated.includes('fox')) return true;
       if (owner.includes('greg') || owner.includes('fox')) return true;
+      if (assisting.includes('greg') || assisting.includes('fox')) return true;
       if (id.includes('peoplegrove') || id.includes('employer') || title.includes('employer') || desc.includes('greg fox')) return true;
       return false;
     case 'karla':
       if (delegated.includes('karla') || delegated.includes('groom')) return true;
       if (owner.includes('karla') || owner.includes('groom')) return true;
+      if (assisting.includes('karla') || assisting.includes('groom')) return true;
       if (id.includes('internship') || id.includes('car398') || title.includes('internship') || desc.includes('karla')) return true;
       return false;
     case 'kurt':
       if (delegated.includes('kurt') || delegated.includes('jones')) return true;
       if (owner.includes('kurt') || owner.includes('jones')) return true;
+      if (assisting.includes('kurt') || assisting.includes('jones')) return true;
       if (id.includes('prison') || title.includes('prison') || desc.includes('prison') || desc.includes('kurt jones')) return true;
       return false;
     case 'joseph':
       if (delegated.includes('joseph') || delegated.includes('bonilla') || delegated.includes('abarca')) return true;
       if (owner.includes('joseph') || owner.includes('bonilla') || owner.includes('abarca')) return true;
+      if (assisting.includes('joseph') || assisting.includes('bonilla') || assisting.includes('abarca')) return true;
       if (id.includes('alumni') || title.includes('alumni') || desc.includes('joseph')) return true;
       return false;
-    default:
-      return true;
+    case 'aqeel':
+      if (delegated.includes('aqeel') || owner.includes('aqeel') || assisting.includes('aqeel')) return true;
+      return false;
+    case 'paula':
+      if (delegated.includes('paula') || owner.includes('paula') || assisting.includes('paula')) return true;
+      return false;
+    default: {
+      const q = userView.toLowerCase();
+      if (owner.includes(q) || delegated.includes(q) || assisting.includes(q)) return true;
+      return false;
+    }
   }
 }
 
@@ -260,7 +276,9 @@ function handleToolCall(name, args) {
         progress: 0,
         dueDate: args.dueDate || new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
         owner: args.owner || 'Rob Bagley',
-        delegatedOwner: args.delegatedOwner || '',
+        delegatedLead: args.delegatedLead || args.delegatedOwner || '',
+        delegatedOwner: args.delegatedLead || args.delegatedOwner || '',
+        assisting: args.assisting || '',
         needsDelegation: !!args.delegatedOwner || args.quadrant === 'Q3',
         description: args.description || '',
         link: args.link || '',
@@ -282,11 +300,16 @@ function handleToolCall(name, args) {
 
       if (args.status !== undefined) proj.status = args.status;
       if (args.progress !== undefined) proj.progress = args.progress;
+      if (args.owner !== undefined) proj.owner = args.owner;
+      if (args.delegatedLead !== undefined) {
+        proj.delegatedLead = args.delegatedLead;
+        proj.delegatedOwner = args.delegatedLead;
+      }
       if (args.delegatedOwner !== undefined) {
         proj.delegatedOwner = args.delegatedOwner;
-        proj.needsDelegation = !!args.delegatedOwner;
-        if (args.delegatedOwner) proj.owner = args.delegatedOwner;
+        proj.delegatedLead = args.delegatedOwner;
       }
+      if (args.assisting !== undefined) proj.assisting = args.assisting;
       if (args.inMikesReport !== undefined) proj.inMikesReport = args.inMikesReport;
       if (args.isRemoved !== undefined) proj.isRemoved = args.isRemoved;
 
