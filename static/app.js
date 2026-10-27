@@ -48,6 +48,7 @@ const CIS_TEAM_MEMBERS = [
 const DEFAULT_PROJECTS = [
   {
     id: 'car398-canvas-fixes',
+    promptDoc: 'car398-canvas-fixes.md',
     title: 'CAR 398 Canvas Course Fixes & Gradebook Sync',
     quadrant: 'Q1', // Urgent & Important (Do First)
     pillar: 'Capable', // Capable Disciples
@@ -65,6 +66,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'vmock-ingestion',
+    promptDoc: 'vmock-ingestion.md',
     title: 'VMock Full Module Ingestion & Scoring Engine',
     quadrant: 'Q1', // Urgent & Important (Do First)
     pillar: 'Capable',
@@ -82,6 +84,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'ens101-polish',
+    promptDoc: 'ens101-polish.md',
     title: 'ENS 101 Guide Mentor Desk & Completion Glow',
     quadrant: 'Q1', // Urgent & Important (Do First)
     pillar: 'Capable',
@@ -99,6 +102,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'internship-tool',
+    promptDoc: 'internship-tool.md',
     title: 'Internship Approval Process & Web Tool',
     quadrant: 'Q1', // Urgent & Important (Do First)
     pillar: 'Capable',
@@ -116,6 +120,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'career-ui-suite',
+    promptDoc: 'career-ui-suite.md',
     title: 'Ensign Career Apps Design System Restyle',
     quadrant: 'Q2', // Important, Not Urgent (Strategic Mission)
     pillar: 'Capable',
@@ -133,6 +138,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'workshop-redesign',
+    promptDoc: 'workshop-redesign.md',
     title: 'Career Workshop & CAR 201 Curriculum Redesign',
     quadrant: 'Q2', // Important, Not Urgent (Strategic Mission)
     pillar: 'Trusted', // Trusted Disciples
@@ -150,6 +156,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'peoplegrove-alumni',
+    promptDoc: 'peoplegrove-alumni.md',
     title: 'Ensign Connect & PeopleGrove Mentoring Network',
     quadrant: 'Q2', // Important, Not Urgent (Strategic Mission)
     pillar: 'Community', // Church & Community
@@ -167,6 +174,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'employer-portal',
+    promptDoc: 'employer-portal.md',
     title: 'Employer Relations Hiring Partner & Job Fair Portal',
     quadrant: 'Q2', // Important, Not Urgent (Strategic Mission)
     pillar: 'Community',
@@ -184,6 +192,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'prison-education',
+    promptDoc: 'prison-education.md',
     title: 'Incarcerated Learners Prison Education Roadmap (PBWE)',
     quadrant: 'Q2', // Important, Not Urgent (Strategic Mission)
     pillar: 'Trusted',
@@ -201,6 +210,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'fleet-infrastructure',
+    promptDoc: 'fleet-infrastructure.md',
     title: 'Mac Fleet AI Teams & Local LLM Inference Stack',
     quadrant: 'Q2', // Important, Not Urgent (Strategic Mission)
     pillar: 'Capable',
@@ -218,6 +228,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'appfix-dispatch',
+    promptDoc: 'appfix-dispatch.md',
     title: 'DevOps AppFix & Continuous Bug Dispatch (appfix-cis)',
     quadrant: 'Q3', // Urgent, Not Important (Delegate & Automate)
     pillar: 'Capable',
@@ -235,6 +246,7 @@ const DEFAULT_PROJECTS = [
   },
   {
     id: 'stale-tasks-triage',
+    promptDoc: 'stale-tasks-triage.md',
     title: 'Overdue Tasks & Smartsheet Legacy Decommissioning',
     quadrant: 'Q4', // Not Urgent, Not Important (Eliminate & Triage)
     pillar: 'Community',
@@ -282,6 +294,9 @@ function loadProjects() {
             } else {
               p.delegatedOwner = '';
             }
+          }
+          if (!p.promptDoc) {
+            p.promptDoc = p.id ? `${p.id}.md` : 'prompt.md';
           }
           if (p.needsDelegation === undefined) {
             p.needsDelegation = p.quadrant === 'Q3' || !!p.delegatedOwner;
@@ -999,6 +1014,72 @@ function render() {
   }
 }
 
+
+// Prompt Modal Elements
+const promptModal = document.getElementById('prompt-modal');
+const promptModalClose = document.getElementById('prompt-modal-close');
+const promptModalTitle = document.getElementById('prompt-modal-title');
+const promptModalSubtitle = document.getElementById('prompt-modal-subtitle');
+const promptDocLink = document.getElementById('prompt-doc-link');
+const promptCopyBtn = document.getElementById('prompt-copy-btn');
+const promptContentPre = document.getElementById('prompt-content-pre');
+const promptCopyFeedback = document.getElementById('prompt-copy-feedback');
+const formPromptDoc = document.getElementById('form-prompt-doc');
+
+let currentActivePromptText = '';
+
+window.openPromptModal = async function(id) {
+  const p = state.projects.find(item => item.id === id);
+  if (!p) return;
+
+  const docFile = p.promptDoc || `${p.id}.md`;
+  const docUrl = `prompts/${docFile}`;
+
+  promptModalTitle.textContent = `🚀 Prompt to Start: ${p.title}`;
+  promptModalSubtitle.textContent = `Document: ${docFile} · OneDrive > AI PROJECTS > PROMPTS to Start Projects`;
+  promptDocLink.href = docUrl;
+
+  promptContentPre.textContent = 'Loading prompt document...';
+  promptCopyFeedback.style.display = 'none';
+
+  promptModal.style.display = 'flex';
+
+  try {
+    const res = await fetch(docUrl);
+    if (res.ok) {
+      const text = await res.text();
+      currentActivePromptText = text;
+      promptContentPre.textContent = text;
+    } else {
+      currentActivePromptText = `# Start Prompt: ${p.title}\n\nRole: AI Engineer / Developer\nProject: ${p.title}\nOwner: ${p.delegatedOwner || p.owner}\nStatus: ${p.status}\nDescription: ${p.description || ''}\n\n1. Review project requirements.\n2. Proceed with implementation.`;
+      promptContentPre.textContent = currentActivePromptText;
+    }
+  } catch (err) {
+    currentActivePromptText = `# Start Prompt: ${p.title}\n\nProject: ${p.title}\nDescription: ${p.description || ''}`;
+    promptContentPre.textContent = currentActivePromptText;
+  }
+};
+
+function closePromptModal() {
+  if (promptModal) promptModal.style.display = 'none';
+}
+
+if (promptModalClose) promptModalClose.addEventListener('click', closePromptModal);
+
+if (promptCopyBtn) {
+  promptCopyBtn.addEventListener('click', () => {
+    if (!currentActivePromptText) return;
+    navigator.clipboard.writeText(currentActivePromptText).then(() => {
+      promptCopyFeedback.style.display = 'inline-block';
+      setTimeout(() => {
+        promptCopyFeedback.style.display = 'none';
+      }, 3500);
+    }).catch(err => {
+      console.error('Clipboard copy failed:', err);
+    });
+  });
+}
+
 function renderQuadrantCards(container, items, qClass) {
   container.innerHTML = '';
   if (items.length === 0) {
@@ -1034,6 +1115,9 @@ function renderQuadrantCards(container, items, qClass) {
 
       <div class="card-footer">
         <div class="card-actions-group">
+          <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
+            🚀 Start Prompt
+          </button>
           <button class="btn-delegate ${p.delegatedOwner ? 'btn-delegate-assigned' : ''}" onclick="event.stopPropagation(); openDelegateModal('${p.id}')" title="Delegate to coworker or reassign">
             🤝 ${p.delegatedOwner ? 'Re-delegate' : 'Delegate'}
           </button>
@@ -1086,6 +1170,9 @@ function renderList(container, items) {
 
       <div class="card-footer">
         <div class="card-actions-group">
+          <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
+            🚀 Start Prompt
+          </button>
           <button class="btn-delegate ${p.delegatedOwner ? 'btn-delegate-assigned' : ''}" onclick="event.stopPropagation(); openDelegateModal('${p.id}')" title="Delegate to coworker or reassign">
             🤝 ${p.delegatedOwner ? 'Re-delegate' : 'Delegate'}
           </button>
@@ -1120,6 +1207,7 @@ function openEditModal(id) {
   progressVal.textContent = `${p.progress}%`;
   formDescription.value = p.description || '';
   formLink.value = p.link || '';
+  if (formPromptDoc) formPromptDoc.value = p.promptDoc || `${p.id}.md`;
 
   if (p.isRemoved) {
     modalCompleteRemoveBtn.style.display = 'none';
@@ -1161,6 +1249,7 @@ function openAddModal() {
   progressVal.textContent = '50%';
   formDescription.value = '';
   formLink.value = '';
+  if (formPromptDoc) formPromptDoc.value = '';
 
   modalCompleteRemoveBtn.style.display = 'none';
   modalRestoreBtn.style.display = 'none';
@@ -1222,6 +1311,7 @@ projectForm.addEventListener('submit', (e) => {
       progress: parseInt(formProgress.value, 10),
       description: formDescription.value,
       link: formLink.value,
+      promptDoc: (formPromptDoc && formPromptDoc.value.trim()) ? formPromptDoc.value.trim() : 'prompt.md',
       isRemoved: false,
       milestones: []
     };
