@@ -267,6 +267,7 @@ const DEFAULT_PROJECTS = [
 let state = {
   projects: loadProjects(),
   currentView: 'matrix', // 'matrix' or 'list'
+  filterQuadrant: 'all', // 'all', 'Q1', 'Q2', 'Q3', 'Q4'
   filterDepartment: 'all',
   filterOwner: 'all',
   filterPillar: 'all',
@@ -333,6 +334,7 @@ const searchInput = document.getElementById('search-input');
 const myProjectsBtn = document.getElementById('my-projects-btn');
 const needsDelegationBtn = document.getElementById('needs-delegation-btn');
 const needsDelegationCountEl = document.getElementById('needs-delegation-count');
+const filterQuadrantSelect = document.getElementById('filter-quadrant-select');
 const filterDepartment = document.getElementById('filter-department');
 const filterOwner = document.getElementById('filter-owner');
 const filterPillar = document.getElementById('filter-pillar');
@@ -341,6 +343,16 @@ const toggleRemovedBtn = document.getElementById('toggle-removed-btn');
 const removedCountSpan = document.getElementById('removed-count');
 const resetStorageBtn = document.getElementById('reset-storage-btn');
 const addProjectBtn = document.getElementById('add-project-btn');
+
+const metricCardQ1 = document.querySelector('.metric-card.metric-q1');
+const metricCardQ2 = document.querySelector('.metric-card.metric-q2');
+const metricCardQ3 = document.querySelector('.metric-card.metric-q3');
+const metricCardQ4 = document.querySelector('.metric-card.metric-q4');
+
+const boxQ1 = document.querySelector('.q1-box');
+const boxQ2 = document.querySelector('.q2-box');
+const boxQ3 = document.querySelector('.q3-box');
+const boxQ4 = document.querySelector('.q4-box');
 
 const cardsQ1 = document.getElementById('cards-q1');
 const cardsQ2 = document.getElementById('cards-q2');
@@ -1004,13 +1016,49 @@ function render() {
   countBadgeQ3.textContent = q3.length;
   countBadgeQ4.textContent = q4.length;
 
+  // Sync Metric Card Active Indicator & Quadrant Dropdown
+  [metricCardQ1, metricCardQ2, metricCardQ3, metricCardQ4].forEach(card => card && card.classList.remove('active-quadrant-filter'));
+  if (state.filterQuadrant === 'Q1' && metricCardQ1) metricCardQ1.classList.add('active-quadrant-filter');
+  if (state.filterQuadrant === 'Q2' && metricCardQ2) metricCardQ2.classList.add('active-quadrant-filter');
+  if (state.filterQuadrant === 'Q3' && metricCardQ3) metricCardQ3.classList.add('active-quadrant-filter');
+  if (state.filterQuadrant === 'Q4' && metricCardQ4) metricCardQ4.classList.add('active-quadrant-filter');
+
+  if (filterQuadrantSelect && filterQuadrantSelect.value !== state.filterQuadrant) {
+    filterQuadrantSelect.value = state.filterQuadrant;
+  }
+
   if (state.currentView === 'matrix') {
+    const quadrantBoxes = { Q1: boxQ1, Q2: boxQ2, Q3: boxQ3, Q4: boxQ4 };
+    if (state.filterQuadrant === 'all') {
+      Object.values(quadrantBoxes).forEach(box => {
+        if (box) {
+          box.style.display = '';
+          box.style.gridColumn = '';
+        }
+      });
+    } else {
+      Object.entries(quadrantBoxes).forEach(([key, box]) => {
+        if (box) {
+          if (key === state.filterQuadrant) {
+            box.style.display = '';
+            box.style.gridColumn = '1 / -1'; // Expand full width for selected quadrant
+          } else {
+            box.style.display = 'none';
+          }
+        }
+      });
+    }
+
     renderQuadrantCards(cardsQ1, q1, 'q1');
     renderQuadrantCards(cardsQ2, q2, 'q2');
     renderQuadrantCards(cardsQ3, q3, 'q3');
     renderQuadrantCards(cardsQ4, q4, 'q4');
   } else {
-    renderList(allProjectsList, filtered);
+    // List view: filter list if a specific quadrant is selected
+    const listItems = state.filterQuadrant === 'all'
+      ? filtered
+      : filtered.filter(p => p.quadrant === state.filterQuadrant);
+    renderList(allProjectsList, listItems);
   }
 }
 
@@ -1355,6 +1403,23 @@ filterStatus.addEventListener('change', (e) => {
   state.filterStatus = e.target.value;
   render();
 });
+
+if (filterQuadrantSelect) {
+  filterQuadrantSelect.addEventListener('change', (e) => {
+    state.filterQuadrant = e.target.value;
+    render();
+  });
+}
+
+function toggleQuadrantFilter(q) {
+  state.filterQuadrant = (state.filterQuadrant === q) ? 'all' : q;
+  render();
+}
+
+if (metricCardQ1) metricCardQ1.addEventListener('click', () => toggleQuadrantFilter('Q1'));
+if (metricCardQ2) metricCardQ2.addEventListener('click', () => toggleQuadrantFilter('Q2'));
+if (metricCardQ3) metricCardQ3.addEventListener('click', () => toggleQuadrantFilter('Q3'));
+if (metricCardQ4) metricCardQ4.addEventListener('click', () => toggleQuadrantFilter('Q4'));
 
 function escapeHTML(str) {
   if (!str) return '';

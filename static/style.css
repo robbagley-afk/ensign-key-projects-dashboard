@@ -330,6 +330,39 @@ body {
   box-shadow: var(--shadow-sm);
   border-left: 4px solid #64748B;
   position: relative;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, outline 0.15s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-card.active-quadrant-filter {
+  outline: 3px solid var(--ensign-emerald);
+  box-shadow: 0 0 0 4px rgba(0, 113, 80, 0.2), var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.metric-card.metric-q1.active-quadrant-filter {
+  outline-color: var(--q1-color);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25), var(--shadow-md);
+}
+
+.metric-card.metric-q2.active-quadrant-filter {
+  outline-color: var(--q2-color);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25), var(--shadow-md);
+}
+
+.metric-card.metric-q3.active-quadrant-filter {
+  outline-color: var(--q3-color);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25), var(--shadow-md);
+}
+
+.metric-card.metric-q4.active-quadrant-filter {
+  outline-color: var(--q4-color);
+  box-shadow: 0 0 0 4px rgba(100, 116, 139, 0.25), var(--shadow-md);
 }
 
 .metric-card.metric-q1 { border-left-color: var(--q1-color); }
