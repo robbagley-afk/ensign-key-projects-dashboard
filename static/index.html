@@ -288,9 +288,13 @@
               <span>⚠️ Flag as <strong>Needs Delegation</strong></span>
             </label>
           </div>
-          <div class="form-group flex-2">
-            <label for="form-delegated-owner">Delegated Coworker (Leave blank if owned by Rob)</label>
-            <input type="text" id="form-delegated-owner" placeholder="e.g. Rodrigo Moll, Karla Groom, Grover Vasquez...">
+          <div class="form-group flex-2 combobox-wrapper">
+            <label for="form-delegated-owner">Delegated Worker (Type to search)</label>
+            <div class="combobox-input-container">
+              <input type="text" id="form-delegated-owner" class="combobox-input" autocomplete="off" placeholder="Leave blank if owned by Rob, or pick coworker...">
+              <button type="button" class="combobox-toggle-btn" id="delegated-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
+            </div>
+            <ul id="delegated-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
           </div>
         </div>
 

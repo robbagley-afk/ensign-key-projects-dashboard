@@ -356,6 +356,8 @@ const ownerDropdownList = document.getElementById('owner-dropdown-list');
 const ownerToggleBtn = document.getElementById('owner-toggle-btn');
 const formNeedsDelegation = document.getElementById('form-needs-delegation');
 const formDelegatedOwner = document.getElementById('form-delegated-owner');
+const delegatedDropdownList = document.getElementById('delegated-dropdown-list');
+const delegatedToggleBtn = document.getElementById('delegated-toggle-btn');
 const formDepartment = document.getElementById('form-department');
 const formDueDate = document.getElementById('form-due-date');
 const formQuadrant = document.getElementById('form-quadrant');
@@ -449,9 +451,102 @@ if (ownerToggleBtn) {
   });
 }
 
+// Searchable Combobox for Delegated Worker in Project Edit Modal (Uses same pick list as Owner/Lead)
+function renderDelegatedDropdown(filterText = '') {
+  if (!delegatedDropdownList) return;
+  const query = filterText.toLowerCase().trim();
+  const filtered = CIS_TEAM_MEMBERS.filter(m => 
+    m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query))
+  );
+
+  delegatedDropdownList.innerHTML = '';
+
+  // Top option to clear delegation (revert to Rob Bagley)
+  const clearLi = document.createElement('li');
+  clearLi.className = 'combobox-option';
+  clearLi.style.color = '#64748B';
+  clearLi.innerHTML = `
+    <span>👤 None (Owner: Rob Bagley)</span>
+    <span class="combobox-option-badge">Default Owner</span>
+  `;
+  clearLi.onmousedown = (e) => {
+    e.preventDefault();
+    formDelegatedOwner.value = '';
+    closeDelegatedDropdown();
+  };
+  delegatedDropdownList.appendChild(clearLi);
+
+  if (filtered.length === 0) {
+    if (filterText.trim()) {
+      const li = document.createElement('li');
+      li.className = 'combobox-option';
+      li.style.color = '#94A3B8';
+      li.textContent = `Use custom: "${filterText}"`;
+      li.onmousedown = (e) => {
+        e.preventDefault();
+        formDelegatedOwner.value = filterText;
+        if (formNeedsDelegation) formNeedsDelegation.checked = true;
+        closeDelegatedDropdown();
+      };
+      delegatedDropdownList.appendChild(li);
+    }
+  } else {
+    filtered.forEach(m => {
+      const isRob = m.name.toLowerCase().includes('rob bagley');
+      const li = document.createElement('li');
+      li.className = 'combobox-option';
+      li.innerHTML = `
+        <span>👤 ${escapeHTML(m.name)}</span>
+        <span class="combobox-option-badge">${escapeHTML(m.role || 'Team')}</span>
+      `;
+      li.onmousedown = (e) => {
+        e.preventDefault();
+        if (isRob) {
+          formDelegatedOwner.value = '';
+        } else {
+          formDelegatedOwner.value = m.name;
+          if (formNeedsDelegation) formNeedsDelegation.checked = true;
+        }
+        closeDelegatedDropdown();
+      };
+      delegatedDropdownList.appendChild(li);
+    });
+  }
+
+  delegatedDropdownList.style.display = 'block';
+}
+
+function closeDelegatedDropdown() {
+  if (delegatedDropdownList) delegatedDropdownList.style.display = 'none';
+}
+
+if (formDelegatedOwner) {
+  formDelegatedOwner.addEventListener('input', (e) => {
+    renderDelegatedDropdown(e.target.value);
+  });
+
+  formDelegatedOwner.addEventListener('focus', () => {
+    renderDelegatedDropdown(formDelegatedOwner.value);
+  });
+}
+
+if (delegatedToggleBtn) {
+  delegatedToggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (delegatedDropdownList.style.display === 'block') {
+      closeDelegatedDropdown();
+    } else {
+      renderDelegatedDropdown('');
+      formDelegatedOwner.focus();
+    }
+  });
+}
+
+
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.combobox-wrapper')) {
     closeOwnerDropdown();
+    closeDelegatedDropdown();
   }
 });
 
@@ -1076,6 +1171,7 @@ function openAddModal() {
 function closeModal() {
   modal.style.display = 'none';
   closeOwnerDropdown();
+  closeDelegatedDropdown();
 }
 
 modalClose.addEventListener('click', closeModal);
