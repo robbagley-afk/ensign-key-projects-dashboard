@@ -123,6 +123,11 @@
           <input type="text" id="search-input" placeholder="Search projects, owners, departments, milestones...">
         </div>
 
+        <!-- Quick "Needs Delegation" Filter Toggle Button -->
+        <button id="needs-delegation-btn" class="pill-btn btn-delegation-toggle" title="Filter projects that need delegation or are delegated">
+          <span class="pill-icon">🤝</span> Needs Delegation (<span id="needs-delegation-count">0</span>)
+        </button>
+
         <!-- Quick "My Projects" Toggle Button -->
         <button id="my-projects-btn" class="pill-btn" title="Toggle between showing only your projects or all team projects">
           <span class="pill-icon">👤</span> My Projects (Rob)
@@ -278,6 +283,19 @@
 
         <div class="form-row">
           <div class="form-group flex-1">
+            <label class="checkbox-label" for="form-needs-delegation" style="margin-top: 1.8rem;">
+              <input type="checkbox" id="form-needs-delegation">
+              <span>⚠️ Flag as <strong>Needs Delegation</strong></span>
+            </label>
+          </div>
+          <div class="form-group flex-2">
+            <label for="form-delegated-owner">Delegated Coworker (Leave blank if owned by Rob)</label>
+            <input type="text" id="form-delegated-owner" placeholder="e.g. Rodrigo Moll, Karla Groom, Grover Vasquez...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
             <label for="form-department">Department Category</label>
             <select id="form-department" required>
               <option value="Career Mentor">Career Mentor</option>
@@ -354,6 +372,54 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+
+  
+  <!-- Delegate Coworker Pick List Modal -->
+  <div id="delegate-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card modal-card-delegate">
+      <div class="modal-header">
+        <div>
+          <h3 id="delegate-modal-title">Delegate Project</h3>
+          <p id="delegate-modal-subtitle" class="modal-subtitle">Select a coworker from the CIS team roster to take ownership. If unselected, Rob Bagley remains the assumed owner.</p>
+        </div>
+        <button id="delegate-modal-close" class="btn-close">&times;</button>
+      </div>
+      
+      <div class="delegate-body">
+        <!-- Current Status Banner -->
+        <div id="delegate-current-status" class="delegate-status-banner"></div>
+
+        <!-- Flag as Needs Delegation toggle -->
+        <div class="delegate-flag-row">
+          <label class="checkbox-label" for="delegate-flag-checkbox">
+            <input type="checkbox" id="delegate-flag-checkbox">
+            <span>Mark project as <strong>Needs Delegation</strong> (shows badge on card)</span>
+          </label>
+        </div>
+
+        <!-- Search Pick List -->
+        <div class="delegate-search-container">
+          <label for="delegate-search-input" class="search-label">Pick Coworker from CIS Team Roster (34 Members):</label>
+          <div class="search-input-wrapper">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="delegate-search-input" placeholder="Type coworker name or role (e.g. Rodrigo, Karla, Grover, Jorge)..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Scrollable Coworker Pick List -->
+        <div class="delegate-picklist-wrapper">
+          <ul id="delegate-picklist" class="delegate-picklist"></ul>
+        </div>
+
+        <div class="delegate-modal-footer">
+          <button type="button" id="delegate-revert-btn" class="btn btn-outline btn-revert-rob">
+            👤 Clear Delegation (Owner: Rob Bagley)
+          </button>
+          <button type="button" id="delegate-cancel-btn" class="btn btn-outline">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 

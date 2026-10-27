@@ -4,7 +4,8 @@
  * Rob Bagley, Associate Director Career Services
  */
 
-const STORAGE_KEY = 'ensign_key_projects_data_v2';
+const STORAGE_KEY = 'ensign_key_projects_data_v3';
+const LEGACY_STORAGE_KEY = 'ensign_key_projects_data_v2';
 
 // Official CIS All Team roster from Outlook group (cis_all_team@ensign.edu)
 const CIS_TEAM_MEMBERS = [
@@ -55,6 +56,8 @@ const DEFAULT_PROJECTS = [
     progress: 60,
     dueDate: '2026-11-05',
     owner: 'Rob Bagley',
+    delegatedOwner: '',
+    needsDelegation: false,
     description: 'Fixing Canvas assignment modules, rubrics, and gradebook sync issues for CAR 398 Internship course students.',
     link: 'https://ensign.instructure.com',
     isRemoved: false,
@@ -70,6 +73,8 @@ const DEFAULT_PROJECTS = [
     progress: 100,
     dueDate: '2026-11-01',
     owner: 'Rob Bagley',
+    delegatedOwner: '',
+    needsDelegation: false,
     description: 'Ingesting 7,024 student records across all 6 VMock reporting modules to calculate real-time readiness scores and verify resume feedback.',
     link: 'https://github.com/robbagley-afk/ensign-student-readiness-hub',
     isRemoved: false,
@@ -84,7 +89,9 @@ const DEFAULT_PROJECTS = [
     status: 'In Progress',
     progress: 90,
     dueDate: '2026-11-15',
-    owner: 'Rodrigo Moll / Rob Bagley',
+    owner: 'Rodrigo Moll (Victor Mendoza)',
+    delegatedOwner: 'Rodrigo Moll (Victor Mendoza)',
+    needsDelegation: true,
     description: 'Simplifying and polishing the ENS 101 mentor app. Issue #28 active for Amazon orange Next Step button with completion glow.',
     link: 'https://github.com/robbagley-afk/ENS-101-Guide/issues/28',
     isRemoved: false,
@@ -99,7 +106,9 @@ const DEFAULT_PROJECTS = [
     status: 'Blocked',
     progress: 70,
     dueDate: '2026-11-20',
-    owner: 'Sister Groom / Rodrigo Moll',
+    owner: 'Karla Groom',
+    delegatedOwner: 'Karla Groom',
+    needsDelegation: true,
     description: 'Replacing Smartsheet with custom approval workflow, saving ~$1,500/yr. Resolving final feedback approval bottleneck with Sister Groom.',
     link: 'https://github.com/robbagley-afk',
     isRemoved: false,
@@ -114,8 +123,10 @@ const DEFAULT_PROJECTS = [
     status: 'In Progress',
     progress: 85,
     dueDate: '2026-12-01',
-    owner: 'Rob Bagley / DevOps Team',
-    description: 'Aligning all 10 portfolio tools to Ensign Career Coach design system (56px touch targets, accessibility WCAG AA, local LM Studio).',
+    owner: 'Rob Bagley',
+    delegatedOwner: '',
+    needsDelegation: true,
+    description: 'Aligning all 10 portfolio tools to Ensign Career Coach design system (56px touch targets, accessibility WCAG AA, local LM Studio). Needs DevOps delegation.',
     link: 'https://github.com/robbagley-afk/ensign-design-system',
     isRemoved: false,
     milestones: ['Decommission cloud fallback (PR 23)', 'Audit ENS 101 & Readiness Hub', 'Mentor Explorer 5046 release', 'Phase 2 runtime audit across all ports']
@@ -129,7 +140,9 @@ const DEFAULT_PROJECTS = [
     status: 'In Progress',
     progress: 65,
     dueDate: '2026-12-15',
-    owner: 'Rob Bagley / Faculty',
+    owner: 'Rob Bagley',
+    delegatedOwner: '',
+    needsDelegation: false,
     description: 'Restructuring career prep curriculum around natural student motivation: Job Search first, LinkedIn networking, and AI resume crafting.',
     link: 'https://mem.ai',
     isRemoved: false,
@@ -144,7 +157,9 @@ const DEFAULT_PROJECTS = [
     status: 'On Track',
     progress: 75,
     dueDate: '2027-01-15',
-    owner: 'Greg / Joseph / Rob',
+    owner: 'Gregory Fox',
+    delegatedOwner: 'Gregory Fox',
+    needsDelegation: true,
     description: 'Strengthening community discipleship through student-alumni career roadmaps, LinkedIn sign-ups, and monthly engagement.',
     link: 'https://ensign.peoplegrove.com',
     isRemoved: false,
@@ -159,7 +174,9 @@ const DEFAULT_PROJECTS = [
     status: 'In Progress',
     progress: 45,
     dueDate: '2027-01-30',
-    owner: 'Greg / Rob Bagley',
+    owner: 'Gregory Fox',
+    delegatedOwner: 'Gregory Fox',
+    needsDelegation: true,
     description: 'Direct pipeline connecting local employers to students for internships and career placement without third-party friction.',
     link: 'https://ensign.edu',
     isRemoved: false,
@@ -174,7 +191,9 @@ const DEFAULT_PROJECTS = [
     status: 'In Progress',
     progress: 50,
     dueDate: '2027-02-01',
-    owner: 'Nate / Arturo / Rob',
+    owner: 'Kurt Jones',
+    delegatedOwner: 'Kurt Jones',
+    needsDelegation: true,
     description: 'Bringing Career Roadmaps 1-3 and offline on-device AI resume feedback into restricted prison Canvas environments at Draper.',
     link: 'https://mem.ai',
     isRemoved: false,
@@ -190,6 +209,8 @@ const DEFAULT_PROJECTS = [
     progress: 90,
     dueDate: '2026-11-30',
     owner: 'Rob Bagley',
+    delegatedOwner: '',
+    needsDelegation: false,
     description: 'Mac Studio resident inference (:1234), Odysseus (:7001), credit gate (4.8% used), and automated fleet sync across Mac Studio, iMac, MacBook Pro.',
     link: 'https://github.com/robbagley-afk',
     isRemoved: false,
@@ -204,7 +225,9 @@ const DEFAULT_PROJECTS = [
     status: 'Completed',
     progress: 100,
     dueDate: '2026-11-10',
-    owner: 'Rodrigo Moll (@Rodrigomoll)',
+    owner: 'Rodrigo Moll (Victor Mendoza)',
+    delegatedOwner: 'Rodrigo Moll (Victor Mendoza)',
+    needsDelegation: true,
     description: 'Automated issue intake via /appfix-cis, live Kanban board on Vercel, and GitHub dispatch to Rodrigo.',
     link: 'https://ensign-appfix-dashboard.vercel.app',
     isRemoved: false,
@@ -220,7 +243,9 @@ const DEFAULT_PROJECTS = [
     progress: 30,
     dueDate: '2026-12-31',
     owner: 'Rob Bagley',
-    description: 'Triaging 150+ aged backlog tasks in TASKS.md and formal decommissioning of legacy spreadsheets.',
+    delegatedOwner: '',
+    needsDelegation: true,
+    description: 'Triaging 150+ aged backlog tasks in TASKS.md and formal decommissioning of legacy spreadsheets. Needs student mentor delegation.',
     link: 'https://mem.ai',
     isRemoved: false,
     milestones: ['Audit 150+ aged items in TASKS.md', 'Decommission obsolete spreadsheets', 'Close 168-day BYUI coach card', 'Archive closed projects']
@@ -234,6 +259,7 @@ let state = {
   filterOwner: 'all',
   filterPillar: 'all',
   filterStatus: 'all',
+  filterDelegation: 'all', // 'all', 'needs_delegation', 'delegated', 'rob_owned'
   searchQuery: '',
   myProjectsOnly: false,
   showRemoved: false
@@ -241,8 +267,33 @@ let state = {
 
 function loadProjects() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(p => {
+          // Normalization & Migration: ensure delegatedOwner and needsDelegation fields exist
+          if (p.delegatedOwner === undefined) {
+            if (p.owner && !p.owner.toLowerCase().includes('rob bagley') && !p.owner.toLowerCase().includes('rob')) {
+              p.delegatedOwner = p.owner;
+            } else {
+              p.delegatedOwner = '';
+            }
+          }
+          if (p.needsDelegation === undefined) {
+            p.needsDelegation = p.quadrant === 'Q3' || !!p.delegatedOwner;
+          }
+          // Default assumed owner is Rob Bagley if not delegated or owner is empty
+          if (!p.delegatedOwner && (!p.owner || p.owner.trim() === '')) {
+            p.owner = 'Rob Bagley';
+          }
+          return p;
+        });
+      }
+    }
   } catch (err) {
     console.warn('Error reading from localStorage:', err);
   }
@@ -265,6 +316,8 @@ const listView = document.getElementById('list-view');
 
 const searchInput = document.getElementById('search-input');
 const myProjectsBtn = document.getElementById('my-projects-btn');
+const needsDelegationBtn = document.getElementById('needs-delegation-btn');
+const needsDelegationCountEl = document.getElementById('needs-delegation-count');
 const filterDepartment = document.getElementById('filter-department');
 const filterOwner = document.getElementById('filter-owner');
 const filterPillar = document.getElementById('filter-pillar');
@@ -290,7 +343,7 @@ const countBadgeQ2 = document.getElementById('count-badge-q2');
 const countBadgeQ3 = document.getElementById('count-badge-q3');
 const countBadgeQ4 = document.getElementById('count-badge-q4');
 
-// Modal Elements
+// Project Edit / Add Modal Elements
 const modal = document.getElementById('project-modal');
 const modalClose = document.getElementById('modal-close');
 const modalCancel = document.getElementById('modal-cancel');
@@ -301,6 +354,8 @@ const formTitle = document.getElementById('form-title');
 const formOwner = document.getElementById('form-owner');
 const ownerDropdownList = document.getElementById('owner-dropdown-list');
 const ownerToggleBtn = document.getElementById('owner-toggle-btn');
+const formNeedsDelegation = document.getElementById('form-needs-delegation');
+const formDelegatedOwner = document.getElementById('form-delegated-owner');
 const formDepartment = document.getElementById('form-department');
 const formDueDate = document.getElementById('form-due-date');
 const formQuadrant = document.getElementById('form-quadrant');
@@ -313,7 +368,21 @@ const formLink = document.getElementById('form-link');
 const modalCompleteRemoveBtn = document.getElementById('modal-complete-remove-btn');
 const modalRestoreBtn = document.getElementById('modal-restore-btn');
 
-// Searchable Combobox for Owner/Lead
+// Delegation Modal Elements
+const delegateModal = document.getElementById('delegate-modal');
+const delegateModalClose = document.getElementById('delegate-modal-close');
+const delegateCancelBtn = document.getElementById('delegate-cancel-btn');
+const delegateModalTitle = document.getElementById('delegate-modal-title');
+const delegateModalSubtitle = document.getElementById('delegate-modal-subtitle');
+const delegateCurrentStatus = document.getElementById('delegate-current-status');
+const delegateFlagCheckbox = document.getElementById('delegate-flag-checkbox');
+const delegateSearchInput = document.getElementById('delegate-search-input');
+const delegatePicklist = document.getElementById('delegate-picklist');
+const delegateRevertBtn = document.getElementById('delegate-revert-btn');
+
+let currentDelegatingProjectId = null;
+
+// Searchable Combobox for Owner/Lead in Project Edit Modal
 function renderOwnerDropdown(filterText = '') {
   if (!ownerDropdownList) return;
   const query = filterText.toLowerCase().trim();
@@ -386,9 +455,175 @@ document.addEventListener('click', (e) => {
   }
 });
 
-formProgress.addEventListener('input', (e) => {
-  progressVal.textContent = `${e.target.value}%`;
-});
+if (formProgress) {
+  formProgress.addEventListener('input', (e) => {
+    progressVal.textContent = `${e.target.value}%`;
+  });
+}
+
+// Delegation Modal Functionality
+window.openDelegateModal = function(id) {
+  const p = state.projects.find(item => item.id === id);
+  if (!p) return;
+  currentDelegatingProjectId = id;
+
+  if (delegateModalTitle) {
+    delegateModalTitle.textContent = `Delegate: ${p.title}`;
+  }
+  if (delegateModalSubtitle) {
+    delegateModalSubtitle.textContent = `Select a coworker from the CIS team roster to take ownership. If unselected, Rob Bagley remains the assumed owner.`;
+  }
+  
+  if (delegateCurrentStatus) {
+    if (p.delegatedOwner) {
+      delegateCurrentStatus.innerHTML = `
+        <div class="status-banner-content is-delegated">
+          <span class="status-icon">🤝</span>
+          <div>
+            <div class="status-heading">Currently Delegated to: <strong>${escapeHTML(p.delegatedOwner)}</strong></div>
+            <div class="status-hint">Pick any coworker below to reassign, or clear delegation to return project to Rob Bagley.</div>
+          </div>
+        </div>
+      `;
+      if (delegateRevertBtn) delegateRevertBtn.style.display = 'inline-flex';
+    } else {
+      delegateCurrentStatus.innerHTML = `
+        <div class="status-banner-content is-rob">
+          <span class="status-icon">👤</span>
+          <div>
+            <div class="status-heading">Current Owner: <strong>Rob Bagley</strong> (Default / Assumed Owner)</div>
+            <div class="status-hint">${p.needsDelegation ? '⚠️ Flagged as needing delegation. Select a coworker from the list below.' : 'Click any coworker from the list below to delegate this project.'}</div>
+          </div>
+        </div>
+      `;
+      if (delegateRevertBtn) delegateRevertBtn.style.display = 'none';
+    }
+  }
+
+  if (delegateFlagCheckbox) {
+    delegateFlagCheckbox.checked = !!p.needsDelegation;
+  }
+  if (delegateSearchInput) {
+    delegateSearchInput.value = '';
+  }
+  renderDelegatePicklist('');
+
+  if (delegateModal) {
+    delegateModal.style.display = 'flex';
+    setTimeout(() => {
+      if (delegateSearchInput) delegateSearchInput.focus();
+    }, 100);
+  }
+};
+
+function closeDelegateModal() {
+  if (delegateModal) delegateModal.style.display = 'none';
+  currentDelegatingProjectId = null;
+}
+
+function renderDelegatePicklist(filterText = '') {
+  if (!delegatePicklist) return;
+  const query = filterText.toLowerCase().trim();
+  
+  // Show coworkers; Rob Bagley is displayed at bottom with distinct note if searched
+  const filtered = CIS_TEAM_MEMBERS.filter(m => 
+    m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query))
+  );
+
+  delegatePicklist.innerHTML = '';
+  if (filtered.length === 0) {
+    delegatePicklist.innerHTML = `<li class="picklist-empty">No coworkers found matching "${escapeHTML(filterText)}"</li>`;
+    return;
+  }
+
+  const p = state.projects.find(item => item.id === currentDelegatingProjectId);
+  const currentDelegated = p ? p.delegatedOwner : '';
+
+  filtered.forEach(m => {
+    const isSelected = currentDelegated === m.name;
+    const isRob = m.name.toLowerCase().includes('rob bagley');
+    const li = document.createElement('li');
+    li.className = `picklist-item ${isSelected ? 'is-selected' : ''} ${isRob ? 'is-rob-item' : ''}`;
+    
+    li.innerHTML = `
+      <div class="picklist-item-left">
+        <span class="picklist-avatar">${isRob ? '👑' : '👤'}</span>
+        <div class="picklist-names">
+          <span class="picklist-name">${escapeHTML(m.name)}</span>
+          <span class="picklist-role">${escapeHTML(m.role || 'Team Member')} ${isRob ? '(Default Owner)' : ''}</span>
+        </div>
+      </div>
+      <div class="picklist-item-right">
+        ${isSelected ? 
+          '<span class="picklist-assigned-badge">Current Delegated Owner</span>' : 
+          (isRob ? 
+            '<span class="btn-select-coworker btn-select-rob">Keep with Rob</span>' : 
+            '<span class="btn-select-coworker">Delegate ➔</span>')
+        }
+      </div>
+    `;
+    
+    li.onclick = () => {
+      if (isRob) {
+        clearDelegation(currentDelegatingProjectId);
+      } else {
+        assignDelegation(currentDelegatingProjectId, m.name);
+      }
+    };
+    delegatePicklist.appendChild(li);
+  });
+}
+
+function assignDelegation(projectId, coworkerName) {
+  const p = state.projects.find(item => item.id === projectId);
+  if (!p) return;
+
+  p.delegatedOwner = coworkerName;
+  p.owner = coworkerName;
+  p.needsDelegation = true;
+  saveProjects();
+  closeDelegateModal();
+  render();
+}
+
+function clearDelegation(projectId) {
+  const p = state.projects.find(item => item.id === projectId);
+  if (!p) return;
+
+  p.delegatedOwner = '';
+  p.owner = 'Rob Bagley';
+  if (delegateFlagCheckbox) {
+    p.needsDelegation = delegateFlagCheckbox.checked;
+  }
+  saveProjects();
+  closeDelegateModal();
+  render();
+}
+
+if (delegateFlagCheckbox) {
+  delegateFlagCheckbox.addEventListener('change', (e) => {
+    const p = state.projects.find(item => item.id === currentDelegatingProjectId);
+    if (p) {
+      p.needsDelegation = e.target.checked;
+      saveProjects();
+      render();
+    }
+  });
+}
+
+if (delegateSearchInput) {
+  delegateSearchInput.addEventListener('input', (e) => {
+    renderDelegatePicklist(e.target.value);
+  });
+}
+
+if (delegateModalClose) delegateModalClose.addEventListener('click', closeDelegateModal);
+if (delegateCancelBtn) delegateCancelBtn.addEventListener('click', closeDelegateModal);
+if (delegateRevertBtn) {
+  delegateRevertBtn.addEventListener('click', () => {
+    if (currentDelegatingProjectId) clearDelegation(currentDelegatingProjectId);
+  });
+}
 
 // Switch Views
 viewMatrixBtn.addEventListener('click', () => {
@@ -420,6 +655,20 @@ myProjectsBtn.addEventListener('click', () => {
   render();
 });
 
+// "Needs Delegation" Quick Toggle
+if (needsDelegationBtn) {
+  needsDelegationBtn.addEventListener('click', () => {
+    if (state.filterDelegation === 'needs_delegation') {
+      state.filterDelegation = 'all';
+      needsDelegationBtn.classList.remove('active');
+    } else {
+      state.filterDelegation = 'needs_delegation';
+      needsDelegationBtn.classList.add('active');
+    }
+    render();
+  });
+}
+
 // Toggle Removed / Completed Cards View
 toggleRemovedBtn.addEventListener('click', () => {
   state.showRemoved = !state.showRemoved;
@@ -437,24 +686,30 @@ function getRemovedCount() {
   return state.projects.filter(p => p.isRemoved).length;
 }
 
-// Populate Owner Filter Dropdown with All CIS Team Members & Existing Leads
+// Populate Owner Filter Dropdown with All CIS Team Members & Special Categories
 function updateOwnerDropdown() {
   if (!filterOwner) return;
   const currentVal = filterOwner.value;
   const owners = new Set();
   
-  // Add all 34 official CIS team members from Outlook
+  // Add all official CIS team members
   CIS_TEAM_MEMBERS.forEach(m => owners.add(m.name));
 
-  // Also include any custom project owners from state
+  // Also include any custom owners
   state.projects.forEach(p => {
-    if (p.owner) {
-      owners.add(p.owner.trim());
-    }
+    if (p.owner) owners.add(p.owner.trim());
+    if (p.delegatedOwner) owners.add(p.delegatedOwner.trim());
   });
 
   const sorted = Array.from(owners).sort((a, b) => a.localeCompare(b));
-  filterOwner.innerHTML = '<option value="all">All Team Leads</option>';
+  
+  filterOwner.innerHTML = `
+    <option value="all">All Team Leads</option>
+    <option value="__needs_delegation__">⚠️ Needs Delegation (Unassigned)</option>
+    <option value="__delegated__">🤝 All Delegated Projects</option>
+    <option value="__rob_owned__">👤 Rob Owned Projects</option>
+  `;
+
   sorted.forEach(owner => {
     const opt = document.createElement('option');
     opt.value = owner;
@@ -462,6 +717,24 @@ function updateOwnerDropdown() {
     if (owner === currentVal) opt.selected = true;
     filterOwner.appendChild(opt);
   });
+}
+
+function getDelegationBadge(p) {
+  if (p.delegatedOwner) {
+    return `<span class="badge badge-delegated" title="Delegated to coworker: ${escapeHTML(p.delegatedOwner)}">🤝 Delegated: ${escapeHTML(p.delegatedOwner)}</span>`;
+  }
+  if (p.needsDelegation) {
+    return `<span class="badge badge-needs-delegation" title="Flagged: This project needs to be delegated to a coworker">⚠️ Needs Delegation</span>`;
+  }
+  return '';
+}
+
+function getOwnerDisplay(p) {
+  if (p.delegatedOwner) {
+    return `<span class="card-owner card-owner-delegated" title="Delegated Owner">🤝 <strong>Delegated:</strong> ${escapeHTML(p.delegatedOwner)}</span>`;
+  }
+  const ownerName = p.owner || 'Rob Bagley';
+  return `<span class="card-owner" title="Project Owner (Assumed Rob)">👤 ${escapeHTML(ownerName)}</span>`;
 }
 
 function getPillarBadge(pillar) {
@@ -548,21 +821,44 @@ function render() {
   const countEl = document.getElementById('removed-count');
   if (countEl) countEl.textContent = removedCount;
 
+  // Update needs-delegation count badge in toolbar
+  const needsDelCount = state.projects.filter(p => !p.isRemoved && (p.needsDelegation && !p.delegatedOwner)).length;
+  if (needsDelegationCountEl) needsDelegationCountEl.textContent = needsDelCount;
+
   const filtered = state.projects.filter(p => {
     // Visibility filter: hide removed unless showRemoved is active
     if (!state.showRemoved && p.isRemoved) return false;
-    if (state.showRemoved && !p.isRemoved) return false; // In removed view, show only removed cards
+    if (state.showRemoved && !p.isRemoved) return false;
 
-    // "My Projects" filter: matches Rob
+    // "My Projects (Rob)": matches projects owned by Rob (i.e. not delegated to a coworker, or explicitly assigned to Rob)
     if (state.myProjectsOnly) {
-      if (!p.owner || !p.owner.toLowerCase().includes('rob')) return false;
+      if (p.delegatedOwner && !p.delegatedOwner.toLowerCase().includes('rob')) {
+        return false;
+      }
+      if (p.owner && !p.owner.toLowerCase().includes('rob') && p.delegatedOwner) {
+        return false;
+      }
+    }
+
+    // Quick Delegation Filter Toggle
+    if (state.filterDelegation === 'needs_delegation') {
+      if (!(p.needsDelegation && !p.delegatedOwner)) return false;
     }
 
     // Department filter
     if (state.filterDepartment !== 'all' && p.department !== state.filterDepartment) return false;
 
-    // Owner filter
-    if (state.filterOwner !== 'all' && p.owner !== state.filterOwner) return false;
+    // Owner / Delegation dropdown filter
+    if (state.filterOwner === '__needs_delegation__') {
+      if (!(p.needsDelegation && !p.delegatedOwner)) return false;
+    } else if (state.filterOwner === '__delegated__') {
+      if (!p.delegatedOwner) return false;
+    } else if (state.filterOwner === '__rob_owned__') {
+      if (p.delegatedOwner) return false;
+    } else if (state.filterOwner !== 'all') {
+      const matchOwner = p.owner === state.filterOwner || p.delegatedOwner === state.filterOwner;
+      if (!matchOwner) return false;
+    }
 
     // Mission pillar filter
     if (state.filterPillar !== 'all' && p.pillar !== state.filterPillar) return false;
@@ -575,9 +871,10 @@ function render() {
       const q = state.searchQuery.toLowerCase();
       const matchTitle = (p.title || '').toLowerCase().includes(q);
       const matchOwner = (p.owner || '').toLowerCase().includes(q);
+      const matchDelegated = (p.delegatedOwner || '').toLowerCase().includes(q);
       const matchDesc = (p.description || '').toLowerCase().includes(q);
       const matchDept = (p.department || '').toLowerCase().includes(q);
-      if (!matchTitle && !matchOwner && !matchDesc && !matchDept) return false;
+      if (!matchTitle && !matchOwner && !matchDelegated && !matchDesc && !matchDept) return false;
     }
     return true;
   });
@@ -616,18 +913,19 @@ function renderQuadrantCards(container, items, qClass) {
 
   items.forEach(p => {
     const card = document.createElement('div');
-    card.className = `project-card ${p.isRemoved ? 'card-archived' : ''}`;
+    card.className = `project-card ${p.isRemoved ? 'card-archived' : ''} ${p.needsDelegation && !p.delegatedOwner ? 'card-needs-delegation' : ''}`;
     card.onclick = () => openEditModal(p.id);
 
     card.innerHTML = `
       <div class="card-top">
         <div class="card-badges">
+          ${getDelegationBadge(p)}
           ${getDepartmentBadge(p.department)}
           ${getPillarBadge(p.pillar)}
           ${getStatusBadge(p.status)}
           ${getDueDateBadge(p.dueDate)}
         </div>
-        <span class="card-owner">👤 ${escapeHTML(p.owner)}</span>
+        ${getOwnerDisplay(p)}
       </div>
       <h3 class="card-title">${escapeHTML(p.title)}</h3>
       <p class="card-desc">${escapeHTML(p.description)}</p>
@@ -641,9 +939,12 @@ function renderQuadrantCards(container, items, qClass) {
 
       <div class="card-footer">
         <div class="card-actions-group">
+          <button class="btn-delegate ${p.delegatedOwner ? 'btn-delegate-assigned' : ''}" onclick="event.stopPropagation(); openDelegateModal('${p.id}')" title="Delegate to coworker or reassign">
+            🤝 ${p.delegatedOwner ? 'Re-delegate' : 'Delegate'}
+          </button>
           ${p.isRemoved ? 
-            `<button class="btn-restore-card" onclick="event.stopPropagation(); restoreProject('${p.id}')">↩️ Restore Card</button>` :
-            `<button class="btn-complete-remove" onclick="event.stopPropagation(); completeAndRemoveProject('${p.id}')">✅ Complete & Remove</button>`
+            `<button class="btn-restore-card" onclick="event.stopPropagation(); restoreProject('${p.id}')">↩️ Restore</button>` :
+            `<button class="btn-complete-remove" onclick="event.stopPropagation(); completeAndRemoveProject('${p.id}')">✅ Complete</button>`
           }
         </div>
         ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">Open Link ↗</a>` : ''}
@@ -662,7 +963,7 @@ function renderList(container, items) {
 
   items.forEach(p => {
     const card = document.createElement('div');
-    card.className = `project-card ${p.isRemoved ? 'card-archived' : ''}`;
+    card.className = `project-card ${p.isRemoved ? 'card-archived' : ''} ${p.needsDelegation && !p.delegatedOwner ? 'card-needs-delegation' : ''}`;
     card.onclick = () => openEditModal(p.id);
 
     const qClass = p.quadrant.toLowerCase();
@@ -670,12 +971,13 @@ function renderList(container, items) {
       <div class="card-top">
         <div class="card-badges">
           <span class="badge" style="background:#0F172A; color:#FFF; font-weight:800;">${p.quadrant}</span>
+          ${getDelegationBadge(p)}
           ${getDepartmentBadge(p.department)}
           ${getPillarBadge(p.pillar)}
           ${getStatusBadge(p.status)}
           ${getDueDateBadge(p.dueDate)}
         </div>
-        <span class="card-owner">👤 ${escapeHTML(p.owner)}</span>
+        ${getOwnerDisplay(p)}
       </div>
       <h3 class="card-title">${escapeHTML(p.title)}</h3>
       <p class="card-desc">${escapeHTML(p.description)}</p>
@@ -689,9 +991,12 @@ function renderList(container, items) {
 
       <div class="card-footer">
         <div class="card-actions-group">
+          <button class="btn-delegate ${p.delegatedOwner ? 'btn-delegate-assigned' : ''}" onclick="event.stopPropagation(); openDelegateModal('${p.id}')" title="Delegate to coworker or reassign">
+            🤝 ${p.delegatedOwner ? 'Re-delegate' : 'Delegate'}
+          </button>
           ${p.isRemoved ? 
-            `<button class="btn-restore-card" onclick="event.stopPropagation(); restoreProject('${p.id}')">↩️ Restore Card</button>` :
-            `<button class="btn-complete-remove" onclick="event.stopPropagation(); completeAndRemoveProject('${p.id}')">✅ Complete & Remove</button>`
+            `<button class="btn-restore-card" onclick="event.stopPropagation(); restoreProject('${p.id}')">↩️ Restore</button>` :
+            `<button class="btn-complete-remove" onclick="event.stopPropagation(); completeAndRemoveProject('${p.id}')">✅ Complete</button>`
           }
         </div>
         ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">Open Resource ↗</a>` : ''}
@@ -708,7 +1013,9 @@ function openEditModal(id) {
   modalTitle.textContent = 'Update Key Project';
   formId.value = p.id;
   formTitle.value = p.title;
-  formOwner.value = p.owner;
+  formOwner.value = p.owner || 'Rob Bagley';
+  if (formNeedsDelegation) formNeedsDelegation.checked = !!p.needsDelegation;
+  if (formDelegatedOwner) formDelegatedOwner.value = p.delegatedOwner || '';
   formDepartment.value = p.department || 'Career Mentor';
   formDueDate.value = p.dueDate || '';
   formQuadrant.value = p.quadrant;
@@ -743,6 +1050,8 @@ function openAddModal() {
   formId.value = '';
   formTitle.value = '';
   formOwner.value = 'Rob Bagley';
+  if (formNeedsDelegation) formNeedsDelegation.checked = false;
+  if (formDelegatedOwner) formDelegatedOwner.value = '';
   formDepartment.value = 'Career Mentor';
   
   // Default due date to 30 days out
@@ -776,13 +1085,22 @@ addProjectBtn.addEventListener('click', openAddModal);
 projectForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const id = formId.value;
+  const delegatedVal = formDelegatedOwner ? formDelegatedOwner.value.trim() : '';
+  const needsDelVal = formNeedsDelegation ? formNeedsDelegation.checked : (formQuadrant.value === 'Q3' || !!delegatedVal);
 
   if (id) {
-    // Edit
+    // Edit existing project
     const p = state.projects.find(item => item.id === id);
     if (p) {
       p.title = formTitle.value;
-      p.owner = formOwner.value;
+      p.delegatedOwner = delegatedVal;
+      // If delegated, owner is the delegated coworker; if not, owner is Rob Bagley (or formOwner)
+      if (delegatedVal) {
+        p.owner = delegatedVal;
+      } else {
+        p.owner = formOwner.value || 'Rob Bagley';
+      }
+      p.needsDelegation = needsDelVal;
       p.department = formDepartment.value;
       p.dueDate = formDueDate.value;
       p.quadrant = formQuadrant.value;
@@ -793,11 +1111,13 @@ projectForm.addEventListener('submit', (e) => {
       p.link = formLink.value;
     }
   } else {
-    // Add New
+    // Add New project
     const newProj = {
       id: 'proj-' + Date.now(),
       title: formTitle.value,
-      owner: formOwner.value,
+      delegatedOwner: delegatedVal,
+      owner: delegatedVal ? delegatedVal : (formOwner.value || 'Rob Bagley'),
+      needsDelegation: needsDelVal,
       department: formDepartment.value,
       dueDate: formDueDate.value,
       quadrant: formQuadrant.value,
@@ -818,7 +1138,7 @@ projectForm.addEventListener('submit', (e) => {
 });
 
 resetStorageBtn.addEventListener('click', () => {
-  if (confirm('Reset to standard Mem project defaults (including CAR 398 Canvas fixes)?')) {
+  if (confirm('Reset to standard canonical project defaults with updated delegation states?')) {
     state.projects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
     saveProjects();
     render();
