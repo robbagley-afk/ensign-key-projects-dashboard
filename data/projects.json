@@ -1,0 +1,470 @@
+[
+  {
+    "id": "car398-canvas-fixes",
+    "promptDoc": "car398-canvas-fixes.md",
+    "title": "CAR 398 Canvas Course Fixes & Gradebook Sync",
+    "quadrant": "Q1",
+    "pillar": "Capable",
+    "department": "Career Mentor",
+    "status": "In Progress",
+    "progress": 60,
+    "dueDate": "2026-11-05",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "",
+    "needsDelegation": false,
+    "description": "Fixing Canvas assignment modules, rubrics, and gradebook sync issues for CAR 398 Internship course students.",
+    "link": "https://ensign.instructure.com",
+    "isRemoved": false,
+    "milestones": [
+      "Audit broken assignment links",
+      "Fix rubric grading criteria",
+      "Sync gradebook passback",
+      "Notify enrolled students"
+    ],
+    "attachments": [
+      {
+        "id": "att-car398-1",
+        "name": "Canvas CAR 398 Course & Gradebook",
+        "type": "link",
+        "url": "https://ensign.instructure.com",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-car398-2",
+        "name": "Start Prompt: car398-canvas-fixes.md",
+        "type": "link",
+        "url": "PROMPTS/car398-canvas-fixes.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "vmock-ingestion",
+    "promptDoc": "vmock-ingestion.md",
+    "title": "VMock Full Module Ingestion & Scoring Engine",
+    "quadrant": "Q1",
+    "pillar": "Capable",
+    "department": "AI & Operations",
+    "status": "Completed",
+    "progress": 100,
+    "dueDate": "2026-11-01",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "",
+    "needsDelegation": false,
+    "description": "Ingesting 7,024 student records across all 6 VMock reporting modules to calculate real-time readiness scores and verify resume feedback.",
+    "link": "https://github.com/robbagley-afk/ensign-student-readiness-hub",
+    "isRemoved": false,
+    "milestones": [
+      "Parse all 6 module fields",
+      "Download 9.7MB report",
+      "Pass 167 unit tests",
+      "Deploy live to port 5055"
+    ],
+    "attachments": [
+      {
+        "id": "att-vmock-1",
+        "name": "Student Readiness Hub Repository",
+        "type": "link",
+        "url": "https://github.com/robbagley-afk/ensign-student-readiness-hub",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-vmock-2",
+        "name": "Start Prompt: vmock-ingestion.md",
+        "type": "link",
+        "url": "PROMPTS/vmock-ingestion.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "ens101-polish",
+    "promptDoc": "ens101-polish.md",
+    "title": "ENS 101 Guide Mentor Desk & Completion Glow",
+    "quadrant": "Q1",
+    "pillar": "Capable",
+    "department": "Career Mentor",
+    "status": "In Progress",
+    "progress": 90,
+    "dueDate": "2026-11-15",
+    "owner": "Rodrigo Moll (Victor Mendoza)",
+    "delegatedOwner": "Rodrigo Moll (Victor Mendoza)",
+    "needsDelegation": true,
+    "description": "Simplifying and polishing the ENS 101 mentor app. Issue #28 active for Amazon orange Next Step button with completion glow.",
+    "link": "https://github.com/robbagley-afk/ENS-101-Guide/issues/28",
+    "isRemoved": false,
+    "milestones": [
+      "Two-screen layout live on 5050",
+      "Register Issue #28 with Rodrigo",
+      "Implement completion lighting",
+      "Verify design system audit"
+    ],
+    "attachments": [
+      {
+        "id": "att-ens101-1",
+        "name": "GitHub Issue #28 (Orange Next Step Glow)",
+        "type": "link",
+        "url": "https://github.com/robbagley-afk/ENS-101-Guide/issues/28",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-ens101-2",
+        "name": "Start Prompt: ens101-polish.md",
+        "type": "link",
+        "url": "PROMPTS/ens101-polish.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "internship-tool",
+    "promptDoc": "internship-tool.md",
+    "title": "Internship Approval Process & Web Tool",
+    "quadrant": "Q1",
+    "pillar": "Capable",
+    "department": "Internships",
+    "status": "Blocked",
+    "progress": 70,
+    "dueDate": "2026-11-20",
+    "owner": "Karla Groom",
+    "delegatedOwner": "Karla Groom",
+    "needsDelegation": true,
+    "description": "Replacing Smartsheet with custom approval workflow, saving ~$1,500/yr. Resolving final feedback approval bottleneck with Sister Groom.",
+    "link": "https://github.com/robbagley-afk",
+    "isRemoved": false,
+    "milestones": [
+      "Replace Smartsheet core logic",
+      "Train Sister Whitney",
+      "Sister Groom final feedback review",
+      "Full production rollout"
+    ],
+    "attachments": [
+      {
+        "id": "att-intern-1",
+        "name": "Career Services Tools GitHub",
+        "type": "link",
+        "url": "https://github.com/robbagley-afk",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-intern-2",
+        "name": "Start Prompt: internship-tool.md",
+        "type": "link",
+        "url": "PROMPTS/internship-tool.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "career-ui-suite",
+    "promptDoc": "career-ui-suite.md",
+    "title": "Ensign Career Apps Design System Restyle",
+    "quadrant": "Q2",
+    "pillar": "Capable",
+    "department": "AI & Operations",
+    "status": "In Progress",
+    "progress": 85,
+    "dueDate": "2026-12-01",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "",
+    "needsDelegation": true,
+    "description": "Aligning all 10 portfolio tools to Ensign Career Coach design system (56px touch targets, accessibility WCAG AA, local LM Studio). Needs DevOps delegation.",
+    "link": "https://github.com/robbagley-afk/ensign-design-system",
+    "isRemoved": false,
+    "milestones": [
+      "Decommission cloud fallback (PR 23)",
+      "Audit ENS 101 & Readiness Hub",
+      "Mentor Explorer 5046 release",
+      "Phase 2 runtime audit across all ports"
+    ],
+    "attachments": [
+      {
+        "id": "att-ui-1",
+        "name": "Ensign Design System Repo",
+        "type": "link",
+        "url": "https://github.com/robbagley-afk/ensign-design-system",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-ui-2",
+        "name": "Start Prompt: career-ui-suite.md",
+        "type": "link",
+        "url": "PROMPTS/career-ui-suite.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "workshop-redesign",
+    "promptDoc": "workshop-redesign.md",
+    "title": "Career Workshop & CAR 201 Curriculum Redesign",
+    "quadrant": "Q2",
+    "pillar": "Trusted",
+    "department": "Training",
+    "status": "In Progress",
+    "progress": 65,
+    "dueDate": "2026-12-15",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "",
+    "needsDelegation": false,
+    "description": "Restructuring career prep curriculum around natural student motivation: Job Search first, LinkedIn networking, and AI resume crafting.",
+    "link": "https://mem.ai",
+    "isRemoved": false,
+    "milestones": [
+      "College version completed",
+      "GEC version final review",
+      "AI-assisted resume templates",
+      "Launch with Fall semester mentors"
+    ],
+    "attachments": [
+      {
+        "id": "att-ws-1",
+        "name": "Mem.ai Workshop Notes",
+        "type": "link",
+        "url": "https://mem.ai",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-ws-2",
+        "name": "Start Prompt: workshop-redesign.md",
+        "type": "link",
+        "url": "PROMPTS/workshop-redesign.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "peoplegrove-alumni",
+    "promptDoc": "peoplegrove-alumni.md",
+    "title": "Ensign Connect & PeopleGrove Mentoring Network",
+    "quadrant": "Q2",
+    "pillar": "Community",
+    "department": "Alumni",
+    "status": "On Track",
+    "progress": 75,
+    "dueDate": "2027-01-15",
+    "owner": "Gregory Fox",
+    "delegatedOwner": "Gregory Fox",
+    "needsDelegation": true,
+    "description": "Strengthening community discipleship through student-alumni career roadmaps, LinkedIn sign-ups, and monthly engagement.",
+    "link": "https://ensign.peoplegrove.com",
+    "isRemoved": false,
+    "milestones": [
+      "Deliver PeopleGrove utilization report",
+      "LinkedIn-first onboarding flow",
+      "Alumni roadmap adaptation",
+      "Track mentor message exchanges"
+    ],
+    "attachments": [
+      {
+        "id": "att-pg-1",
+        "name": "Ensign Connect Portal (PeopleGrove)",
+        "type": "link",
+        "url": "https://ensign.peoplegrove.com",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-pg-2",
+        "name": "Start Prompt: peoplegrove-alumni.md",
+        "type": "link",
+        "url": "PROMPTS/peoplegrove-alumni.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "employer-portal",
+    "promptDoc": "employer-portal.md",
+    "title": "Employer Relations Hiring Partner & Job Fair Portal",
+    "quadrant": "Q2",
+    "pillar": "Community",
+    "department": "Employer Relations",
+    "status": "In Progress",
+    "progress": 45,
+    "dueDate": "2027-01-30",
+    "owner": "Gregory Fox",
+    "delegatedOwner": "Gregory Fox",
+    "needsDelegation": true,
+    "description": "Direct pipeline connecting local employers to students for internships and career placement without third-party friction.",
+    "link": "https://ensign.edu",
+    "isRemoved": false,
+    "milestones": [
+      "Employer survey synthesis",
+      "Draft job fair reservation system",
+      "Alumni employer outreach batch",
+      "Automated invitation pipeline"
+    ],
+    "attachments": [
+      {
+        "id": "att-emp-1",
+        "name": "Ensign College Employer Resources",
+        "type": "link",
+        "url": "https://ensign.edu",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-emp-2",
+        "name": "Start Prompt: employer-portal.md",
+        "type": "link",
+        "url": "PROMPTS/employer-portal.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "prison-education",
+    "promptDoc": "prison-education.md",
+    "title": "Incarcerated Learners Prison Education Roadmap (PBWE)",
+    "quadrant": "Q2",
+    "pillar": "Trusted",
+    "department": "PBWE",
+    "status": "In Progress",
+    "progress": 50,
+    "dueDate": "2027-02-01",
+    "owner": "Kurt Jones",
+    "delegatedOwner": "Kurt Jones",
+    "needsDelegation": true,
+    "description": "Bringing Career Roadmaps 1-3 and offline on-device AI resume feedback into restricted prison Canvas environments at Draper.",
+    "link": "https://mem.ai",
+    "isRemoved": false,
+    "milestones": [
+      "Assess Canvas restrictions",
+      "Roadmap 1 mockup for incarcerated learners",
+      "Test offline local AI computer proposal",
+      "Instructor training"
+    ],
+    "attachments": [
+      {
+        "id": "att-pe-1",
+        "name": "PBWE Draper Prison Canvas Proposal",
+        "type": "link",
+        "url": "https://mem.ai",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-pe-2",
+        "name": "Start Prompt: prison-education.md",
+        "type": "link",
+        "url": "PROMPTS/prison-education.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "fleet-infrastructure",
+    "promptDoc": "fleet-infrastructure.md",
+    "title": "Mac Fleet AI Teams & Local LLM Inference Stack",
+    "quadrant": "Q2",
+    "pillar": "Capable",
+    "department": "AI & Operations",
+    "status": "On Track",
+    "progress": 90,
+    "dueDate": "2026-11-30",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "",
+    "needsDelegation": false,
+    "description": "Mac Studio resident inference (:1234), Odysseus (:7001), credit gate (4.8% used), and automated fleet sync across Mac Studio, iMac, MacBook Pro.",
+    "link": "https://github.com/robbagley-afk",
+    "isRemoved": false,
+    "milestones": [
+      "LM Studio resident gemma4-26b-qat",
+      "Copilot Studio credit gate",
+      "Corner Office coordinator handoffs",
+      "Automated fleetsync across 3 Macs"
+    ],
+    "attachments": [
+      {
+        "id": "att-fleet-1",
+        "name": "AI Teams GitHub",
+        "type": "link",
+        "url": "https://github.com/robbagley-afk",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-fleet-2",
+        "name": "Start Prompt: fleet-infrastructure.md",
+        "type": "link",
+        "url": "PROMPTS/fleet-infrastructure.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "appfix-dispatch",
+    "promptDoc": "appfix-dispatch.md",
+    "title": "DevOps AppFix & Continuous Bug Dispatch (appfix-cis)",
+    "quadrant": "Q3",
+    "pillar": "Capable",
+    "department": "AI & Operations",
+    "status": "Completed",
+    "progress": 100,
+    "dueDate": "2026-11-10",
+    "owner": "Rodrigo Moll (Victor Mendoza)",
+    "delegatedOwner": "Rodrigo Moll (Victor Mendoza)",
+    "needsDelegation": true,
+    "description": "Automated issue intake via /appfix-cis, live Kanban board on Vercel, and GitHub dispatch to Rodrigo.",
+    "link": "https://ensign-appfix-dashboard.vercel.app",
+    "isRemoved": false,
+    "milestones": [
+      "Deploy Vercel Kanban board",
+      "Build /appfix-cis skill",
+      "7-day auto-prune rule",
+      "Distribute to all fleet paths"
+    ],
+    "attachments": [
+      {
+        "id": "att-af-1",
+        "name": "Live Ensign AppFix Dashboard",
+        "type": "link",
+        "url": "https://ensign-appfix-dashboard.vercel.app",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-af-2",
+        "name": "Start Prompt: appfix-dispatch.md",
+        "type": "link",
+        "url": "PROMPTS/appfix-dispatch.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "stale-tasks-triage",
+    "promptDoc": "stale-tasks-triage.md",
+    "title": "Overdue Tasks & Smartsheet Legacy Decommissioning",
+    "quadrant": "Q4",
+    "pillar": "Community",
+    "department": "Career Mentor",
+    "status": "In Progress",
+    "progress": 30,
+    "dueDate": "2026-12-31",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "",
+    "needsDelegation": true,
+    "description": "Triaging 150+ aged backlog tasks in TASKS.md and formal decommissioning of legacy spreadsheets. Needs student mentor delegation.",
+    "link": "https://mem.ai",
+    "isRemoved": false,
+    "milestones": [
+      "Audit 150+ aged items in TASKS.md",
+      "Decommission obsolete spreadsheets",
+      "Close 168-day BYUI coach card",
+      "Archive closed projects"
+    ],
+    "attachments": [
+      {
+        "id": "att-st-1",
+        "name": "Mem AI Backlog Tasks",
+        "type": "link",
+        "url": "https://mem.ai",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      },
+      {
+        "id": "att-st-2",
+        "name": "Start Prompt: stale-tasks-triage.md",
+        "type": "link",
+        "url": "PROMPTS/stale-tasks-triage.md",
+        "dateAdded": "2026-10-27T10:00:00Z"
+      }
+    ]
+  }
+]

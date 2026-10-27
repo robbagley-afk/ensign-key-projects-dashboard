@@ -131,10 +131,19 @@
           <span class="pill-icon">🤝</span> Needs Delegation (<span id="needs-delegation-count">0</span>)
         </button>
 
-        <!-- Quick "My Projects" Toggle Button -->
-        <button id="my-projects-btn" class="pill-btn" title="Toggle between showing only your projects or all team projects">
-          <span class="pill-icon">👤</span> My Projects (Rob)
-        </button>
+        <!-- User Perspective View Selector -->
+        <div class="user-view-group">
+          <label for="user-view-select" class="user-view-label">👤 User View:</label>
+          <select id="user-view-select" class="user-view-select" title="Switch dashboard view to see personal and delegated projects for a specific team member">
+            <option value="all">🌐 All Team Projects</option>
+            <option value="rob">👤 Rob Bagley (Assoc Director)</option>
+            <option value="rodrigo">💻 Rodrigo Moll (DevOps Lead)</option>
+            <option value="greg">👔 Gregory Fox (Assoc Director)</option>
+            <option value="karla">🤝 Karla Groom (Internships)</option>
+            <option value="kurt">🏛️ Kurt Jones (PBWE / Prison Ed)</option>
+            <option value="joseph">🎓 Joseph Bonilla Abarca (Alumni)</option>
+          </select>
+        </div>
 
         <!-- Quick "Mike's Report" Toggle Button -->
         <button id="mikes-report-btn" class="pill-btn btn-mikes-toggle" title="Filter to show only projects marked for Director Mike Ray 1:1 Report">
@@ -205,6 +214,15 @@
         </button>
 
         <button id="reset-storage-btn" class="btn btn-outline" title="Reset to standard Mem project defaults">Reset Defaults</button>
+      </div>
+
+      <!-- Active User View Perspective Banner -->
+      <div id="active-user-view-banner" class="active-user-view-banner" style="display: none;">
+        <div class="banner-left">
+          <span class="banner-badge user-view-badge">PERSPECTIVE</span>
+          <span id="active-user-view-text" class="banner-text">Viewing Rodrigo Moll's Workspace (3 projects)</span>
+        </div>
+        <button type="button" id="clear-user-view-btn" class="btn-clear-user-view" title="Reset view back to all team projects">✕ View All Team Projects</button>
       </div>
 
       <!-- Active Quadrant Filter Banner -->
@@ -396,6 +414,42 @@
           </div>
         </div>
 
+        <!-- Project Attachments & Resources Section -->
+        <div class="form-attachments-section">
+          <div class="attachments-header">
+            <label class="attachments-title">📎 Project Attachments &amp; Files (<span id="modal-attachments-count">0</span>)</label>
+            <span class="attachments-subtitle">Upload files (PDF, screenshots, docs) or link OneDrive/Cloud files</span>
+          </div>
+
+          <!-- Existing Attachments List -->
+          <div id="modal-attachments-list" class="attachments-list-container">
+            <div class="empty-attachments-msg">No attachments yet. Drop files or add links below.</div>
+          </div>
+
+          <!-- Add Attachment Input Box -->
+          <div class="attachment-input-card">
+            <!-- Drag & Drop Upload Zone -->
+            <div id="drop-zone" class="file-drop-target">
+              <input type="file" id="form-attachment-file-input" multiple style="display: none;">
+              <span class="drop-zone-icon">📤</span>
+              <div class="drop-zone-label">
+                <strong>Drag &amp; drop files here</strong> or <button type="button" class="btn-browse-link" onclick="document.getElementById('form-attachment-file-input').click()">Browse files</button>
+              </div>
+              <span class="drop-zone-sub">PDF, PNG/JPG images, Word, Excel, Markdown, Text, ZIP</span>
+            </div>
+
+            <!-- Add URL / OneDrive Link Row -->
+            <div class="attachment-link-adder">
+              <span class="link-adder-label">Or attach a Cloud Document / OneDrive Link:</span>
+              <div class="link-adder-inputs">
+                <input type="text" id="form-att-link-name" placeholder="File / Link title (e.g. OneDrive Project Notes)..." class="flex-1">
+                <input type="url" id="form-att-link-url" placeholder="https://onedrive.live.com/... or https://..." class="flex-2">
+                <button type="button" id="btn-add-attachment-link" class="btn btn-secondary btn-sm">📎 Add Link</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="form-group form-checkbox-group">
           <label class="checkbox-label" for="form-in-mikes-report">
             <input type="checkbox" id="form-in-mikes-report">
@@ -541,6 +595,29 @@
         <div class="summary-preview-container" id="summary-rendered-preview">
           <!-- Dynamically populated executive summary preview -->
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Attachment Viewer -->
+  <div id="attachment-viewer-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card modal-card-attachments">
+      <div class="modal-header">
+        <div>
+          <div class="modal-header-badge">PROJECT ATTACHMENTS</div>
+          <h3 id="att-viewer-title">Project Attachments</h3>
+          <p id="att-viewer-subtitle" class="modal-subtitle"></p>
+        </div>
+        <button type="button" id="att-viewer-close" class="btn-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body modal-attachments-body">
+        <div id="att-viewer-list" class="viewer-attachments-grid">
+          <!-- Dynamically populated cards with download / preview buttons -->
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-top: 1px solid var(--border-subtle);">
+        <button type="button" id="att-viewer-edit-btn" class="btn btn-outline">✏️ Manage Attachments in Edit Modal</button>
+        <button type="button" id="att-viewer-done-btn" class="btn btn-primary">Done</button>
       </div>
     </div>
   </div>

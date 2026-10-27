@@ -4,8 +4,9 @@
  * Rob Bagley, Associate Director Career Services
  */
 
-const STORAGE_KEY = 'ensign_key_projects_data_v3';
-const LEGACY_STORAGE_KEY = 'ensign_key_projects_data_v2';
+const STORAGE_KEY = 'ensign_key_projects_data_v4';
+const LEGACY_STORAGE_KEY = 'ensign_key_projects_data_v3';
+const LEGACY_STORAGE_KEY_V2 = 'ensign_key_projects_data_v2';
 
 // Official CIS All Team roster from Outlook group (cis_all_team@ensign.edu)
 const CIS_TEAM_MEMBERS = [
@@ -62,7 +63,11 @@ const DEFAULT_PROJECTS = [
     description: 'Fixing Canvas assignment modules, rubrics, and gradebook sync issues for CAR 398 Internship course students.',
     link: 'https://ensign.instructure.com',
     isRemoved: false,
-    milestones: ['Audit broken assignment links', 'Fix rubric grading criteria', 'Sync gradebook passback', 'Notify enrolled students']
+    milestones: ['Audit broken assignment links', 'Fix rubric grading criteria', 'Sync gradebook passback', 'Notify enrolled students'],
+    attachments: [
+      { id: 'att-car398-1', name: 'Canvas CAR 398 Course & Gradebook', type: 'link', url: 'https://ensign.instructure.com', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-car398-2', name: 'Start Prompt: car398-canvas-fixes.md', type: 'link', url: 'PROMPTS/car398-canvas-fixes.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'vmock-ingestion',
@@ -80,7 +85,11 @@ const DEFAULT_PROJECTS = [
     description: 'Ingesting 7,024 student records across all 6 VMock reporting modules to calculate real-time readiness scores and verify resume feedback.',
     link: 'https://github.com/robbagley-afk/ensign-student-readiness-hub',
     isRemoved: false,
-    milestones: ['Parse all 6 module fields', 'Download 9.7MB report', 'Pass 167 unit tests', 'Deploy live to port 5055']
+    milestones: ['Parse all 6 module fields', 'Download 9.7MB report', 'Pass 167 unit tests', 'Deploy live to port 5055'],
+    attachments: [
+      { id: 'att-vmock-1', name: 'Student Readiness Hub Repository', type: 'link', url: 'https://github.com/robbagley-afk/ensign-student-readiness-hub', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-vmock-2', name: 'Start Prompt: vmock-ingestion.md', type: 'link', url: 'PROMPTS/vmock-ingestion.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'ens101-polish',
@@ -98,7 +107,11 @@ const DEFAULT_PROJECTS = [
     description: 'Simplifying and polishing the ENS 101 mentor app. Issue #28 active for Amazon orange Next Step button with completion glow.',
     link: 'https://github.com/robbagley-afk/ENS-101-Guide/issues/28',
     isRemoved: false,
-    milestones: ['Two-screen layout live on 5050', 'Register Issue #28 with Rodrigo', 'Implement completion lighting', 'Verify design system audit']
+    milestones: ['Two-screen layout live on 5050', 'Register Issue #28 with Rodrigo', 'Implement completion lighting', 'Verify design system audit'],
+    attachments: [
+      { id: 'att-ens101-1', name: 'GitHub Issue #28 (Orange Next Step Glow)', type: 'link', url: 'https://github.com/robbagley-afk/ENS-101-Guide/issues/28', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-ens101-2', name: 'Start Prompt: ens101-polish.md', type: 'link', url: 'PROMPTS/ens101-polish.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'internship-tool',
@@ -116,7 +129,11 @@ const DEFAULT_PROJECTS = [
     description: 'Replacing Smartsheet with custom approval workflow, saving ~$1,500/yr. Resolving final feedback approval bottleneck with Sister Groom.',
     link: 'https://github.com/robbagley-afk',
     isRemoved: false,
-    milestones: ['Replace Smartsheet core logic', 'Train Sister Whitney', 'Sister Groom final feedback review', 'Full production rollout']
+    milestones: ['Replace Smartsheet core logic', 'Train Sister Whitney', 'Sister Groom final feedback review', 'Full production rollout'],
+    attachments: [
+      { id: 'att-intern-1', name: 'Career Services Tools GitHub', type: 'link', url: 'https://github.com/robbagley-afk', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-intern-2', name: 'Start Prompt: internship-tool.md', type: 'link', url: 'PROMPTS/internship-tool.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'career-ui-suite',
@@ -134,7 +151,11 @@ const DEFAULT_PROJECTS = [
     description: 'Aligning all 10 portfolio tools to Ensign Career Coach design system (56px touch targets, accessibility WCAG AA, local LM Studio). Needs DevOps delegation.',
     link: 'https://github.com/robbagley-afk/ensign-design-system',
     isRemoved: false,
-    milestones: ['Decommission cloud fallback (PR 23)', 'Audit ENS 101 & Readiness Hub', 'Mentor Explorer 5046 release', 'Phase 2 runtime audit across all ports']
+    milestones: ['Decommission cloud fallback (PR 23)', 'Audit ENS 101 & Readiness Hub', 'Mentor Explorer 5046 release', 'Phase 2 runtime audit across all ports'],
+    attachments: [
+      { id: 'att-ui-1', name: 'Ensign Design System Repo', type: 'link', url: 'https://github.com/robbagley-afk/ensign-design-system', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-ui-2', name: 'Start Prompt: career-ui-suite.md', type: 'link', url: 'PROMPTS/career-ui-suite.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'workshop-redesign',
@@ -152,7 +173,11 @@ const DEFAULT_PROJECTS = [
     description: 'Restructuring career prep curriculum around natural student motivation: Job Search first, LinkedIn networking, and AI resume crafting.',
     link: 'https://mem.ai',
     isRemoved: false,
-    milestones: ['College version completed', 'GEC version final review', 'AI-assisted resume templates', 'Launch with Fall semester mentors']
+    milestones: ['College version completed', 'GEC version final review', 'AI-assisted resume templates', 'Launch with Fall semester mentors'],
+    attachments: [
+      { id: 'att-ws-1', name: 'Mem.ai Workshop Notes', type: 'link', url: 'https://mem.ai', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-ws-2', name: 'Start Prompt: workshop-redesign.md', type: 'link', url: 'PROMPTS/workshop-redesign.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'peoplegrove-alumni',
@@ -170,7 +195,11 @@ const DEFAULT_PROJECTS = [
     description: 'Strengthening community discipleship through student-alumni career roadmaps, LinkedIn sign-ups, and monthly engagement.',
     link: 'https://ensign.peoplegrove.com',
     isRemoved: false,
-    milestones: ['Deliver PeopleGrove utilization report', 'LinkedIn-first onboarding flow', 'Alumni roadmap adaptation', 'Track mentor message exchanges']
+    milestones: ['Deliver PeopleGrove utilization report', 'LinkedIn-first onboarding flow', 'Alumni roadmap adaptation', 'Track mentor message exchanges'],
+    attachments: [
+      { id: 'att-pg-1', name: 'Ensign Connect Portal (PeopleGrove)', type: 'link', url: 'https://ensign.peoplegrove.com', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-pg-2', name: 'Start Prompt: peoplegrove-alumni.md', type: 'link', url: 'PROMPTS/peoplegrove-alumni.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'employer-portal',
@@ -188,7 +217,11 @@ const DEFAULT_PROJECTS = [
     description: 'Direct pipeline connecting local employers to students for internships and career placement without third-party friction.',
     link: 'https://ensign.edu',
     isRemoved: false,
-    milestones: ['Employer survey synthesis', 'Draft job fair reservation system', 'Alumni employer outreach batch', 'Automated invitation pipeline']
+    milestones: ['Employer survey synthesis', 'Draft job fair reservation system', 'Alumni employer outreach batch', 'Automated invitation pipeline'],
+    attachments: [
+      { id: 'att-emp-1', name: 'Ensign College Employer Resources', type: 'link', url: 'https://ensign.edu', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-emp-2', name: 'Start Prompt: employer-portal.md', type: 'link', url: 'PROMPTS/employer-portal.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'prison-education',
@@ -206,7 +239,11 @@ const DEFAULT_PROJECTS = [
     description: 'Bringing Career Roadmaps 1-3 and offline on-device AI resume feedback into restricted prison Canvas environments at Draper.',
     link: 'https://mem.ai',
     isRemoved: false,
-    milestones: ['Assess Canvas restrictions', 'Roadmap 1 mockup for incarcerated learners', 'Test offline local AI computer proposal', 'Instructor training']
+    milestones: ['Assess Canvas restrictions', 'Roadmap 1 mockup for incarcerated learners', 'Test offline local AI computer proposal', 'Instructor training'],
+    attachments: [
+      { id: 'att-pe-1', name: 'PBWE Draper Prison Canvas Proposal', type: 'link', url: 'https://mem.ai', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-pe-2', name: 'Start Prompt: prison-education.md', type: 'link', url: 'PROMPTS/prison-education.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'fleet-infrastructure',
@@ -224,7 +261,11 @@ const DEFAULT_PROJECTS = [
     description: 'Mac Studio resident inference (:1234), Odysseus (:7001), credit gate (4.8% used), and automated fleet sync across Mac Studio, iMac, MacBook Pro.',
     link: 'https://github.com/robbagley-afk',
     isRemoved: false,
-    milestones: ['LM Studio resident gemma4-26b-qat', 'Copilot Studio credit gate', 'Corner Office coordinator handoffs', 'Automated fleetsync across 3 Macs']
+    milestones: ['LM Studio resident gemma4-26b-qat', 'Copilot Studio credit gate', 'Corner Office coordinator handoffs', 'Automated fleetsync across 3 Macs'],
+    attachments: [
+      { id: 'att-fleet-1', name: 'AI Teams GitHub', type: 'link', url: 'https://github.com/robbagley-afk', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-fleet-2', name: 'Start Prompt: fleet-infrastructure.md', type: 'link', url: 'PROMPTS/fleet-infrastructure.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'appfix-dispatch',
@@ -242,7 +283,11 @@ const DEFAULT_PROJECTS = [
     description: 'Automated issue intake via /appfix-cis, live Kanban board on Vercel, and GitHub dispatch to Rodrigo.',
     link: 'https://ensign-appfix-dashboard.vercel.app',
     isRemoved: false,
-    milestones: ['Deploy Vercel Kanban board', 'Build /appfix-cis skill', '7-day auto-prune rule', 'Distribute to all fleet paths']
+    milestones: ['Deploy Vercel Kanban board', 'Build /appfix-cis skill', '7-day auto-prune rule', 'Distribute to all fleet paths'],
+    attachments: [
+      { id: 'att-af-1', name: 'Live Ensign AppFix Dashboard', type: 'link', url: 'https://ensign-appfix-dashboard.vercel.app', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-af-2', name: 'Start Prompt: appfix-dispatch.md', type: 'link', url: 'PROMPTS/appfix-dispatch.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   },
   {
     id: 'stale-tasks-triage',
@@ -260,9 +305,131 @@ const DEFAULT_PROJECTS = [
     description: 'Triaging 150+ aged backlog tasks in TASKS.md and formal decommissioning of legacy spreadsheets. Needs student mentor delegation.',
     link: 'https://mem.ai',
     isRemoved: false,
-    milestones: ['Audit 150+ aged items in TASKS.md', 'Decommission obsolete spreadsheets', 'Close 168-day BYUI coach card', 'Archive closed projects']
+    milestones: ['Audit 150+ aged items in TASKS.md', 'Decommission obsolete spreadsheets', 'Close 168-day BYUI coach card', 'Archive closed projects'],
+    attachments: [
+      { id: 'att-st-1', name: 'Mem AI Backlog Tasks', type: 'link', url: 'https://mem.ai', dateAdded: '2026-10-27T10:00:00Z' },
+      { id: 'att-st-2', name: 'Start Prompt: stale-tasks-triage.md', type: 'link', url: 'PROMPTS/stale-tasks-triage.md', dateAdded: '2026-10-27T10:00:00Z' }
+    ]
   }
 ];
+
+// IndexedDB for Persistent Attachment File Blobs
+const IDB_NAME = 'ensign_dashboard_db';
+const IDB_STORE = 'attachments';
+function openIDB() {
+  return new Promise((resolve) => {
+    if (!window.indexedDB) {
+      resolve(null);
+      return;
+    }
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(IDB_STORE)) {
+        db.createObjectStore(IDB_STORE, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = (e) => resolve(e.target.result);
+    req.onerror = () => resolve(null);
+  });
+}
+
+async function saveIDBAttachment(item) {
+  try {
+    const db = await openIDB();
+    if (!db) return false;
+    return new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).put(item);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    });
+  } catch (err) {
+    return false;
+  }
+}
+
+async function getIDBAttachment(id) {
+  try {
+    const db = await openIDB();
+    if (!db) return null;
+    return new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(id);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  } catch (err) {
+    return null;
+  }
+}
+
+function getUserViewFromURL() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const u = params.get('user') || params.get('view');
+    if (u && ['all', 'rob', 'rodrigo', 'greg', 'karla', 'kurt', 'joseph'].includes(u.toLowerCase())) {
+      return u.toLowerCase();
+    }
+  } catch (e) {}
+  return 'all';
+}
+
+function matchesUserView(project, userView) {
+  if (!userView || userView === 'all') return true;
+  
+  const owner = (project.owner || '').toLowerCase();
+  const delegated = (project.delegatedOwner || '').toLowerCase();
+  const title = (project.title || '').toLowerCase();
+  const desc = (project.description || '').toLowerCase();
+  const id = (project.id || '').toLowerCase();
+
+  switch (userView) {
+    case 'rob':
+      // Rob's view: projects owned by Rob and NOT delegated away, OR explicitly assigned/delegated to Rob
+      if (delegated.includes('rob')) return true;
+      if (!delegated && (owner.includes('rob') || !owner)) return true;
+      return false;
+
+    case 'rodrigo':
+      // Rodrigo Moll / Victor Mendoza: devops lead, ENS 101, appfix, etc.
+      if (delegated.includes('rodrigo') || delegated.includes('moll') || delegated.includes('victor') || delegated.includes('mendoza')) return true;
+      if (owner.includes('rodrigo') || owner.includes('moll') || owner.includes('victor') || owner.includes('mendoza')) return true;
+      if (id.includes('ens101') || id.includes('appfix')) return true;
+      return false;
+
+    case 'greg':
+      // Gregory Fox: Assoc Director Employer & Alumni, PeopleGrove, Employer Portal
+      if (delegated.includes('greg') || delegated.includes('fox')) return true;
+      if (owner.includes('greg') || owner.includes('fox')) return true;
+      if (id.includes('peoplegrove') || id.includes('employer') || title.includes('employer') || desc.includes('greg fox')) return true;
+      return false;
+
+    case 'karla':
+      // Karla Groom: Internships Coordinator, CAR 398, Handshake internship tool
+      if (delegated.includes('karla') || delegated.includes('groom')) return true;
+      if (owner.includes('karla') || owner.includes('groom')) return true;
+      if (id.includes('internship') || id.includes('car398') || title.includes('internship') || desc.includes('karla')) return true;
+      return false;
+
+    case 'kurt':
+      // Kurt Jones: PBWE (Prison Education)
+      if (delegated.includes('kurt') || delegated.includes('jones')) return true;
+      if (owner.includes('kurt') || owner.includes('jones')) return true;
+      if (id.includes('prison') || title.includes('prison') || desc.includes('prison') || desc.includes('kurt jones')) return true;
+      return false;
+
+    case 'joseph':
+      // Joseph Bonilla Abarca: Alumni Network
+      if (delegated.includes('joseph') || delegated.includes('bonilla') || delegated.includes('abarca')) return true;
+      if (owner.includes('joseph') || owner.includes('bonilla') || owner.includes('abarca')) return true;
+      if (id.includes('alumni') || title.includes('alumni') || desc.includes('joseph')) return true;
+      return false;
+
+    default:
+      return true;
+  }
+}
 
 let state = {
   projects: loadProjects(),
@@ -277,6 +444,7 @@ let state = {
   filterDelegation: 'all', // 'all', 'needs_delegation', 'delegated', 'rob_owned'
   searchQuery: '',
   myProjectsOnly: false,
+  userView: getUserViewFromURL(),
   showRemoved: false
 };
 
@@ -285,6 +453,9 @@ function loadProjects() {
     let raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
       raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    }
+    if (!raw) {
+      raw = localStorage.getItem(LEGACY_STORAGE_KEY_V2);
     }
     if (raw) {
       const parsed = JSON.parse(raw);
@@ -310,6 +481,27 @@ function loadProjects() {
           }
           if (p.inMikesReport === undefined) {
             p.inMikesReport = p.quadrant === 'Q1' || p.id === 'career-ui-suite' || p.id === 'ens101-polish' || p.id === 'car398-canvas-fixes';
+          }
+          if (!Array.isArray(p.attachments)) {
+            p.attachments = [];
+            if (p.link) {
+              p.attachments.push({
+                id: 'att-res-' + p.id,
+                name: (p.title || 'Project') + ' Resource Link',
+                type: 'link',
+                url: p.link,
+                dateAdded: new Date().toISOString()
+              });
+            }
+            if (p.promptDoc) {
+              p.attachments.push({
+                id: 'att-prompt-' + p.id,
+                name: `Start Prompt (${p.promptDoc})`,
+                type: 'link',
+                url: `PROMPTS/${p.promptDoc}`,
+                dateAdded: new Date().toISOString()
+              });
+            }
           }
           return p;
         });
@@ -337,6 +529,11 @@ const listView = document.getElementById('list-view');
 
 const searchInput = document.getElementById('search-input');
 const myProjectsBtn = document.getElementById('my-projects-btn');
+const userViewSelect = document.getElementById('user-view-select');
+const activeUserViewBanner = document.getElementById('active-user-view-banner');
+const activeUserViewText = document.getElementById('active-user-view-text');
+const clearUserViewBtn = document.getElementById('clear-user-view-btn');
+
 const needsDelegationBtn = document.getElementById('needs-delegation-btn');
 const needsDelegationCountEl = document.getElementById('needs-delegation-count');
 const filterQuadrantSelect = document.getElementById('filter-quadrant-select');
@@ -355,6 +552,24 @@ const toggleRemovedBtn = document.getElementById('toggle-removed-btn');
 const removedCountSpan = document.getElementById('removed-count');
 const resetStorageBtn = document.getElementById('reset-storage-btn');
 const addProjectBtn = document.getElementById('add-project-btn');
+
+// Attachments & Resource Link Modal Elements
+const modalAttachmentsCount = document.getElementById('modal-attachments-count');
+const modalAttachmentsList = document.getElementById('modal-attachments-list');
+const dropZone = document.getElementById('drop-zone');
+const formFileInput = document.getElementById('form-attachment-file-input');
+const formAttLinkName = document.getElementById('form-att-link-name');
+const formAttLinkUrl = document.getElementById('form-att-link-url');
+const btnAddAttachmentLink = document.getElementById('btn-add-attachment-link');
+
+// Attachment Viewer Modal Elements
+const attViewerModal = document.getElementById('attachment-viewer-modal');
+const attViewerTitle = document.getElementById('att-viewer-title');
+const attViewerSubtitle = document.getElementById('att-viewer-subtitle');
+const attViewerList = document.getElementById('att-viewer-list');
+const attViewerClose = document.getElementById('att-viewer-close');
+const attViewerDoneBtn = document.getElementById('att-viewer-done-btn');
+const attViewerEditBtn = document.getElementById('att-viewer-edit-btn');
 
 const metricCardQ1 = document.querySelector('.metric-card.metric-q1');
 const metricCardQ2 = document.querySelector('.metric-card.metric-q2');
@@ -778,16 +993,49 @@ viewListBtn.addEventListener('click', () => {
   render();
 });
 
-// "My Projects (Rob)" Quick Toggle
-myProjectsBtn.addEventListener('click', () => {
-  state.myProjectsOnly = !state.myProjectsOnly;
-  if (state.myProjectsOnly) {
-    myProjectsBtn.classList.add('active');
-  } else {
-    myProjectsBtn.classList.remove('active');
-  }
-  render();
-});
+// "My Projects (Rob)" Quick Toggle (legacy support)
+if (myProjectsBtn) {
+  myProjectsBtn.addEventListener('click', () => {
+    state.myProjectsOnly = !state.myProjectsOnly;
+    if (state.myProjectsOnly) {
+      myProjectsBtn.classList.add('active');
+    } else {
+      myProjectsBtn.classList.remove('active');
+    }
+    render();
+  });
+}
+
+// User Perspective View Change Handler
+if (userViewSelect) {
+  userViewSelect.addEventListener('change', (e) => {
+    state.userView = e.target.value;
+    try {
+      const url = new URL(window.location);
+      if (state.userView === 'all') {
+        url.searchParams.delete('user');
+        url.searchParams.delete('view');
+      } else {
+        url.searchParams.set('user', state.userView);
+      }
+      window.history.replaceState({}, '', url);
+    } catch (err) {}
+    render();
+  });
+}
+
+if (clearUserViewBtn) {
+  clearUserViewBtn.addEventListener('click', () => {
+    state.userView = 'all';
+    try {
+      const url = new URL(window.location);
+      url.searchParams.delete('user');
+      url.searchParams.delete('view');
+      window.history.replaceState({}, '', url);
+    } catch (err) {}
+    render();
+  });
+}
 
 // "Needs Delegation" Quick Toggle
 if (needsDelegationBtn) {
@@ -967,6 +1215,9 @@ function render() {
     // Filter Mike's Report only
     if (state.filterMikesReportOnly && !p.inMikesReport) return false;
 
+    // User Perspective View Filter
+    if (!matchesUserView(p, state.userView)) return false;
+
     // "My Projects (Rob)": matches projects owned by Rob (i.e. not delegated to a coworker, or explicitly assigned to Rob)
     if (state.myProjectsOnly) {
       if (p.delegatedOwner && !p.delegatedOwner.toLowerCase().includes('rob')) {
@@ -1055,6 +1306,31 @@ function render() {
     } else {
       activeQuadrantBanner.style.display = 'none';
     }
+  }
+
+  // Update Active User View Banner & Selector
+  if (activeUserViewBanner) {
+    if (state.userView && state.userView !== 'all') {
+      activeUserViewBanner.style.display = 'flex';
+      const userLabels = {
+        rob: 'Rob Bagley (Assoc Director)',
+        rodrigo: 'Rodrigo Moll (DevOps Lead)',
+        greg: 'Gregory Fox (Assoc Director)',
+        karla: 'Karla Groom (Internships)',
+        kurt: 'Kurt Jones (PBWE / Prison Ed)',
+        joseph: 'Joseph Bonilla Abarca (Alumni)'
+      };
+      const label = userLabels[state.userView] || state.userView;
+      const count = state.projects.filter(p => !p.isRemoved && matchesUserView(p, state.userView)).length;
+      if (activeUserViewText) {
+        activeUserViewText.textContent = `Viewing ${label}'s Workspace (${count} active projects & delegations)`;
+      }
+    } else {
+      activeUserViewBanner.style.display = 'none';
+    }
+  }
+  if (userViewSelect && userViewSelect.value !== state.userView) {
+    userViewSelect.value = state.userView;
   }
 
   // Sync Metric Card Active Indicator & Quadrant Dropdown
@@ -1181,6 +1457,9 @@ function renderQuadrantCards(container, items, qClass) {
     card.className = `project-card ${p.isRemoved ? 'card-archived' : ''} ${p.needsDelegation && !p.delegatedOwner ? 'card-needs-delegation' : ''}`;
     card.onclick = () => openEditModal(p.id);
 
+    const attCount = p.attachments ? p.attachments.length : 0;
+    const attBtnClass = attCount > 0 ? 'btn-card-attachments has-attachments' : 'btn-card-attachments';
+
     card.innerHTML = `
       <div class="card-top">
         <div class="card-badges">
@@ -1206,6 +1485,9 @@ function renderQuadrantCards(container, items, qClass) {
         <div class="card-actions-group">
           <button class="btn-card-mike ${p.inMikesReport ? 'active' : ''}" onclick="event.stopPropagation(); window.toggleCardMikesReport('${p.id}')" title="${p.inMikesReport ? 'Included in Mike Ray 1:1 Report (Click to remove)' : 'Click to include in Mike Ray 1:1 Report'}">
             ${p.inMikesReport ? '⭐ 1:1 Report' : '☆ Add to 1:1'}
+          </button>
+          <button class="${attBtnClass}" onclick="event.stopPropagation(); window.openAttachmentViewer('${p.id}')" title="${attCount} attached file(s) and links - click to view or add">
+            📎 ${attCount > 0 ? `${attCount} ${attCount === 1 ? 'file' : 'files'}` : 'Attach'}
           </button>
           <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
             🚀 Start Prompt
@@ -1238,6 +1520,9 @@ function renderList(container, items) {
     card.onclick = () => openEditModal(p.id);
 
     const qClass = p.quadrant.toLowerCase();
+    const attCount = p.attachments ? p.attachments.length : 0;
+    const attBtnClass = attCount > 0 ? 'btn-card-attachments has-attachments' : 'btn-card-attachments';
+
     card.innerHTML = `
       <div class="card-top">
         <div class="card-badges">
@@ -1264,6 +1549,9 @@ function renderList(container, items) {
         <div class="card-actions-group">
           <button class="btn-card-mike ${p.inMikesReport ? 'active' : ''}" onclick="event.stopPropagation(); window.toggleCardMikesReport('${p.id}')" title="${p.inMikesReport ? 'Included in Mike Ray 1:1 Report (Click to remove)' : 'Click to include in Mike Ray 1:1 Report'}">
             ${p.inMikesReport ? '⭐ 1:1 Report' : '☆ Add to 1:1'}
+          </button>
+          <button class="${attBtnClass}" onclick="event.stopPropagation(); window.openAttachmentViewer('${p.id}')" title="${attCount} attached file(s) and links - click to view or add">
+            📎 ${attCount > 0 ? `${attCount} ${attCount === 1 ? 'file' : 'files'}` : 'Attach'}
           </button>
           <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
             🚀 Start Prompt
@@ -1303,6 +1591,11 @@ function openEditModal(id) {
   formDescription.value = p.description || '';
   formLink.value = p.link || '';
   if (formPromptDoc) formPromptDoc.value = p.promptDoc || `${p.id}.md`;
+  if (formInMikesReport) formInMikesReport.checked = !!p.inMikesReport;
+
+  // Initialize attachments in modal
+  currentModalAttachments = JSON.parse(JSON.stringify(p.attachments || []));
+  renderModalAttachmentsList();
 
   if (p.isRemoved) {
     modalCompleteRemoveBtn.style.display = 'none';
@@ -1345,6 +1638,11 @@ function openAddModal() {
   formDescription.value = '';
   formLink.value = '';
   if (formPromptDoc) formPromptDoc.value = '';
+  if (formInMikesReport) formInMikesReport.checked = false;
+
+  // Reset attachments for new project
+  currentModalAttachments = [];
+  renderModalAttachmentsList();
 
   modalCompleteRemoveBtn.style.display = 'none';
   modalRestoreBtn.style.display = 'none';
@@ -1389,6 +1687,8 @@ projectForm.addEventListener('submit', (e) => {
       p.progress = parseInt(formProgress.value, 10);
       p.description = formDescription.value;
       p.link = formLink.value;
+      p.inMikesReport = formInMikesReport ? formInMikesReport.checked : false;
+      p.attachments = currentModalAttachments;
     }
   } else {
     // Add New project
@@ -1407,6 +1707,8 @@ projectForm.addEventListener('submit', (e) => {
       description: formDescription.value,
       link: formLink.value,
       promptDoc: (formPromptDoc && formPromptDoc.value.trim()) ? formPromptDoc.value.trim() : 'prompt.md',
+      inMikesReport: formInMikesReport ? formInMikesReport.checked : false,
+      attachments: currentModalAttachments,
       isRemoved: false,
       milestones: []
     };
@@ -1417,6 +1719,262 @@ projectForm.addEventListener('submit', (e) => {
   closeModal();
   render();
 });
+
+// Attachment Helpers and Handlers
+function getAttachmentIcon(att) {
+  if (att.type === 'link') {
+    const url = (att.url || '').toLowerCase();
+    if (url.includes('github')) return '💻';
+    if (url.includes('instructure') || url.includes('canvas')) return '🎓';
+    if (url.includes('sharepoint') || url.includes('onedrive')) return '☁️';
+    if (url.includes('peoplegrove')) return '🤝';
+    return '🔗';
+  }
+  const name = (att.name || '').toLowerCase();
+  if (name.endsWith('.pdf')) return '📕';
+  if (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.webp') || name.endsWith('.gif')) return '🖼️';
+  if (name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.csv')) return '📊';
+  if (name.endsWith('.docx') || name.endsWith('.doc')) return '📝';
+  if (name.endsWith('.md') || name.endsWith('.txt')) return '📄';
+  if (name.endsWith('.zip') || name.endsWith('.tar') || name.endsWith('.gz')) return '📦';
+  return '📎';
+}
+
+function formatBytes(bytes) {
+  if (!bytes || bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+let currentModalAttachments = [];
+
+function renderModalAttachmentsList() {
+  if (!modalAttachmentsList) return;
+  modalAttachmentsList.innerHTML = '';
+  if (modalAttachmentsCount) modalAttachmentsCount.textContent = currentModalAttachments.length;
+
+  if (currentModalAttachments.length === 0) {
+    modalAttachmentsList.innerHTML = '<div class="empty-attachments-msg">No attachments yet. Drop files or add links below.</div>';
+    return;
+  }
+
+  currentModalAttachments.forEach(att => {
+    const chip = document.createElement('div');
+    chip.className = 'attachment-item-chip';
+    const icon = getAttachmentIcon(att);
+    const meta = att.type === 'link' ? 'Cloud Link' : formatBytes(att.size);
+
+    chip.innerHTML = `
+      <div class="attachment-chip-left">
+        <span class="attachment-chip-icon">${icon}</span>
+        <span class="attachment-chip-name" title="${escapeHTML(att.name)}">${escapeHTML(att.name)}</span>
+        <span class="attachment-chip-meta">(${meta})</span>
+      </div>
+      <div class="attachment-chip-actions">
+        ${att.type === 'link' ? 
+          `<a href="${att.url}" target="_blank" rel="noopener" class="btn-att-action">Open ↗</a>` :
+          `<button type="button" class="btn-att-action" onclick="window.downloadAttachment('${att.id}')">Download ⬇</button>`
+        }
+        <button type="button" class="btn-att-remove" onclick="window.removeModalAttachment('${att.id}')" title="Remove attachment">✕</button>
+      </div>
+    `;
+    modalAttachmentsList.appendChild(chip);
+  });
+}
+
+window.removeModalAttachment = function(attId) {
+  currentModalAttachments = currentModalAttachments.filter(a => a.id !== attId);
+  renderModalAttachmentsList();
+};
+
+window.downloadAttachment = async function(attId) {
+  let item = currentModalAttachments.find(a => a.id === attId);
+  if (!item) {
+    for (const p of state.projects) {
+      if (p.attachments) {
+        item = p.attachments.find(a => a.id === attId);
+        if (item) break;
+      }
+    }
+  }
+  if (!item) return;
+
+  if (item.dataUrl) {
+    const a = document.createElement('a');
+    a.href = item.dataUrl;
+    a.download = item.name || 'attachment';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    return;
+  }
+
+  const stored = await getIDBAttachment(item.id);
+  if (stored && stored.dataUrl) {
+    const a = document.createElement('a');
+    a.href = stored.dataUrl;
+    a.download = stored.name || 'attachment';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } else if (item.url) {
+    window.open(item.url, '_blank');
+  }
+};
+
+function handleFilesSelected(fileList) {
+  Array.from(fileList).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      const att = {
+        id: 'att-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+        name: file.name,
+        type: 'file',
+        size: file.size,
+        mimeType: file.type || 'application/octet-stream',
+        dataUrl: dataUrl,
+        dateAdded: new Date().toISOString()
+      };
+      saveIDBAttachment(att);
+      currentModalAttachments.push(att);
+      renderModalAttachmentsList();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+if (dropZone && formFileInput) {
+  ['dragenter', 'dragover'].forEach(name => {
+    dropZone.addEventListener(name, (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+  });
+  ['dragleave', 'drop'].forEach(name => {
+    dropZone.addEventListener(name, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+    });
+  });
+  dropZone.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) handleFilesSelected(files);
+  });
+  formFileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFilesSelected(e.target.files);
+      e.target.value = '';
+    }
+  });
+}
+
+if (btnAddAttachmentLink && formAttLinkUrl) {
+  btnAddAttachmentLink.addEventListener('click', () => {
+    let url = (formAttLinkUrl.value || '').trim();
+    if (!url) {
+      alert('Please provide a valid URL for the attachment.');
+      return;
+    }
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+      url = 'https://' + url;
+    }
+    let name = (formAttLinkName.value || '').trim();
+    if (!name) {
+      try {
+        const u = new URL(url);
+        name = u.hostname + u.pathname;
+      } catch (e) {
+        name = url;
+      }
+    }
+    currentModalAttachments.push({
+      id: 'att-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+      name: name,
+      type: 'link',
+      url: url,
+      dateAdded: new Date().toISOString()
+    });
+    formAttLinkName.value = '';
+    formAttLinkUrl.value = '';
+    renderModalAttachmentsList();
+  });
+}
+
+// Attachment Viewer Modal Logic
+let currentViewerProjectId = null;
+
+window.openAttachmentViewer = function(projectId) {
+  const p = state.projects.find(item => item.id === projectId);
+  if (!p) return;
+  currentViewerProjectId = projectId;
+  if (attViewerTitle) attViewerTitle.textContent = p.title;
+  const atts = p.attachments || [];
+  if (attViewerSubtitle) {
+    attViewerSubtitle.textContent = `${atts.length} attached document(s), assets, and cloud links`;
+  }
+
+  if (attViewerList) {
+    attViewerList.innerHTML = '';
+    if (atts.length === 0) {
+      attViewerList.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: #94A3B8;">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">📎</span>
+          <p style="font-size: 0.95rem; font-weight: 600; color: #475569; margin-bottom: 0.25rem;">No attachments added yet</p>
+          <p style="font-size: 0.8rem; margin-bottom: 1rem;">Upload project PDFs, spreadsheets, screenshots, or link OneDrive documents.</p>
+          <button type="button" class="btn btn-primary btn-sm" onclick="closeAttachmentViewer(); openEditModal('${p.id}')">➕ Add First Attachment</button>
+        </div>
+      `;
+    } else {
+      atts.forEach(att => {
+        const card = document.createElement('div');
+        card.className = 'viewer-att-card';
+        const icon = getAttachmentIcon(att);
+        const metaText = att.type === 'link' ? 'Cloud Resource / Web Link' : formatBytes(att.size);
+        const dateText = att.dateAdded ? new Date(att.dateAdded).toLocaleDateString() : '';
+        card.innerHTML = `
+          <div class="viewer-att-top">
+            <span class="viewer-att-icon">${icon}</span>
+            <div class="viewer-att-info">
+              <div class="viewer-att-name">${escapeHTML(att.name)}</div>
+              <div class="viewer-att-meta">${metaText}${dateText ? ' • ' + dateText : ''}</div>
+            </div>
+          </div>
+          <div class="viewer-att-actions">
+            ${att.type === 'link' ? 
+              `<a href="${att.url}" target="_blank" rel="noopener" class="viewer-att-btn viewer-att-btn-primary">Open Link ↗</a>` :
+              `<button type="button" class="viewer-att-btn viewer-att-btn-primary" onclick="window.downloadAttachment('${att.id}')">Download ⬇</button>`
+            }
+          </div>
+        `;
+        attViewerList.appendChild(card);
+      });
+    }
+  }
+
+  if (attViewerEditBtn) {
+    attViewerEditBtn.onclick = () => {
+      closeAttachmentViewer();
+      openEditModal(projectId);
+    };
+  }
+  if (attViewerModal) attViewerModal.style.display = 'flex';
+};
+
+function closeAttachmentViewer() {
+  if (attViewerModal) attViewerModal.style.display = 'none';
+  currentViewerProjectId = null;
+}
+
+if (attViewerClose) attViewerClose.addEventListener('click', closeAttachmentViewer);
+if (attViewerDoneBtn) attViewerDoneBtn.addEventListener('click', closeAttachmentViewer);
+if (attViewerModal) {
+  attViewerModal.addEventListener('click', (e) => {
+    if (e.target === attViewerModal) closeAttachmentViewer();
+  });
+}
 
 resetStorageBtn.addEventListener('click', () => {
   if (confirm('Reset to standard canonical project defaults with updated delegation states?')) {
@@ -1757,6 +2315,9 @@ if (summaryCopyMdBtn) {
 
 if (summaryPrintBtn) {
   summaryPrintBtn.addEventListener('click', () => {
+    if (summaryViewRendered && summaryMarkdownPreview && summaryMarkdownPreview.style.display !== 'none') {
+      summaryViewRendered.click();
+    }
     window.print();
   });
 }

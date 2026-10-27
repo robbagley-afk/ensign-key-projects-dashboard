@@ -1796,32 +1796,530 @@ body {
   gap: 0.75rem;
 }
 
+/* User Perspective Selector */
+.user-view-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem 0.25rem 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.user-view-group:hover, .user-view-group:focus-within {
+  border-color: var(--ensign-forest);
+  box-shadow: 0 0 0 2px rgba(0, 71, 49, 0.1);
+}
+
+.user-view-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--slate-700);
+  white-space: nowrap;
+}
+
+.user-view-select {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--slate-900);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+/* Active User View Perspective Banner */
+.active-user-view-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1rem;
+  margin-top: 0.85rem;
+  animation: fadeIn 0.15s ease;
+}
+
+.user-view-badge {
+  background: var(--ensign-forest);
+  color: #FFFFFF;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.active-user-view-banner .banner-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #065F46;
+}
+
+.btn-clear-user-view {
+  background: #FFFFFF;
+  border: 1px solid #6EE7B7;
+  color: #047857;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-clear-user-view:hover {
+  background: #D1FAE5;
+  color: #064E3B;
+}
+
+/* Project Card Attachments Button */
+.btn-card-attachments {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.btn-card-attachments:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+
+.btn-card-attachments.has-attachments {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+}
+
+.btn-card-attachments.has-attachments:hover {
+  background: #DBEAFE;
+  border-color: #93C5FD;
+}
+
+/* Modal Form Attachments Section */
+.form-attachments-section {
+  background: #F8FAFC;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.attachments-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.attachments-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.attachments-subtitle {
+  font-size: 0.78rem;
+  color: var(--slate-500);
+}
+
+.attachments-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.empty-attachments-msg {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  font-style: italic;
+  padding: 0.4rem 0;
+}
+
+.attachment-item-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  transition: border-color 0.15s ease;
+}
+
+.attachment-item-chip:hover {
+  border-color: #CBD5E1;
+}
+
+.attachment-chip-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.attachment-chip-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.attachment-chip-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1E293B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attachment-chip-meta {
+  font-size: 0.72rem;
+  color: #64748B;
+  margin-left: 0.4rem;
+  flex-shrink: 0;
+}
+
+.attachment-chip-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.btn-att-action {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-att-action:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.btn-att-remove {
+  background: transparent;
+  border: none;
+  color: #EF4444;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-att-remove:hover {
+  background: #FEE2E2;
+}
+
+.file-drop-target {
+  border: 2px dashed #CBD5E1;
+  border-radius: 6px;
+  background: #FFFFFF;
+  padding: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.65rem;
+}
+
+.file-drop-target.drag-over {
+  border-color: var(--ensign-forest);
+  background: #F0FDF4;
+}
+
+.drop-zone-icon {
+  font-size: 1.4rem;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.drop-zone-label {
+  font-size: 0.82rem;
+  color: #334155;
+  margin-bottom: 0.15rem;
+}
+
+.btn-browse-link {
+  background: none;
+  border: none;
+  color: var(--ensign-forest);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}
+
+.drop-zone-sub {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  display: block;
+}
+
+.attachment-link-adder {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.65rem;
+}
+
+.link-adder-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.35rem;
+}
+
+.link-adder-inputs {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+/* Attachment Viewer Modal */
+.modal-card-attachments {
+  max-width: 650px;
+  width: 90%;
+}
+
+.modal-attachments-body {
+  padding: 1.25rem 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.viewer-attachments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.85rem;
+}
+
+.viewer-att-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.viewer-att-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  border-color: #CBD5E1;
+}
+
+.viewer-att-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.viewer-att-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.viewer-att-info {
+  min-width: 0;
+}
+
+.viewer-att-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+  word-break: break-word;
+  line-height: 1.3;
+  margin-bottom: 0.2rem;
+}
+
+.viewer-att-meta {
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.viewer-att-actions {
+  display: flex;
+  gap: 0.4rem;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 0.65rem;
+}
+
+.viewer-att-btn {
+  flex: 1;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.viewer-att-btn-primary {
+  background: var(--ensign-forest);
+  color: #FFFFFF;
+  border: none;
+}
+
+.viewer-att-btn-primary:hover {
+  background: var(--ensign-forest-dark);
+}
+
+.viewer-att-btn-secondary {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+}
+
+.viewer-att-btn-secondary:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
 @media print {
-  body * {
-    visibility: hidden;
-  }
-  #summary-rendered-preview, #summary-rendered-preview * {
-    visibility: visible;
-  }
-  #summary-rendered-preview {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    border: none;
-    padding: 0;
-  }
-  .modal-overlay {
-    position: static;
-    background: none;
-  }
-  .modal-card {
-    box-shadow: none;
-    border: none;
-    max-width: 100%;
-    width: 100%;
-  }
-  .modal-header, .summary-toolbar-actions, .btn-close {
+  /* Hide all dashboard UI, page structure, and interactive controls */
+  header,
+  nav,
+  main,
+  footer,
+  .toolbar,
+  .kpi-section,
+  .view-container,
+  .user-view-group,
+  .active-user-view-banner,
+  .active-quadrant-banner,
+  #matrix-view,
+  #list-view,
+  #project-modal,
+  #delegate-modal,
+  #prompt-modal,
+  #attachment-viewer-modal,
+  .modal-overlay:not(#exec-summary-modal),
+  #exec-summary-modal .modal-header,
+  #exec-summary-modal .summary-toolbar-actions,
+  #exec-summary-modal .btn-close,
+  #exec-summary-modal .summary-view-toggle,
+  #summary-markdown-preview {
     display: none !important;
+  }
+
+  /* Reset body and html for clean multi-page flow without blank sheets */
+  html, body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Unravel modal wrapper into a natural, seamless document flow */
+  #exec-summary-modal.modal-overlay {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  #exec-summary-modal .modal-card,
+  #exec-summary-modal .modal-card-summary {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  #exec-summary-modal .modal-body {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  #summary-rendered-preview {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  #summary-rendered-preview * {
+    visibility: visible !important;
+  }
+
+  /* Prevent cards from awkwardly splitting across page boundaries */
+  .briefing-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 0.85rem !important;
+  }
+
+  .briefing-section {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .briefing-section h3 {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
 }
