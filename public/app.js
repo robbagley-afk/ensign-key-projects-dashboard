@@ -268,6 +268,8 @@ let state = {
   projects: loadProjects(),
   currentView: 'matrix', // 'matrix' or 'list'
   filterQuadrant: 'all', // 'all', 'Q1', 'Q2', 'Q3', 'Q4'
+  filterMikesReportOnly: false,
+  execSummaryScope: 'mikes', // 'mikes' or 'all'
   filterDepartment: 'all',
   filterOwner: 'all',
   filterPillar: 'all',
@@ -306,6 +308,9 @@ function loadProjects() {
           if (!p.delegatedOwner && (!p.owner || p.owner.trim() === '')) {
             p.owner = 'Rob Bagley';
           }
+          if (p.inMikesReport === undefined) {
+            p.inMikesReport = p.quadrant === 'Q1' || p.id === 'career-ui-suite' || p.id === 'ens101-polish' || p.id === 'car398-canvas-fixes';
+          }
           return p;
         });
       }
@@ -335,6 +340,13 @@ const myProjectsBtn = document.getElementById('my-projects-btn');
 const needsDelegationBtn = document.getElementById('needs-delegation-btn');
 const needsDelegationCountEl = document.getElementById('needs-delegation-count');
 const filterQuadrantSelect = document.getElementById('filter-quadrant-select');
+const mikesReportBtn = document.getElementById('mikes-report-btn');
+const mikesReportCountEl = document.getElementById('mikes-report-count');
+const execSummaryBtn = document.getElementById('exec-summary-btn');
+const activeQuadrantBanner = document.getElementById('active-quadrant-banner');
+const activeQuadrantBannerText = document.getElementById('active-quadrant-banner-text');
+const clearQuadrantBannerBtn = document.getElementById('clear-quadrant-banner-btn');
+const formInMikesReport = document.getElementById('form-in-mikes-report');
 const filterDepartment = document.getElementById('filter-department');
 const filterOwner = document.getElementById('filter-owner');
 const filterPillar = document.getElementById('filter-pillar');
@@ -952,6 +964,9 @@ function render() {
     if (!state.showRemoved && p.isRemoved) return false;
     if (state.showRemoved && !p.isRemoved) return false;
 
+    // Filter Mike's Report only
+    if (state.filterMikesReportOnly && !p.inMikesReport) return false;
+
     // "My Projects (Rob)": matches projects owned by Rob (i.e. not delegated to a coworker, or explicitly assigned to Rob)
     if (state.myProjectsOnly) {
       if (p.delegatedOwner && !p.delegatedOwner.toLowerCase().includes('rob')) {
@@ -1015,6 +1030,32 @@ function render() {
   countBadgeQ2.textContent = q2.length;
   countBadgeQ3.textContent = q3.length;
   countBadgeQ4.textContent = q4.length;
+
+  // Update Mike's Report counter & toggle button state
+  const totalMikesCount = state.projects.filter(p => !p.isRemoved && p.inMikesReport).length;
+  if (mikesReportCountEl) mikesReportCountEl.textContent = totalMikesCount;
+  if (mikesReportBtn) {
+    if (state.filterMikesReportOnly) mikesReportBtn.classList.add('active');
+    else mikesReportBtn.classList.remove('active');
+  }
+
+  // Update Active Quadrant Banner
+  if (activeQuadrantBanner) {
+    if (state.filterQuadrant !== 'all') {
+      activeQuadrantBanner.style.display = 'flex';
+      const quadLabels = {
+        Q1: 'Q1: Urgent & Important (Do First)',
+        Q2: 'Q2: Strategic Mission (Deep Focus)',
+        Q3: 'Q3: Urgent & Routine (Delegate)',
+        Q4: 'Q4: Low Priority (Triage)'
+      };
+      if (activeQuadrantBannerText) {
+        activeQuadrantBannerText.textContent = `Showing ${quadLabels[state.filterQuadrant] || state.filterQuadrant} projects only`;
+      }
+    } else {
+      activeQuadrantBanner.style.display = 'none';
+    }
+  }
 
   // Sync Metric Card Active Indicator & Quadrant Dropdown
   [metricCardQ1, metricCardQ2, metricCardQ3, metricCardQ4].forEach(card => card && card.classList.remove('active-quadrant-filter'));
@@ -1163,6 +1204,9 @@ function renderQuadrantCards(container, items, qClass) {
 
       <div class="card-footer">
         <div class="card-actions-group">
+          <button class="btn-card-mike ${p.inMikesReport ? 'active' : ''}" onclick="event.stopPropagation(); window.toggleCardMikesReport('${p.id}')" title="${p.inMikesReport ? 'Included in Mike Ray 1:1 Report (Click to remove)' : 'Click to include in Mike Ray 1:1 Report'}">
+            ${p.inMikesReport ? '⭐ 1:1 Report' : '☆ Add to 1:1'}
+          </button>
           <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
             🚀 Start Prompt
           </button>
@@ -1218,6 +1262,9 @@ function renderList(container, items) {
 
       <div class="card-footer">
         <div class="card-actions-group">
+          <button class="btn-card-mike ${p.inMikesReport ? 'active' : ''}" onclick="event.stopPropagation(); window.toggleCardMikesReport('${p.id}')" title="${p.inMikesReport ? 'Included in Mike Ray 1:1 Report (Click to remove)' : 'Click to include in Mike Ray 1:1 Report'}">
+            ${p.inMikesReport ? '⭐ 1:1 Report' : '☆ Add to 1:1'}
+          </button>
           <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
             🚀 Start Prompt
           </button>
@@ -1430,3 +1477,286 @@ function escapeHTML(str) {
 
 // Initial render
 render();
+
+// Mike's Report Card Toggle Handler
+window.toggleCardMikesReport = function(id) {
+  const p = state.projects.find(item => item.id === id);
+  if (!p) return;
+  p.inMikesReport = !p.inMikesReport;
+  saveProjects();
+  render();
+};
+
+if (mikesReportBtn) {
+  mikesReportBtn.addEventListener('click', () => {
+    state.filterMikesReportOnly = !state.filterMikesReportOnly;
+    render();
+  });
+}
+
+if (clearQuadrantBannerBtn) {
+  clearQuadrantBannerBtn.addEventListener('click', () => {
+    state.filterQuadrant = 'all';
+    render();
+  });
+}
+
+// Executive Summary & Mike Ray 1:1 Report Modal Elements
+const execSummaryModal = document.getElementById('exec-summary-modal');
+const execSummaryClose = document.getElementById('exec-summary-close');
+const summaryScopeMikes = document.getElementById('summary-scope-mikes');
+const summaryScopeAll = document.getElementById('summary-scope-all');
+const summaryMikesCountEl = document.getElementById('summary-mikes-count');
+const summaryAllCountEl = document.getElementById('summary-all-count');
+const summaryCopyMdBtn = document.getElementById('summary-copy-md-btn');
+const summaryPrintBtn = document.getElementById('summary-print-btn');
+const summaryCopyFeedback = document.getElementById('summary-copy-feedback');
+const summaryRenderedPreview = document.getElementById('summary-rendered-preview');
+
+let currentActiveSummaryMarkdown = '';
+
+function getExecutiveSummaryItems() {
+  const nonArchived = state.projects.filter(p => !p.isRemoved);
+  if (state.execSummaryScope === 'mikes') {
+    return nonArchived.filter(p => p.inMikesReport);
+  }
+  return nonArchived;
+}
+
+function generateExecutiveSummaryMarkdown(items) {
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const q1 = items.filter(p => p.quadrant === 'Q1');
+  const q2 = items.filter(p => p.quadrant === 'Q2');
+  const q3 = items.filter(p => p.quadrant === 'Q3');
+  const q4 = items.filter(p => p.quadrant === 'Q4');
+
+  let md = `# Director 1:1 Briefing · Mike Ray\n`;
+  md += `**Date:** ${today}\n`;
+  md += `**Prepared by:** Rob Bagley, Associate Director Career Services\n`;
+  md += `**Portfolio:** Ensign Key Projects & Situational Awareness Dashboard\n`;
+  md += `**Scope:** ${state.execSummaryScope === 'mikes' ? "Mike's 1:1 Focus Items" : 'All Active Key Projects'} (${items.length} projects)\n\n`;
+  md += `---\n\n`;
+
+  md += `## Executive Snapshot\n`;
+  md += `- **Q1 Immediate Fires & Deadlines (Do First):** ${q1.length} project(s)\n`;
+  md += `- **Q2 Strategic Mission & Core AI Systems (Deep Focus):** ${q2.length} project(s)\n`;
+  md += `- **Q3 Delegated Operations & DevOps Requests:** ${q3.length} project(s)\n`;
+  md += `- **Q4 Low Priority / Triage:** ${q4.length} project(s)\n\n`;
+  md += `---\n\n`;
+
+  function formatSection(title, list) {
+    if (list.length === 0) return `### ${title}\n*No items in this category.*\n\n`;
+    let s = `### ${title} (${list.length})\n\n`;
+    list.forEach(p => {
+      const owner = p.delegatedOwner ? `${p.delegatedOwner} (Delegated by Rob)` : (p.owner || 'Rob Bagley');
+      s += `#### ${p.title}\n`;
+      s += `- **Status:** ${p.status} (${p.progress}%)\n`;
+      s += `- **Lead / Owner:** ${owner}\n`;
+      s += `- **Department & Pillar:** ${p.department} · ${p.pillar || 'General'}\n`;
+      if (p.dueDate) s += `- **Target Milestone:** ${p.dueDate}\n`;
+      if (p.description) s += `- **Summary:** ${p.description}\n`;
+      if (p.link) s += `- **Reference Link:** ${p.link}\n`;
+      s += `\n`;
+    });
+    return s;
+  }
+
+  md += formatSection('Q1: Urgent & Important · Immediate Fires & Deadlines', q1);
+  md += formatSection('Q2: Strategic Mission · Deep Learning, AI Systems & Curriculum', q2);
+  md += formatSection('Q3: Urgent & Routine · Delegated Operations & DevOps Intake', q3);
+  if (q4.length > 0) {
+    md += formatSection('Q4: Low Priority · Triage & Deprioritized', q4);
+  }
+
+  md += `## Discussion Topics & Decisions for Mike Ray\n`;
+  md += `1. **Resource Allocation & Delegation:** Review status of delegated team members and student employees.\n`;
+  md += `2. **Milestones & Blockers:** Confirm timeline on upcoming Q1 critical deliverables.\n`;
+  md += `3. **Strategic AI Alignment:** Next steps on Ensign AI tools, student readiness, and curriculum integration.\n`;
+
+  return md;
+}
+
+function renderExecutiveSummaryHTML(items) {
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const q1 = items.filter(p => p.quadrant === 'Q1');
+  const q2 = items.filter(p => p.quadrant === 'Q2');
+  const q3 = items.filter(p => p.quadrant === 'Q3');
+  const q4 = items.filter(p => p.quadrant === 'Q4');
+
+  function renderItemsHTML(list, qClass) {
+    if (list.length === 0) return '<p style="color:#94A3B8; font-style:italic; font-size:0.85rem; padding: 0.5rem 0;">No active projects in this section.</p>';
+    return list.map(p => {
+      const owner = p.delegatedOwner ? `<span style="color:#007150; font-weight:700;">🤝 ${escapeHTML(p.delegatedOwner)}</span> (Delegated)` : `<span>👤 ${escapeHTML(p.owner || 'Rob Bagley')}</span>`;
+      return `
+        <div class="briefing-item ${qClass}">
+          <div class="briefing-item-top">
+            <span class="briefing-item-title">${escapeHTML(p.title)}</span>
+            ${getStatusBadge(p.status)}
+          </div>
+          <p class="briefing-item-desc">${escapeHTML(p.description || 'No detailed description provided.')}</p>
+          <div class="briefing-item-meta">
+            <span><strong>Lead:</strong> ${owner}</span>
+            <span><strong>Dept:</strong> ${escapeHTML(p.department)}</span>
+            <span><strong>Progress:</strong> ${p.progress}%</span>
+            ${p.dueDate ? `<span><strong>Due:</strong> ${p.dueDate}</span>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  return `
+    <div class="briefing-header">
+      <div class="briefing-title">Executive Briefing · Director Mike Ray</div>
+      <div class="briefing-meta">
+        <strong>Date:</strong> ${today} &nbsp;|&nbsp; 
+        <strong>Prepared By:</strong> Rob Bagley, Associate Director Career Services &nbsp;|&nbsp;
+        <strong>Scope:</strong> ${state.execSummaryScope === 'mikes' ? "⭐ Mike's 1:1 Selected Items" : '🌐 All Key Projects'} (${items.length} items)
+      </div>
+    </div>
+
+    <div class="briefing-stat-row">
+      <div class="briefing-stat-card">
+        <div class="briefing-stat-num" style="color:var(--q1-color);">${q1.length}</div>
+        <div class="briefing-stat-lbl">Q1 Urgent Fires</div>
+      </div>
+      <div class="briefing-stat-card">
+        <div class="briefing-stat-num" style="color:var(--q2-color);">${q2.length}</div>
+        <div class="briefing-stat-lbl">Q2 Strategic Mission</div>
+      </div>
+      <div class="briefing-stat-card">
+        <div class="briefing-stat-num" style="color:var(--q3-color);">${q3.length}</div>
+        <div class="briefing-stat-lbl">Q3 Delegated Ops</div>
+      </div>
+      <div class="briefing-stat-card">
+        <div class="briefing-stat-num" style="color:var(--q4-color);">${q4.length}</div>
+        <div class="briefing-stat-lbl">Q4 Triage</div>
+      </div>
+    </div>
+
+    <div class="briefing-section">
+      <div class="briefing-section-title" style="color:var(--q1-color);">
+        <span>🔴 Q1: Urgent &amp; Important · Immediate Fires &amp; Critical Deadlines</span>
+        <span>${q1.length} item(s)</span>
+      </div>
+      ${renderItemsHTML(q1, 'item-q1')}
+    </div>
+
+    <div class="briefing-section">
+      <div class="briefing-section-title" style="color:var(--q2-color);">
+        <span>🟢 Q2: Strategic Mission · Deep Learning, AI Systems &amp; Curriculum</span>
+        <span>${q2.length} item(s)</span>
+      </div>
+      ${renderItemsHTML(q2, 'item-q2')}
+    </div>
+
+    <div class="briefing-section">
+      <div class="briefing-section-title" style="color:var(--q3-color);">
+        <span>🟡 Q3: Urgent &amp; Routine · Delegated Operations &amp; DevOps Intake</span>
+        <span>${q3.length} item(s)</span>
+      </div>
+      ${renderItemsHTML(q3, 'item-q3')}
+    </div>
+
+    ${q4.length > 0 ? `
+    <div class="briefing-section">
+      <div class="briefing-section-title" style="color:var(--q4-color);">
+        <span>⚪ Q4: Low Priority · Triage &amp; Deprioritized</span>
+        <span>${q4.length} item(s)</span>
+      </div>
+      ${renderItemsHTML(q4, 'item-q4')}
+    </div>
+    ` : ''}
+
+    <div class="briefing-section" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:1rem; margin-top:1.5rem;">
+      <h4 style="font-size:0.95rem; font-weight:700; color:#0F172A; margin-bottom:0.5rem;">📌 Discussion Topics for 1:1 Meeting with Mike Ray</h4>
+      <ul style="padding-left:1.25rem; font-size:0.85rem; color:#334155; line-height:1.6;">
+        <li><strong>Active Blockers &amp; Deadlines:</strong> Review status of urgent Q1 deliverables and Canvas/gradebook updates.</li>
+        <li><strong>Coworker Delegation &amp; DevOps:</strong> Review projects delegated to Rodrigo, Karla, and the Career Mentor team.</li>
+        <li><strong>AI Tools &amp; Student Readiness:</strong> Review deployment progress on PathwayU, ENS 101, and local model infrastructure.</li>
+      </ul>
+    </div>
+  `;
+}
+
+window.openExecSummaryModal = function() {
+  const nonArchived = state.projects.filter(p => !p.isRemoved);
+  const mikesCount = nonArchived.filter(p => p.inMikesReport).length;
+  const allCount = nonArchived.length;
+
+  if (summaryMikesCountEl) summaryMikesCountEl.textContent = mikesCount;
+  if (summaryAllCountEl) summaryAllCountEl.textContent = allCount;
+
+  // Update Scope Buttons
+  if (summaryScopeMikes && summaryScopeAll) {
+    if (state.execSummaryScope === 'mikes') {
+      summaryScopeMikes.classList.add('active');
+      summaryScopeAll.classList.remove('active');
+    } else {
+      summaryScopeAll.classList.add('active');
+      summaryScopeMikes.classList.remove('active');
+    }
+  }
+
+  const items = getExecutiveSummaryItems();
+  currentActiveSummaryMarkdown = generateExecutiveSummaryMarkdown(items);
+
+  if (summaryRenderedPreview) {
+    summaryRenderedPreview.innerHTML = renderExecutiveSummaryHTML(items);
+  }
+
+  if (summaryCopyFeedback) summaryCopyFeedback.style.display = 'none';
+  if (execSummaryModal) execSummaryModal.style.display = 'flex';
+};
+
+if (execSummaryBtn) {
+  execSummaryBtn.addEventListener('click', () => {
+    window.openExecSummaryModal();
+  });
+}
+
+if (execSummaryClose) {
+  execSummaryClose.addEventListener('click', () => {
+    if (execSummaryModal) execSummaryModal.style.display = 'none';
+  });
+}
+
+if (execSummaryModal) {
+  execSummaryModal.addEventListener('click', (e) => {
+    if (e.target === execSummaryModal) execSummaryModal.style.display = 'none';
+  });
+}
+
+if (summaryScopeMikes) {
+  summaryScopeMikes.addEventListener('click', () => {
+    state.execSummaryScope = 'mikes';
+    window.openExecSummaryModal();
+  });
+}
+
+if (summaryScopeAll) {
+  summaryScopeAll.addEventListener('click', () => {
+    state.execSummaryScope = 'all';
+    window.openExecSummaryModal();
+  });
+}
+
+if (summaryCopyMdBtn) {
+  summaryCopyMdBtn.addEventListener('click', () => {
+    if (!currentActiveSummaryMarkdown) return;
+    navigator.clipboard.writeText(currentActiveSummaryMarkdown).then(() => {
+      if (summaryCopyFeedback) {
+        summaryCopyFeedback.style.display = 'inline-block';
+        setTimeout(() => {
+          summaryCopyFeedback.style.display = 'none';
+        }, 3500);
+      }
+    }).catch(err => console.error('Failed to copy executive summary:', err));
+  });
+}
+
+if (summaryPrintBtn) {
+  summaryPrintBtn.addEventListener('click', () => {
+    window.print();
+  });
+}

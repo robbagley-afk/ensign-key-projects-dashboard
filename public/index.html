@@ -70,6 +70,9 @@
             All Projects List
           </button>
         </div>
+        <button id="exec-summary-btn" class="btn btn-secondary btn-exec-summary" title="Generate Executive Summary & 1:1 Report for Director Mike Ray">
+          <span class="btn-icon">👔</span> Mike's 1:1 Report
+        </button>
         <button id="add-project-btn" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add Project
@@ -131,6 +134,11 @@
         <!-- Quick "My Projects" Toggle Button -->
         <button id="my-projects-btn" class="pill-btn" title="Toggle between showing only your projects or all team projects">
           <span class="pill-icon">👤</span> My Projects (Rob)
+        </button>
+
+        <!-- Quick "Mike's Report" Toggle Button -->
+        <button id="mikes-report-btn" class="pill-btn btn-mikes-toggle" title="Filter to show only projects marked for Director Mike Ray 1:1 Report">
+          <span class="pill-icon">⭐</span> Mike's Report (<span id="mikes-report-count">0</span>)
         </button>
 
         <!-- Eisenhower Quadrant Filter -->
@@ -197,6 +205,15 @@
         </button>
 
         <button id="reset-storage-btn" class="btn btn-outline" title="Reset to standard Mem project defaults">Reset Defaults</button>
+      </div>
+
+      <!-- Active Quadrant Filter Banner -->
+      <div id="active-quadrant-banner" class="active-quadrant-banner" style="display: none;">
+        <div class="banner-left">
+          <span class="banner-badge">ACTIVE FILTER</span>
+          <span id="active-quadrant-banner-text" class="banner-text">Showing Q1: Urgent &amp; Important projects only</span>
+        </div>
+        <button type="button" id="clear-quadrant-banner-btn" class="btn-clear-quadrant" title="Clear Quadrant Filter">✕ Show All Quadrants</button>
       </div>
     </section>
 
@@ -379,6 +396,13 @@
           </div>
         </div>
 
+        <div class="form-group form-checkbox-group">
+          <label class="checkbox-label" for="form-in-mikes-report">
+            <input type="checkbox" id="form-in-mikes-report">
+            <span>⭐ <strong>Include in Mike Ray 1:1 Report</strong> (features this project in the executive briefing)</span>
+          </label>
+        </div>
+
         <div class="form-actions">
           <div class="modal-left-actions">
             <button type="button" id="modal-complete-remove-btn" class="btn btn-complete-remove-modal" title="Mark 100% complete and remove from active dashboard">
@@ -478,6 +502,48 @@
       <p>Ensign College Career Services · Strategic Situational Awareness Dashboard · Aligned with Elder Kim B. Clark's Deep Learning Framework</p>
     </div>
   </footer>
+
+  <!-- Modal: Executive Summary & Mike Ray 1:1 Report -->
+  <div id="exec-summary-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card modal-card-summary">
+      <div class="modal-header">
+        <div>
+          <div class="modal-header-badge">EXECUTIVE BRIEFING</div>
+          <h3 id="exec-summary-title">Director 1:1 Report · Mike Ray</h3>
+          <p class="modal-subtitle">Ensign College Career Services · Situational Awareness &amp; Key Projects Portfolio</p>
+        </div>
+        <button type="button" id="exec-summary-close" class="btn-close" aria-label="Close modal">&times;</button>
+      </div>
+      
+      <div class="modal-body modal-summary-body">
+        <div class="summary-toolbar-actions">
+          <div class="summary-scope-selector">
+            <span class="scope-label">Report Scope:</span>
+            <div class="scope-pills">
+              <button type="button" id="summary-scope-mikes" class="scope-btn active">⭐ Mike's 1:1 Selected (<span id="summary-mikes-count">0</span>)</button>
+              <button type="button" id="summary-scope-all" class="scope-btn">🌐 All Active Key Projects (<span id="summary-all-count">0</span>)</button>
+            </div>
+          </div>
+          <div class="summary-btn-group">
+            <button type="button" id="summary-copy-md-btn" class="btn btn-primary btn-copy-summary">
+              📋 Copy Formatted Markdown
+            </button>
+            <button type="button" id="summary-print-btn" class="btn btn-outline btn-print-summary">
+              🖨️ Print / Save PDF
+            </button>
+          </div>
+        </div>
+        
+        <div id="summary-copy-feedback" class="copy-feedback-pill" style="display: none;">
+          ✅ Executive summary copied to clipboard! Ready to paste into Mem, Teams, or Outlook 1:1 notes.
+        </div>
+        
+        <div class="summary-preview-container" id="summary-rendered-preview">
+          <!-- Dynamically populated executive summary preview -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
