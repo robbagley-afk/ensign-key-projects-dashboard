@@ -367,12 +367,31 @@ async function getIDBAttachment(id) {
 function getUserViewFromURL() {
   try {
     const params = new URLSearchParams(window.location.search);
-    const u = params.get('user') || params.get('view');
+    const u = params.get('user');
     if (u && ['all', 'rob', 'rodrigo', 'greg', 'karla', 'kurt', 'joseph'].includes(u.toLowerCase())) {
       return u.toLowerCase();
     }
+    const legacyView = params.get('view');
+    if (legacyView && ['rob', 'rodrigo', 'greg', 'karla', 'kurt', 'joseph'].includes(legacyView.toLowerCase())) {
+      return legacyView.toLowerCase();
+    }
   } catch (e) {}
   return 'all';
+}
+
+function getLayoutViewFromURL() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const layout = params.get('layout');
+    if (layout && ['matrix', 'kanban', 'list'].includes(layout.toLowerCase())) {
+      return layout.toLowerCase();
+    }
+    const view = params.get('view');
+    if (view && ['matrix', 'kanban', 'list'].includes(view.toLowerCase())) {
+      return view.toLowerCase();
+    }
+  } catch (e) {}
+  return 'matrix';
 }
 
 function matchesUserView(project, userView) {
@@ -433,7 +452,7 @@ function matchesUserView(project, userView) {
 
 let state = {
   projects: loadProjects(),
-  currentView: 'matrix', // 'matrix' or 'list'
+  currentView: getLayoutViewFromURL(), // 'matrix', 'kanban', or 'list'
   filterQuadrant: 'all', // 'all', 'Q1', 'Q2', 'Q3', 'Q4'
   filterMikesReportOnly: false,
   execSummaryScope: 'mikes', // 'mikes' or 'all'
@@ -523,8 +542,10 @@ function saveProjects() {
 
 // DOM Elements
 const viewMatrixBtn = document.getElementById('view-matrix-btn');
+const viewKanbanBtn = document.getElementById('view-kanban-btn');
 const viewListBtn = document.getElementById('view-list-btn');
 const matrixView = document.getElementById('matrix-view');
+const kanbanView = document.getElementById('kanban-view');
 const listView = document.getElementById('list-view');
 
 const searchInput = document.getElementById('search-input');
@@ -975,23 +996,17 @@ if (delegateRevertBtn) {
 }
 
 // Switch Views
-viewMatrixBtn.addEventListener('click', () => {
-  state.currentView = 'matrix';
-  viewMatrixBtn.classList.add('active');
-  viewListBtn.classList.remove('active');
-  matrixView.style.display = 'grid';
-  listView.style.display = 'none';
+function switchView(viewName) {
+  state.currentView = viewName;
+  if (viewMatrixBtn) viewMatrixBtn.classList.toggle('active', viewName === 'matrix');
+  if (viewKanbanBtn) viewKanbanBtn.classList.toggle('active', viewName === 'kanban');
+  if (viewListBtn) viewListBtn.classList.toggle('active', viewName === 'list');
   render();
-});
+}
 
-viewListBtn.addEventListener('click', () => {
-  state.currentView = 'list';
-  viewListBtn.classList.add('active');
-  viewMatrixBtn.classList.remove('active');
-  matrixView.style.display = 'none';
-  listView.style.display = 'block';
-  render();
-});
+if (viewMatrixBtn) viewMatrixBtn.addEventListener('click', () => switchView('matrix'));
+if (viewKanbanBtn) viewKanbanBtn.addEventListener('click', () => switchView('kanban'));
+if (viewListBtn) viewListBtn.addEventListener('click', () => switchView('list'));
 
 // "My Projects (Rob)" Quick Toggle (legacy support)
 if (myProjectsBtn) {
@@ -1345,6 +1360,10 @@ function render() {
   }
 
   if (state.currentView === 'matrix') {
+    if (matrixView) matrixView.style.display = 'grid';
+    if (kanbanView) kanbanView.style.display = 'none';
+    if (listView) listView.style.display = 'none';
+
     const quadrantBoxes = { Q1: boxQ1, Q2: boxQ2, Q3: boxQ3, Q4: boxQ4 };
     if (state.filterQuadrant === 'all') {
       Object.values(quadrantBoxes).forEach(box => {
@@ -1370,7 +1389,17 @@ function render() {
     renderQuadrantCards(cardsQ2, q2, 'q2');
     renderQuadrantCards(cardsQ3, q3, 'q3');
     renderQuadrantCards(cardsQ4, q4, 'q4');
+  } else if (state.currentView === 'kanban') {
+    if (matrixView) matrixView.style.display = 'none';
+    if (kanbanView) kanbanView.style.display = 'grid';
+    if (listView) listView.style.display = 'none';
+
+    renderKanban(filtered);
   } else {
+    if (matrixView) matrixView.style.display = 'none';
+    if (kanbanView) kanbanView.style.display = 'none';
+    if (listView) listView.style.display = 'block';
+
     // List view: filter list if a specific quadrant is selected
     const listItems = state.filterQuadrant === 'all'
       ? filtered
@@ -1570,6 +1599,186 @@ function renderList(container, items) {
     container.appendChild(card);
   });
 }
+
+function renderKanban(filteredItems) {
+  const colOnTrack = document.getElementById('cards-kanban-on-track');
+  const colInProgress = document.getElementById('cards-kanban-in-progress');
+  const colBlocked = document.getElementById('cards-kanban-blocked');
+  const colCompleted = document.getElementById('cards-kanban-completed');
+
+  const countOnTrack = document.getElementById('count-kanban-on-track');
+  const countInProgress = document.getElementById('count-kanban-in-progress');
+  const countBlocked = document.getElementById('count-kanban-blocked');
+  const countCompleted = document.getElementById('count-kanban-completed');
+
+  // Respect quadrant filter if selected
+  const items = state.filterQuadrant === 'all'
+    ? filteredItems
+    : filteredItems.filter(p => p.quadrant === state.filterQuadrant);
+
+  const groups = {
+    'On Track': [],
+    'In Progress': [],
+    'Blocked': [],
+    'Completed': []
+  };
+
+  items.forEach(p => {
+    const s = (p.status || '').trim();
+    if (s === 'In Progress') {
+      groups['In Progress'].push(p);
+    } else if (s === 'Blocked') {
+      groups['Blocked'].push(p);
+    } else if (s === 'Completed') {
+      groups['Completed'].push(p);
+    } else {
+      groups['On Track'].push(p);
+    }
+  });
+
+  if (countOnTrack) countOnTrack.textContent = groups['On Track'].length;
+  if (countInProgress) countInProgress.textContent = groups['In Progress'].length;
+  if (countBlocked) countBlocked.textContent = groups['Blocked'].length;
+  if (countCompleted) countCompleted.textContent = groups['Completed'].length;
+
+  renderKanbanColumnCards(colOnTrack, groups['On Track'], 'On Track');
+  renderKanbanColumnCards(colInProgress, groups['In Progress'], 'In Progress');
+  renderKanbanColumnCards(colBlocked, groups['Blocked'], 'Blocked');
+  renderKanbanColumnCards(colCompleted, groups['Completed'], 'Completed');
+}
+
+function renderKanbanColumnCards(container, items, colStatus) {
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (items.length === 0) {
+    container.innerHTML = '<div class="kanban-empty-state">No projects in this stage</div>';
+    return;
+  }
+
+  items.forEach(p => {
+    const card = document.createElement('div');
+    card.className = `project-card kanban-card ${p.isRemoved ? 'card-archived' : ''} ${p.needsDelegation && !p.delegatedOwner ? 'card-needs-delegation' : ''}`;
+    card.setAttribute('draggable', 'true');
+    card.setAttribute('data-id', p.id);
+    card.onclick = () => openEditModal(p.id);
+
+    // Native Drag and Drop events
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', p.id);
+      e.dataTransfer.effectAllowed = 'move';
+      card.classList.add('is-dragging');
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('is-dragging');
+      document.querySelectorAll('.kanban-column-cards').forEach(el => el.classList.remove('drag-over'));
+    });
+
+    const qClass = (p.quadrant || 'q4').toLowerCase();
+    const attCount = p.attachments ? p.attachments.length : 0;
+    const attBtnClass = attCount > 0 ? 'btn-card-attachments has-attachments' : 'btn-card-attachments';
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-badges">
+          <span class="kanban-quadrant-tag tag-${qClass}" title="Eisenhower Matrix: ${p.quadrant}">${p.quadrant}</span>
+          ${getDelegationBadge(p)}
+          ${getDepartmentBadge(p.department)}
+          ${getPillarBadge(p.pillar)}
+          ${getDueDateBadge(p.dueDate)}
+        </div>
+        ${getOwnerDisplay(p)}
+      </div>
+
+      <h3 class="card-title">${escapeHTML(p.title)}</h3>
+      <p class="card-desc">${escapeHTML(p.description)}</p>
+
+      <div class="progress-container">
+        <div class="progress-track">
+          <div class="progress-fill progress-fill-${qClass}" style="width: ${p.progress}%"></div>
+        </div>
+        <span class="progress-pct">${p.progress}%</span>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-actions-group">
+          <button class="btn-card-mike ${p.inMikesReport ? 'active' : ''}" onclick="event.stopPropagation(); window.toggleCardMikesReport('${p.id}')" title="${p.inMikesReport ? 'Included in Mike Ray 1:1 Report (Click to remove)' : 'Click to include in Mike Ray 1:1 Report'}">
+            ${p.inMikesReport ? '⭐ 1:1' : '☆ 1:1'}
+          </button>
+          <button class="${attBtnClass}" onclick="event.stopPropagation(); window.openAttachmentViewer('${p.id}')" title="${attCount} attached file(s) and links">
+            📎 ${attCount > 0 ? `${attCount}` : '+'}
+          </button>
+          <button class="btn-start-prompt" onclick="event.stopPropagation(); openPromptModal('${p.id}')" title="View & run start prompt for this project">
+            🚀
+          </button>
+          <button class="btn-delegate ${p.delegatedOwner ? 'btn-delegate-assigned' : ''}" onclick="event.stopPropagation(); openDelegateModal('${p.id}')" title="Delegate or reassign">
+            🤝
+          </button>
+        </div>
+        ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">Link ↗</a>` : ''}
+      </div>
+
+      <div class="kanban-card-move-bar" onclick="event.stopPropagation()">
+        <span class="kanban-move-label">Stage:</span>
+        <select class="kanban-move-select" onchange="window.moveProjectStatus('${p.id}', this.value)">
+          <option value="On Track" ${p.status === 'On Track' ? 'selected' : ''}>🟢 On Track</option>
+          <option value="In Progress" ${p.status === 'In Progress' ? 'selected' : ''}>🟡 In Progress</option>
+          <option value="Blocked" ${p.status === 'Blocked' ? 'selected' : ''}>🔴 Blocked</option>
+          <option value="Completed" ${p.status === 'Completed' ? 'selected' : ''}>✅ Completed</option>
+        </select>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function setupKanbanDragAndDrop() {
+  const columns = document.querySelectorAll('.kanban-column-cards');
+  columns.forEach(col => {
+    col.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      col.classList.add('drag-over');
+    });
+
+    col.addEventListener('dragleave', (e) => {
+      if (!col.contains(e.relatedTarget)) {
+        col.classList.remove('drag-over');
+      }
+    });
+
+    col.addEventListener('drop', (e) => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const projectId = e.dataTransfer.getData('text/plain');
+      const targetStatus = col.getAttribute('data-status');
+      if (projectId && targetStatus) {
+        window.moveProjectStatus(projectId, targetStatus);
+      }
+    });
+  });
+}
+
+window.moveProjectStatus = function(projectId, targetStatus) {
+  const p = state.projects.find(item => item.id === projectId);
+  if (!p) return;
+  if (p.status === targetStatus) return;
+
+  const oldStatus = p.status;
+  p.status = targetStatus;
+
+  // Auto-adjust progress if moving to/from Completed
+  if (targetStatus === 'Completed' && p.progress < 100) {
+    p.progress = 100;
+  } else if (oldStatus === 'Completed' && targetStatus !== 'Completed' && p.progress === 100) {
+    p.progress = 75;
+  }
+
+  saveProjects();
+  render();
+};
 
 function openEditModal(id) {
   const p = state.projects.find(item => item.id === id);
@@ -2033,8 +2242,9 @@ function escapeHTML(str) {
   );
 }
 
-// Initial render
+// Initial render & drag-and-drop setup
 render();
+setupKanbanDragAndDrop();
 
 // Mike's Report Card Toggle Handler
 window.toggleCardMikesReport = function(id) {

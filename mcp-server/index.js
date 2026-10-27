@@ -175,6 +175,17 @@ const TOOLS = [
         user: { type: 'string', enum: ['rob', 'rodrigo', 'greg', 'karla', 'kurt', 'joseph'], description: 'Coworker perspective view.' }
       }
     }
+  },
+  {
+    name: 'get_kanban_board',
+    description: 'Get the Trello/Kanban board view of key projects grouped by workflow status columns: On Track, In Progress, Blocked, and Completed.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        quadrant: { type: 'string', enum: ['all', 'Q1', 'Q2', 'Q3', 'Q4'], description: 'Optional Eisenhower quadrant filter.' },
+        user: { type: 'string', enum: ['all', 'rob', 'rodrigo', 'greg', 'karla', 'kurt', 'joseph'], description: 'Optional coworker user view filter.' }
+      }
+    }
   }
 ];
 
@@ -350,6 +361,35 @@ function handleToolCall(name, args) {
         user: u,
         count: matching.length,
         projects: matching
+      };
+    }
+
+    case 'get_kanban_board': {
+      let filtered = projects.filter(p => !p.isRemoved);
+      if (args.quadrant && args.quadrant !== 'all') {
+        filtered = filtered.filter(p => p.quadrant.toUpperCase() === args.quadrant.toUpperCase());
+      }
+      if (args.user && args.user !== 'all') {
+        filtered = filtered.filter(p => matchesUserView(p, args.user));
+      }
+
+      const columns = {
+        onTrack: filtered.filter(p => p.status === 'On Track' || !['In Progress', 'Blocked', 'Completed'].includes(p.status)),
+        inProgress: filtered.filter(p => p.status === 'In Progress'),
+        blocked: filtered.filter(p => p.status === 'Blocked'),
+        completed: filtered.filter(p => p.status === 'Completed')
+      };
+
+      return {
+        view: 'kanban',
+        total: filtered.length,
+        counts: {
+          onTrack: columns.onTrack.length,
+          inProgress: columns.inProgress.length,
+          blocked: columns.blocked.length,
+          completed: columns.completed.length
+        },
+        columns
       };
     }
 

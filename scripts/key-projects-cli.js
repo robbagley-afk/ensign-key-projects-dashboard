@@ -84,6 +84,59 @@ switch (command) {
     break;
   }
 
+  case 'kanban': {
+    const projects = loadProjects().filter(p => !p.isRemoved);
+    let filtered = projects;
+
+    if (flags.quadrant) {
+      filtered = filtered.filter(p => p.quadrant.toUpperCase() === flags.quadrant.toUpperCase());
+    }
+    if (flags.owner) {
+      const o = flags.owner.toLowerCase();
+      filtered = filtered.filter(p => (p.owner && p.owner.toLowerCase().includes(o)) || (p.delegatedOwner && p.delegatedOwner.toLowerCase().includes(o)));
+    }
+    if (flags.user) {
+      const u = flags.user.toLowerCase();
+      filtered = filtered.filter(p => {
+        const own = (p.owner || '').toLowerCase();
+        const del = (p.delegatedOwner || '').toLowerCase();
+        return own.includes(u) || del.includes(u);
+      });
+    }
+
+    const columns = [
+      { name: '🟢 ON TRACK / PLANNING', status: 'On Track', match: p => p.status === 'On Track' || !['In Progress', 'Blocked', 'Completed'].includes(p.status) },
+      { name: '🟡 IN PROGRESS', status: 'In Progress', match: p => p.status === 'In Progress' },
+      { name: '🔴 BLOCKED / WAITING', status: 'Blocked', match: p => p.status === 'Blocked' },
+      { name: '✅ COMPLETED', status: 'Completed', match: p => p.status === 'Completed' }
+    ];
+
+    console.log(`\n======================================================`);
+    console.log(`   📊 ENSIGN KEY PROJECTS — TRELLO / KANBAN BOARD`);
+    console.log(`   Total Projects: ${filtered.length}`);
+    console.log(`======================================================\n`);
+
+    columns.forEach(col => {
+      const items = filtered.filter(col.match);
+      console.log(`\n┌─────────────────────────────────────────────────────`);
+      console.log(`│ ${col.name} (${items.length})`);
+      console.log(`└─────────────────────────────────────────────────────`);
+      if (items.length === 0) {
+        console.log(`  (No cards in this column)\n`);
+      } else {
+        items.forEach(p => {
+          const lead = p.delegatedOwner ? `🤝 Delegated: ${p.delegatedOwner}` : `👤 ${p.owner}`;
+          const att = (p.attachments && p.attachments.length > 0) ? ` [📎 ${p.attachments.length}]` : '';
+          const star = p.inMikesReport ? ' [⭐ 1:1]' : '';
+          console.log(`  • [${p.quadrant}] ${p.title} (${p.progress}%)${star}${att}`);
+          console.log(`    ${lead} | Due: ${p.dueDate || 'Ongoing'} | ID: ${p.id}`);
+        });
+        console.log('');
+      }
+    });
+    break;
+  }
+
   case 'status': {
     const id = flags.id || args[1];
     if (!id) {

@@ -65,6 +65,10 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             Eisenhower Matrix
           </button>
+          <button id="view-kanban-btn" class="toggle-btn" title="Trello / Kanban Board View (Grouped by Status with Drag & Drop)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="13" rx="1"/><rect x="17" y="3" width="5" height="16" rx="1"/></svg>
+            Kanban Board
+          </button>
           <button id="view-list-btn" class="toggle-btn" title="All Projects List View">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             All Projects List
@@ -298,7 +302,62 @@
       </div>
     </section>
 
-    <!-- VIEW 2: All Projects List View -->
+    <!-- VIEW 2: Trello / Kanban Board View (Grouped by Workflow Status) -->
+    <section id="kanban-view" class="kanban-board-view" style="display: none;">
+      <!-- Column 1: On Track / Planning -->
+      <div class="kanban-column kanban-col-on-track" id="kanban-col-on-track" data-status="On Track">
+        <div class="kanban-column-header">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-indicator ind-on-track"></span>
+            <h2 class="kanban-col-title">🟢 On Track</h2>
+            <span class="kanban-col-count" id="count-kanban-on-track">0</span>
+          </div>
+          <p class="kanban-col-subtitle">On schedule & planning</p>
+        </div>
+        <div class="kanban-column-cards" id="cards-kanban-on-track" data-status="On Track"></div>
+      </div>
+
+      <!-- Column 2: In Progress -->
+      <div class="kanban-column kanban-col-in-progress" id="kanban-col-in-progress" data-status="In Progress">
+        <div class="kanban-column-header">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-indicator ind-in-progress"></span>
+            <h2 class="kanban-col-title">🟡 In Progress</h2>
+            <span class="kanban-col-count" id="count-kanban-in-progress">0</span>
+          </div>
+          <p class="kanban-col-subtitle">Active execution & work</p>
+        </div>
+        <div class="kanban-column-cards" id="cards-kanban-in-progress" data-status="In Progress"></div>
+      </div>
+
+      <!-- Column 3: Blocked / Waiting -->
+      <div class="kanban-column kanban-col-blocked" id="kanban-col-blocked" data-status="Blocked">
+        <div class="kanban-column-header">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-indicator ind-blocked"></span>
+            <h2 class="kanban-col-title">🔴 Blocked / Waiting</h2>
+            <span class="kanban-col-count" id="count-kanban-blocked">0</span>
+          </div>
+          <p class="kanban-col-subtitle">Needs unblocking or review</p>
+        </div>
+        <div class="kanban-column-cards" id="cards-kanban-blocked" data-status="Blocked"></div>
+      </div>
+
+      <!-- Column 4: Completed -->
+      <div class="kanban-column kanban-col-completed" id="kanban-col-completed" data-status="Completed">
+        <div class="kanban-column-header">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-indicator ind-completed"></span>
+            <h2 class="kanban-col-title">✅ Completed</h2>
+            <span class="kanban-col-count" id="count-kanban-completed">0</span>
+          </div>
+          <p class="kanban-col-subtitle">Delivered & verified</p>
+        </div>
+        <div class="kanban-column-cards" id="cards-kanban-completed" data-status="Completed"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: All Projects List View -->
     <section id="list-view" class="projects-list-view" style="display: none;">
       <div class="list-cards-container" id="all-projects-list"></div>
     </section>

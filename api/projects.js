@@ -87,7 +87,7 @@ module.exports = async function handler(req, res) {
 
   // GET: List or fetch projects
   if (req.method === 'GET') {
-    const { id, quadrant, user, owner, status, pillar, department, mikes } = req.query || {};
+    const { id, quadrant, user, owner, status, pillar, department, mikes, view } = req.query || {};
 
     if (id) {
       const proj = projects.find(p => p.id === id);
@@ -118,6 +118,29 @@ module.exports = async function handler(req, res) {
     }
     if (mikes === 'true' || mikes === '1') {
       results = results.filter(p => !!p.inMikesReport);
+    }
+
+    if (view && view.toLowerCase() === 'kanban') {
+      const onTrack = results.filter(p => (p.status === 'On Track' || !['In Progress', 'Blocked', 'Completed'].includes(p.status)));
+      const inProgress = results.filter(p => p.status === 'In Progress');
+      const blocked = results.filter(p => p.status === 'Blocked');
+      const completed = results.filter(p => p.status === 'Completed');
+      return res.status(200).json({
+        view: 'kanban',
+        total: results.length,
+        columns: {
+          onTrack,
+          inProgress,
+          blocked,
+          completed
+        },
+        counts: {
+          onTrack: onTrack.length,
+          inProgress: inProgress.length,
+          blocked: blocked.length,
+          completed: completed.length
+        }
+      });
     }
 
     return res.status(200).json(results);
