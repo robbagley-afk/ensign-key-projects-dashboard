@@ -205,6 +205,7 @@
           <label for="filter-status" class="filter-label">Status:</label>
           <select id="filter-status">
             <option value="all">All Statuses</option>
+            <option value="Backlog">📥 Backlog</option>
             <option value="On Track">🟢 On Track</option>
             <option value="In Progress">🟡 In Progress</option>
             <option value="Blocked">🔴 Blocked / Waiting</option>
@@ -304,7 +305,20 @@
 
     <!-- VIEW 2: Trello / Kanban Board View (Grouped by Workflow Status) -->
     <section id="kanban-view" class="kanban-board-view" style="display: none;">
-      <!-- Column 1: On Track / Planning -->
+      <!-- Column 1: Backlog -->
+      <div class="kanban-column kanban-col-backlog" id="kanban-col-backlog" data-status="Backlog">
+        <div class="kanban-column-header">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-indicator ind-backlog"></span>
+            <h2 class="kanban-col-title">📥 Backlog</h2>
+            <span class="kanban-col-count" id="count-kanban-backlog">0</span>
+          </div>
+          <p class="kanban-col-subtitle">Queued & upcoming tasks</p>
+        </div>
+        <div class="kanban-column-cards" id="cards-kanban-backlog" data-status="Backlog"></div>
+      </div>
+
+      <!-- Column 2: On Track / Planning -->
       <div class="kanban-column kanban-col-on-track" id="kanban-col-on-track" data-status="On Track">
         <div class="kanban-column-header">
           <div class="kanban-col-title-group">
@@ -444,6 +458,7 @@
           <div class="form-group flex-1">
             <label for="form-status">Status</label>
             <select id="form-status" required>
+              <option value="Backlog">📥 Backlog</option>
               <option value="On Track">🟢 On Track</option>
               <option value="In Progress">🟡 In Progress</option>
               <option value="Blocked">🔴 Blocked / Waiting</option>

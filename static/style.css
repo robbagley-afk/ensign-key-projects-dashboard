@@ -773,24 +773,24 @@ body {
 /* Trello / Kanban Board View */
 .kanban-board-view {
   display: grid;
-  grid-template-columns: repeat(4, minmax(280px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(5, minmax(230px, 1fr));
+  gap: 1.15rem;
   align-items: start;
   width: 100%;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1360px) {
   .kanban-board-view {
     display: flex;
     overflow-x: auto;
     padding-bottom: 1.5rem;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
-    gap: 1.25rem;
+    gap: 1.15rem;
   }
   .kanban-column {
-    min-width: 310px;
-    flex: 0 0 310px;
+    min-width: 290px;
+    flex: 0 0 290px;
     scroll-snap-align: start;
   }
 }
@@ -805,6 +805,11 @@ body {
   box-shadow: var(--shadow-sm);
   border-top: 4px solid #64748B;
   transition: all 0.2s ease;
+}
+
+.kanban-col-backlog {
+  border-top-color: #64748B;
+  background: #F8FAFC;
 }
 
 .kanban-col-on-track {
@@ -847,6 +852,7 @@ body {
   flex-shrink: 0;
 }
 
+.ind-backlog { background: #64748B; }
 .ind-on-track { background: var(--ensign-emerald); }
 .ind-in-progress { background: var(--ensign-orange); }
 .ind-blocked { background: var(--q1-color); }

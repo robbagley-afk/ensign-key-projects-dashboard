@@ -105,7 +105,8 @@ switch (command) {
     }
 
     const columns = [
-      { name: '🟢 ON TRACK / PLANNING', status: 'On Track', match: p => p.status === 'On Track' || !['In Progress', 'Blocked', 'Completed'].includes(p.status) },
+      { name: '📥 BACKLOG', status: 'Backlog', match: p => p.status === 'Backlog' || ((p.progress || 0) === 0 && !['On Track', 'In Progress', 'Blocked', 'Completed'].includes(p.status)) },
+      { name: '🟢 ON TRACK / PLANNING', status: 'On Track', match: p => p.status === 'On Track' || ((p.progress || 0) > 0 && !['Backlog', 'In Progress', 'Blocked', 'Completed'].includes(p.status)) },
       { name: '🟡 IN PROGRESS', status: 'In Progress', match: p => p.status === 'In Progress' },
       { name: '🔴 BLOCKED / WAITING', status: 'Blocked', match: p => p.status === 'Blocked' },
       { name: '✅ COMPLETED', status: 'Completed', match: p => p.status === 'Completed' }

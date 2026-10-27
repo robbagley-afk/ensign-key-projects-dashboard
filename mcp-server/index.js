@@ -374,7 +374,8 @@ function handleToolCall(name, args) {
       }
 
       const columns = {
-        onTrack: filtered.filter(p => p.status === 'On Track' || !['In Progress', 'Blocked', 'Completed'].includes(p.status)),
+        backlog: filtered.filter(p => p.status === 'Backlog' || ((p.progress || 0) === 0 && !['On Track', 'In Progress', 'Blocked', 'Completed'].includes(p.status))),
+        onTrack: filtered.filter(p => p.status === 'On Track' || ((p.progress || 0) > 0 && !['Backlog', 'In Progress', 'Blocked', 'Completed'].includes(p.status))),
         inProgress: filtered.filter(p => p.status === 'In Progress'),
         blocked: filtered.filter(p => p.status === 'Blocked'),
         completed: filtered.filter(p => p.status === 'Completed')
@@ -384,6 +385,7 @@ function handleToolCall(name, args) {
         view: 'kanban',
         total: filtered.length,
         counts: {
+          backlog: columns.backlog.length,
           onTrack: columns.onTrack.length,
           inProgress: columns.inProgress.length,
           blocked: columns.blocked.length,

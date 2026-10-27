@@ -1142,6 +1142,7 @@ function getPillarBadge(pillar) {
 }
 
 function getStatusBadge(status) {
+  if (status === 'Backlog') return '<span class="badge" style="background:#E2E8F0; color:#334155; font-weight:700;">📥 Backlog</span>';
   if (status === 'On Track') return '<span class="badge badge-status-ontrack">🟢 On Track</span>';
   if (status === 'In Progress') return '<span class="badge badge-status-progress">🟡 In Progress</span>';
   if (status === 'Blocked') return '<span class="badge badge-status-blocked">🔴 Blocked</span>';
@@ -1601,11 +1602,13 @@ function renderList(container, items) {
 }
 
 function renderKanban(filteredItems) {
+  const colBacklog = document.getElementById('cards-kanban-backlog');
   const colOnTrack = document.getElementById('cards-kanban-on-track');
   const colInProgress = document.getElementById('cards-kanban-in-progress');
   const colBlocked = document.getElementById('cards-kanban-blocked');
   const colCompleted = document.getElementById('cards-kanban-completed');
 
+  const countBacklog = document.getElementById('count-kanban-backlog');
   const countOnTrack = document.getElementById('count-kanban-on-track');
   const countInProgress = document.getElementById('count-kanban-in-progress');
   const countBlocked = document.getElementById('count-kanban-blocked');
@@ -1617,6 +1620,7 @@ function renderKanban(filteredItems) {
     : filteredItems.filter(p => p.quadrant === state.filterQuadrant);
 
   const groups = {
+    'Backlog': [],
     'On Track': [],
     'In Progress': [],
     'Blocked': [],
@@ -1625,22 +1629,32 @@ function renderKanban(filteredItems) {
 
   items.forEach(p => {
     const s = (p.status || '').trim();
-    if (s === 'In Progress') {
+    if (s === 'Backlog') {
+      groups['Backlog'].push(p);
+    } else if (s === 'In Progress') {
       groups['In Progress'].push(p);
     } else if (s === 'Blocked') {
       groups['Blocked'].push(p);
     } else if (s === 'Completed') {
       groups['Completed'].push(p);
-    } else {
+    } else if (s === 'On Track') {
       groups['On Track'].push(p);
+    } else {
+      if ((p.progress || 0) === 0) {
+        groups['Backlog'].push(p);
+      } else {
+        groups['On Track'].push(p);
+      }
     }
   });
 
+  if (countBacklog) countBacklog.textContent = groups['Backlog'].length;
   if (countOnTrack) countOnTrack.textContent = groups['On Track'].length;
   if (countInProgress) countInProgress.textContent = groups['In Progress'].length;
   if (countBlocked) countBlocked.textContent = groups['Blocked'].length;
   if (countCompleted) countCompleted.textContent = groups['Completed'].length;
 
+  renderKanbanColumnCards(colBacklog, groups['Backlog'], 'Backlog');
   renderKanbanColumnCards(colOnTrack, groups['On Track'], 'On Track');
   renderKanbanColumnCards(colInProgress, groups['In Progress'], 'In Progress');
   renderKanbanColumnCards(colBlocked, groups['Blocked'], 'Blocked');
@@ -1722,6 +1736,7 @@ function renderKanbanColumnCards(container, items, colStatus) {
       <div class="kanban-card-move-bar" onclick="event.stopPropagation()">
         <span class="kanban-move-label">Stage:</span>
         <select class="kanban-move-select" onchange="window.moveProjectStatus('${p.id}', this.value)">
+          <option value="Backlog" ${p.status === 'Backlog' ? 'selected' : ''}>📥 Backlog</option>
           <option value="On Track" ${p.status === 'On Track' ? 'selected' : ''}>🟢 On Track</option>
           <option value="In Progress" ${p.status === 'In Progress' ? 'selected' : ''}>🟡 In Progress</option>
           <option value="Blocked" ${p.status === 'Blocked' ? 'selected' : ''}>🔴 Blocked</option>

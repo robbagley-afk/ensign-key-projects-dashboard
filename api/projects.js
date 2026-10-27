@@ -121,7 +121,8 @@ module.exports = async function handler(req, res) {
     }
 
     if (view && view.toLowerCase() === 'kanban') {
-      const onTrack = results.filter(p => (p.status === 'On Track' || !['In Progress', 'Blocked', 'Completed'].includes(p.status)));
+      const backlog = results.filter(p => p.status === 'Backlog' || ((p.progress || 0) === 0 && !['On Track', 'In Progress', 'Blocked', 'Completed'].includes(p.status)));
+      const onTrack = results.filter(p => p.status === 'On Track' || ((p.progress || 0) > 0 && !['Backlog', 'In Progress', 'Blocked', 'Completed'].includes(p.status)));
       const inProgress = results.filter(p => p.status === 'In Progress');
       const blocked = results.filter(p => p.status === 'Blocked');
       const completed = results.filter(p => p.status === 'Completed');
@@ -129,12 +130,14 @@ module.exports = async function handler(req, res) {
         view: 'kanban',
         total: results.length,
         columns: {
+          backlog,
           onTrack,
           inProgress,
           blocked,
           completed
         },
         counts: {
+          backlog: backlog.length,
           onTrack: onTrack.length,
           inProgress: inProgress.length,
           blocked: blocked.length,
