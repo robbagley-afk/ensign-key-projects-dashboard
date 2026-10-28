@@ -589,6 +589,10 @@ const filterPillar = document.getElementById('filter-pillar');
 const filterStatus = document.getElementById('filter-status');
 const toggleRemovedBtn = document.getElementById('toggle-removed-btn');
 const removedCountSpan = document.getElementById('removed-count');
+const activeArchiveBanner = document.getElementById('active-archive-banner');
+const archiveBannerCount = document.getElementById('archive-banner-count');
+const openArchiveReportBtn = document.getElementById('open-archive-report-btn');
+const clearArchiveViewBtn = document.getElementById('clear-archive-view-btn');
 const resetStorageBtn = document.getElementById('reset-storage-btn');
 const addProjectBtn = document.getElementById('add-project-btn');
 
@@ -1186,17 +1190,50 @@ if (needsDelegationBtn) {
 }
 
 // Toggle Removed / Completed Cards View
-toggleRemovedBtn.addEventListener('click', () => {
-  state.showRemoved = !state.showRemoved;
+function updateArchiveBannerUI() {
+  const count = getRemovedCount();
   if (state.showRemoved) {
-    toggleRemovedBtn.classList.add('active');
-    toggleRemovedBtn.innerHTML = `📦 Hide Removed (<span id="removed-count">${getRemovedCount()}</span>)`;
+    if (toggleRemovedBtn) {
+      toggleRemovedBtn.classList.add('active');
+      toggleRemovedBtn.innerHTML = `📦 Hide Archived (<span id="removed-count">${count}</span>)`;
+    }
+    if (activeArchiveBanner) {
+      activeArchiveBanner.style.display = 'flex';
+      if (archiveBannerCount) archiveBannerCount.textContent = count;
+    }
   } else {
-    toggleRemovedBtn.classList.remove('active');
-    toggleRemovedBtn.innerHTML = `📦 Show Removed (<span id="removed-count">${getRemovedCount()}</span>)`;
+    if (toggleRemovedBtn) {
+      toggleRemovedBtn.classList.remove('active');
+      toggleRemovedBtn.innerHTML = `📦 Archived Projects (<span id="removed-count">${count}</span>)`;
+    }
+    if (activeArchiveBanner) {
+      activeArchiveBanner.style.display = 'none';
+    }
   }
-  render();
-});
+}
+
+if (toggleRemovedBtn) {
+  toggleRemovedBtn.addEventListener('click', () => {
+    state.showRemoved = !state.showRemoved;
+    updateArchiveBannerUI();
+    render();
+  });
+}
+
+if (clearArchiveViewBtn) {
+  clearArchiveViewBtn.addEventListener('click', () => {
+    state.showRemoved = false;
+    updateArchiveBannerUI();
+    render();
+  });
+}
+
+if (openArchiveReportBtn) {
+  openArchiveReportBtn.addEventListener('click', () => {
+    state.execSummaryScope = 'archived';
+    window.openExecSummaryModal();
+  });
+}
 
 function getRemovedCount() {
   return state.projects.filter(p => p.isRemoved).length;
@@ -1321,12 +1358,13 @@ window.completeAndRemoveProject = function(id) {
   const p = state.projects.find(item => item.id === id);
   if (!p) return;
 
-  if (confirm(`Complete and remove "${p.title}" from active dashboard?`)) {
+  if (confirm(`Complete and archive "${p.title}"?`)) {
     p.progress = 100;
     p.status = 'Completed';
     p.isRemoved = true;
     p.completedDate = new Date().toISOString();
     saveProjects();
+    updateArchiveBannerUI();
     render();
   }
 };
@@ -1342,6 +1380,7 @@ window.restoreProject = function(id) {
     p.progress = 90;
   }
   saveProjects();
+  updateArchiveBannerUI();
   render();
 };
 
@@ -2428,8 +2467,10 @@ const execSummaryModal = document.getElementById('exec-summary-modal');
 const execSummaryClose = document.getElementById('exec-summary-close');
 const summaryScopeMikes = document.getElementById('summary-scope-mikes');
 const summaryScopeAll = document.getElementById('summary-scope-all');
+const summaryScopeArchived = document.getElementById('summary-scope-archived');
 const summaryMikesCountEl = document.getElementById('summary-mikes-count');
 const summaryAllCountEl = document.getElementById('summary-all-count');
+const summaryArchivedCountEl = document.getElementById('summary-archived-count');
 const summaryCopyMdBtn = document.getElementById('summary-copy-md-btn');
 const summaryPrintBtn = document.getElementById('summary-print-btn');
 const summaryCopyFeedback = document.getElementById('summary-copy-feedback');
@@ -2438,6 +2479,9 @@ const summaryRenderedPreview = document.getElementById('summary-rendered-preview
 let currentActiveSummaryMarkdown = '';
 
 function getExecutiveSummaryItems() {
+  if (state.execSummaryScope === 'archived') {
+    return state.projects.filter(p => p.isRemoved);
+  }
   const nonArchived = state.projects.filter(p => !p.isRemoved);
   if (state.execSummaryScope === 'mikes') {
     return nonArchived.filter(p => p.inMikesReport);
@@ -2447,6 +2491,40 @@ function getExecutiveSummaryItems() {
 
 function generateExecutiveSummaryMarkdown(items) {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  if (state.execSummaryScope === 'archived') {
+    let md = `# Completed & Archived Projects Report\n`;
+    md += `**Date:** ${today}\n`;
+    md += `**Prepared by:** Rob Bagley, Associate Director Career Services\n`;
+    md += `**Portfolio:** Ensign Key Projects & Situational Awareness Dashboard\n`;
+    md += `**Scope:** 📦 Completed & Archived Projects (${items.length} projects)\n\n`;
+    md += `---\n\n`;
+
+    md += `## Archive Summary\n`;
+    md += `- **Total Completed & Archived Projects:** ${items.length}\n`;
+    md += `- **Completion Status:** 100% Completed\n\n`;
+    md += `---\n\n`;
+
+    if (items.length === 0) {
+      md += `*No completed or archived projects recorded.*\n`;
+    } else {
+      md += `### Archived Project Records (${items.length})\n\n`;
+      items.forEach(p => {
+        const owner = p.delegatedOwner ? `${p.delegatedOwner} (Delegated by Rob)` : (p.owner || 'Rob Bagley');
+        md += `#### ${p.title}\n`;
+        md += `- **Status:** Completed (100%)\n`;
+        md += `- **Lead / Owner:** ${owner}\n`;
+        md += `- **Department & Pillar:** ${p.department} · ${p.pillar || 'General'}\n`;
+        if (p.completedDate) md += `- **Completed Date:** ${new Date(p.completedDate).toLocaleDateString('en-US')}\n`;
+        if (p.dueDate) md += `- **Target Due Date:** ${p.dueDate}\n`;
+        if (p.description) md += `- **Summary:** ${p.description}\n`;
+        if (p.link) md += `- **Reference Link:** ${p.link}\n`;
+        md += `\n`;
+      });
+    }
+    return md;
+  }
+
   const q1 = items.filter(p => p.quadrant === 'Q1');
   const q2 = items.filter(p => p.quadrant === 'Q2');
   const q3 = items.filter(p => p.quadrant === 'Q3');
@@ -2500,6 +2578,59 @@ function generateExecutiveSummaryMarkdown(items) {
 
 function renderExecutiveSummaryHTML(items) {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  if (state.execSummaryScope === 'archived') {
+    return `
+      <div class="briefing-header" style="border-left: 4px solid #DC2626;">
+        <div class="briefing-title">📦 Completed &amp; Archived Projects Report</div>
+        <div class="briefing-meta">
+          <strong>Date:</strong> ${today} &nbsp;|&nbsp; 
+          <strong>Prepared By:</strong> Rob Bagley, Associate Director Career Services &nbsp;|&nbsp;
+          <strong>Scope:</strong> 📦 Completed &amp; Archived (${items.length} items)
+        </div>
+      </div>
+
+      <div class="briefing-stat-row">
+        <div class="briefing-stat-card" style="border-color:#FCA5A5;">
+          <div class="briefing-stat-num" style="color:#DC2626;">${items.length}</div>
+          <div class="briefing-stat-lbl">Archived Projects</div>
+        </div>
+        <div class="briefing-stat-card" style="border-color:#86EFAC;">
+          <div class="briefing-stat-num" style="color:#16A34A;">100%</div>
+          <div class="briefing-stat-lbl">Completion Rate</div>
+        </div>
+      </div>
+
+      <div class="briefing-section">
+        <div class="briefing-section-title" style="color:#DC2626;">
+          <span>📦 Completed &amp; Archived Project Records</span>
+          <span>${items.length} item(s)</span>
+        </div>
+        ${items.length === 0 ? '<p style="color:#94A3B8; font-style:italic; font-size:0.85rem; padding: 0.5rem 0;">No completed or archived projects found.</p>' : 
+          items.map(p => {
+            const owner = p.delegatedOwner ? `<span style="color:#007150; font-weight:700;">🤝 ${escapeHTML(p.delegatedOwner)}</span> (Delegated)` : `<span>👤 ${escapeHTML(p.owner || 'Rob Bagley')}</span>`;
+            return `
+              <div class="briefing-item" style="border-left: 3px solid #DC2626;">
+                <div class="briefing-item-top">
+                  <span class="briefing-item-title">${escapeHTML(p.title)}</span>
+                  <span class="badge" style="background:#DCFCE7; color:#166534; font-weight:700;">✅ Completed</span>
+                </div>
+                <p class="briefing-item-desc">${escapeHTML(p.description || 'No detailed description provided.')}</p>
+                <div class="briefing-item-meta">
+                  <span><strong>Lead:</strong> ${owner}</span>
+                  <span><strong>Dept:</strong> ${escapeHTML(p.department)}</span>
+                  <span><strong>Pillar:</strong> ${escapeHTML(p.pillar || 'General')}</span>
+                  ${p.dueDate ? `<span><strong>Target Due:</strong> ${p.dueDate}</span>` : ''}
+                  ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" style="color:#0284C7; font-weight:600; text-decoration:underline;">Resource ↗</a>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('')
+        }
+      </div>
+    `;
+  }
+
   const q1 = items.filter(p => p.quadrant === 'Q1');
   const q2 = items.filter(p => p.quadrant === 'Q2');
   const q3 = items.filter(p => p.quadrant === 'Q3');
@@ -2605,19 +2736,23 @@ window.openExecSummaryModal = function() {
   const nonArchived = state.projects.filter(p => !p.isRemoved);
   const mikesCount = nonArchived.filter(p => p.inMikesReport).length;
   const allCount = nonArchived.length;
+  const archivedCount = state.projects.filter(p => p.isRemoved).length;
 
   if (summaryMikesCountEl) summaryMikesCountEl.textContent = mikesCount;
   if (summaryAllCountEl) summaryAllCountEl.textContent = allCount;
+  if (summaryArchivedCountEl) summaryArchivedCountEl.textContent = archivedCount;
 
   // Update Scope Buttons
-  if (summaryScopeMikes && summaryScopeAll) {
-    if (state.execSummaryScope === 'mikes') {
-      summaryScopeMikes.classList.add('active');
-      summaryScopeAll.classList.remove('active');
-    } else {
-      summaryScopeAll.classList.add('active');
-      summaryScopeMikes.classList.remove('active');
-    }
+  [summaryScopeMikes, summaryScopeAll, summaryScopeArchived].forEach(btn => {
+    if (btn) btn.classList.remove('active');
+  });
+
+  if (state.execSummaryScope === 'mikes' && summaryScopeMikes) {
+    summaryScopeMikes.classList.add('active');
+  } else if (state.execSummaryScope === 'archived' && summaryScopeArchived) {
+    summaryScopeArchived.classList.add('active');
+  } else if (summaryScopeAll) {
+    summaryScopeAll.classList.add('active');
   }
 
   const items = getExecutiveSummaryItems();
@@ -2659,6 +2794,13 @@ if (summaryScopeMikes) {
 if (summaryScopeAll) {
   summaryScopeAll.addEventListener('click', () => {
     state.execSummaryScope = 'all';
+    window.openExecSummaryModal();
+  });
+}
+
+if (summaryScopeArchived) {
+  summaryScopeArchived.addEventListener('click', () => {
+    state.execSummaryScope = 'archived';
     window.openExecSummaryModal();
   });
 }

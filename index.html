@@ -209,8 +209,8 @@
         </div>
 
         <!-- Toggle Archive / Removed Cards Button -->
-        <button id="toggle-removed-btn" class="pill-btn btn-archive-toggle" title="Show or hide cards marked Complete & Removed">
-          📦 Show Removed (<span id="removed-count">0</span>)
+        <button id="toggle-removed-btn" class="pill-btn btn-archive-toggle" title="Show or hide cards marked Complete &amp; Archived">
+          📦 Archived Projects (<span id="removed-count">0</span>)
         </button>
 
         <button id="reset-storage-btn" class="btn btn-outline" title="Reset to standard Mem project defaults">Reset Defaults</button>
@@ -232,6 +232,18 @@
           <span id="active-quadrant-banner-text" class="banner-text">Showing Q1: Urgent &amp; Important projects only</span>
         </div>
         <button type="button" id="clear-quadrant-banner-btn" class="btn-clear-quadrant" title="Clear Quadrant Filter">✕ Show All Quadrants</button>
+      </div>
+
+      <!-- Active Archive View Banner -->
+      <div id="active-archive-banner" class="active-archive-banner" style="display: none;">
+        <div class="banner-left">
+          <span class="banner-badge archive-view-badge">ARCHIVE</span>
+          <span id="active-archive-text" class="banner-text">Viewing Archived &amp; Completed Projects (<span id="archive-banner-count">0</span> projects)</span>
+        </div>
+        <div class="banner-actions">
+          <button type="button" id="open-archive-report-btn" class="btn-archive-report" title="Generate executive report of archived projects">📊 Archived Report</button>
+          <button type="button" id="clear-archive-view-btn" class="btn-clear-archive-view" title="Return to active projects">✕ Return to Active Projects</button>
+        </div>
       </div>
     </section>
 
@@ -536,8 +548,8 @@
 
         <div class="form-actions">
           <div class="modal-left-actions">
-            <button type="button" id="modal-complete-remove-btn" class="btn btn-complete-remove-modal" title="Mark 100% complete and remove from active dashboard">
-              ✅ Complete & Remove
+            <button type="button" id="modal-complete-remove-btn" class="btn btn-complete-remove-modal" title="Mark 100% complete and archive from active dashboard">
+              📦 Complete &amp; Archive
             </button>
             <button type="button" id="modal-restore-btn" class="btn btn-outline" style="display:none;" title="Restore this card back to the active dashboard">
               ↩️ Restore Card
@@ -653,6 +665,7 @@
             <div class="scope-pills">
               <button type="button" id="summary-scope-mikes" class="scope-btn active">⭐ Mike's 1:1 Selected (<span id="summary-mikes-count">0</span>)</button>
               <button type="button" id="summary-scope-all" class="scope-btn">🌐 All Active Key Projects (<span id="summary-all-count">0</span>)</button>
+              <button type="button" id="summary-scope-archived" class="scope-btn">📦 Completed &amp; Archived (<span id="summary-archived-count">0</span>)</button>
             </div>
           </div>
           <div class="summary-btn-group">
