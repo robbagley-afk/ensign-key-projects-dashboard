@@ -2368,72 +2368,179 @@ body {
 }
 
 .file-drop-target {
-  border: 2px dashed #CBD5E1;
-  border-radius: 6px;
-  background: #FFFFFF;
-  padding: 0.9rem;
+  border: 2px dashed #94A3B8;
+  border-radius: var(--radius-md, 10px);
+  background: #F8FAFC;
+  padding: 1.1rem 1rem;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 0.65rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  margin-bottom: 0.85rem;
 }
 
+.file-drop-target:hover,
 .file-drop-target.drag-over {
-  border-color: var(--ensign-forest);
+  border-color: #006645;
   background: #F0FDF4;
 }
 
 .drop-zone-icon {
-  font-size: 1.4rem;
-  display: block;
-  margin-bottom: 0.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  color: #006645;
 }
 
 .drop-zone-label {
-  font-size: 0.82rem;
-  color: #334155;
-  margin-bottom: 0.15rem;
+  font-size: 0.95rem;
+  color: #0F172A;
+  margin-bottom: 0.25rem;
 }
 
 .btn-browse-link {
   background: none;
   border: none;
-  color: var(--ensign-forest);
+  color: #006645;
   font-weight: 700;
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
   font-size: inherit;
+  font-family: inherit;
+}
+
+.btn-browse-link:focus-visible {
+  outline: 2px solid #006645;
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .drop-zone-sub {
-  font-size: 0.7rem;
-  color: #94A3B8;
+  font-size: 0.85rem;
+  color: #475569;
   display: block;
 }
 
+/* Attachment Link Adder (CIS UI/UX Compliant) */
 .attachment-link-adder {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 6px;
-  padding: 0.65rem;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: var(--radius-md, 10px);
+  padding: 1rem 1.15rem;
+}
+
+.link-adder-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #006645;
+}
+
+.link-adder-icon {
+  color: #006645;
+  flex-shrink: 0;
 }
 
 .link-adder-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.link-adder-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .link-adder-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.link-adder-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.link-field-label {
+  display: block;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #475569;
   margin-bottom: 0.35rem;
 }
 
-.link-adder-inputs {
-  display: flex;
-  gap: 0.4rem;
+.attachment-link-adder input[type="text"],
+.attachment-link-adder input[type="url"] {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: #0F172A;
+  background: #FFFFFF;
+  border: 2px solid #94A3B8;
+  border-radius: 8px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.flex-1 { flex: 1; }
-.flex-2 { flex: 2; }
+.attachment-link-adder input[type="text"]::placeholder,
+.attachment-link-adder input[type="url"]::placeholder {
+  color: #64748B;
+  font-size: 0.88rem;
+}
+
+.attachment-link-adder input[type="text"]:focus,
+.attachment-link-adder input[type="url"]:focus {
+  border-color: #006645;
+  outline: 2px solid rgba(0, 102, 69, 0.25);
+  outline-offset: 1px;
+  background: #FFFFFF;
+}
+
+.link-adder-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-ecc-link-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 1.35rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #FFFFFF;
+  background-color: #006645;
+  border: 2px solid #006645;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-ecc-link-add:hover {
+  background-color: #004D34;
+  border-color: #004D34;
+}
+
+.btn-ecc-link-add:active {
+  transform: scale(0.98);
+}
+
+.btn-ecc-link-add:focus-visible {
+  outline: 2px solid #FDB515;
+  outline-offset: 2px;
+}
 
 /* Attachment Viewer Modal */
 .modal-card-attachments {
