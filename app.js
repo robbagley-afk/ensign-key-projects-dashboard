@@ -17,7 +17,7 @@ const CIS_TEAM_MEMBERS = [
   { name: 'Miguel de Nazare do Espirito Santo', role: 'PBWE Team Lead' },
   { name: 'Gessica Velasco Trujillo', role: 'Onboarding & Enablement' },
   { name: 'Karla Groom', role: 'Internship Coordinator' },
-  { name: 'Maria Gutierrez', role: 'UX/UI Designer' },
+  { name: '(Paula) Maria Gutierrez', role: 'UX/UI Designer' },
   { name: 'Aqeel Emmanuel', role: 'Employer Outreach' },
   { name: 'Brenda Wyatt', role: 'Senior Missionary' },
   { name: 'Dandy Alan De Leon', role: 'MarCom & Career Fair' },
