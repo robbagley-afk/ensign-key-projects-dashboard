@@ -104,7 +104,7 @@ const TOOLS = [
         quadrant: { type: 'string', enum: ['all', 'Q1', 'Q2', 'Q3', 'Q4'], description: 'Filter by Eisenhower quadrant: Q1 (Do First), Q2 (Strategic Mission), Q3 (Delegate), Q4 (Triage).' },
         user: { type: 'string', enum: ['all', 'rob', 'rodrigo', 'greg', 'karla', 'kurt', 'joseph'], description: 'Filter by coworker user view workspace.' },
         owner: { type: 'string', description: 'Filter by owner or delegated owner name.' },
-        status: { type: 'string', enum: ['all', 'In Progress', 'Completed', 'Blocked', 'On Track'], description: 'Filter by project status.' },
+        status: { type: 'string', enum: ['all', 'In Progress', 'Completed', 'Blocked', 'Active and Planning', 'On Track'], description: 'Filter by project status.' },
         pillar: { type: 'string', enum: ['all', 'Capable', 'Trusted', 'Community'], description: 'Filter by Ensign College mission pillar.' },
         mikesReportOnly: { type: 'boolean', description: 'Show only cards selected for Mike Ray 1:1 briefing report.' }
       }
@@ -149,7 +149,7 @@ const TOOLS = [
       required: ['id'],
       properties: {
         id: { type: 'string', description: 'The project ID to update.' },
-        status: { type: 'string', enum: ['In Progress', 'Completed', 'Blocked', 'On Track'], description: 'New status.' },
+        status: { type: 'string', enum: ['In Progress', 'Completed', 'Blocked', 'Active and Planning', 'On Track'], description: 'New status.' },
         progress: { type: 'number', minimum: 0, maximum: 100, description: 'Completion percentage (0-100).' },
         delegatedOwner: { type: 'string', description: 'New delegated coworker name (or empty string to clear).' },
         inMikesReport: { type: 'boolean', description: 'Toggle inclusion in Mike Ray 1:1 report.' },
@@ -396,9 +396,10 @@ function handleToolCall(name, args) {
         filtered = filtered.filter(p => matchesUserView(p, args.user));
       }
 
+      const isPlanned = s => s === 'Active and Planning' || s === 'On Track';
       const columns = {
-        backlog: filtered.filter(p => p.status === 'Backlog' || ((p.progress || 0) === 0 && !['On Track', 'In Progress', 'Blocked', 'Completed'].includes(p.status))),
-        onTrack: filtered.filter(p => p.status === 'On Track' || ((p.progress || 0) > 0 && !['Backlog', 'In Progress', 'Blocked', 'Completed'].includes(p.status))),
+        backlog: filtered.filter(p => p.status === 'Backlog' || ((p.progress || 0) === 0 && !['Active and Planning', 'On Track', 'In Progress', 'Blocked', 'Completed'].includes(p.status))),
+        onTrack: filtered.filter(p => isPlanned(p.status) || ((p.progress || 0) > 0 && !['Backlog', 'In Progress', 'Blocked', 'Completed'].includes(p.status))),
         inProgress: filtered.filter(p => p.status === 'In Progress'),
         blocked: filtered.filter(p => p.status === 'Blocked'),
         completed: filtered.filter(p => p.status === 'Completed')

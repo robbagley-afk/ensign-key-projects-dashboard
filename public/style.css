@@ -559,6 +559,29 @@ body {
   flex-direction: column;
   gap: 0.85rem;
   flex: 1;
+  max-height: 640px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 transparent;
+}
+
+.quadrant-cards::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quadrant-cards::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quadrant-cards::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+
+.quadrant-cards::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }
 
 /* Project Card */
@@ -891,9 +914,31 @@ body {
   gap: 0.85rem;
   flex: 1;
   min-height: 140px;
-  padding: 0.35rem 0.15rem;
+  max-height: 640px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.35rem 0.35rem 0.35rem 0.15rem;
   transition: background-color 0.15s ease, border-color 0.15s ease;
   border-radius: var(--radius-sm);
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 transparent;
+}
+
+.kanban-column-cards::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kanban-column-cards::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-column-cards::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+
+.kanban-column-cards::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }
 
 .kanban-column-cards.drag-over {
@@ -2757,3 +2802,86 @@ body {
     page-break-after: avoid !important;
   }
 }
+
+/* ==========================================================================
+   Stacked People & Perspective Quadrants Modal Styling
+   ========================================================================== */
+.people-quadrant-stack-container {
+  background: #F8FAFC;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.stack-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.stack-section-title {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stack-section-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stack-row {
+  margin-bottom: 0.45rem;
+  align-items: flex-end;
+}
+
+.stack-delegation-flag {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed rgba(203, 213, 225, 0.7);
+}
+
+/* Perspective Quadrant Pills on Card Roles */
+.role-q-pill {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  border-radius: 4px;
+  margin-left: 5px;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+.role-q-pill.q-pill-q1 {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+}
+
+.role-q-pill.q-pill-q2 {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #86EFAC;
+}
+
+.role-q-pill.q-pill-q3 {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.role-q-pill.q-pill-q4 {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+}
+

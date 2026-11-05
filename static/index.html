@@ -201,7 +201,7 @@
           <select id="filter-status">
             <option value="all">All Statuses</option>
             <option value="Backlog">📥 Backlog</option>
-            <option value="On Track">🟢 On Track</option>
+            <option value="Active and Planning">🟢 Active and Planning</option>
             <option value="In Progress">🟡 In Progress</option>
             <option value="Blocked">🔴 Blocked / Waiting</option>
             <option value="Completed">✅ Completed</option>
@@ -325,17 +325,17 @@
         <div class="kanban-column-cards" id="cards-kanban-backlog" data-status="Backlog"></div>
       </div>
 
-      <!-- Column 2: On Track / Planning -->
-      <div class="kanban-column kanban-col-on-track" id="kanban-col-on-track" data-status="On Track">
+      <!-- Column 2: Active and Planning -->
+      <div class="kanban-column kanban-col-on-track" id="kanban-col-on-track" data-status="Active and Planning">
         <div class="kanban-column-header">
           <div class="kanban-col-title-group">
             <span class="kanban-col-indicator ind-on-track"></span>
-            <h2 class="kanban-col-title">🟢 On Track</h2>
+            <h2 class="kanban-col-title">🟢 Active and Planning</h2>
             <span class="kanban-col-count" id="count-kanban-on-track">0</span>
           </div>
-          <p class="kanban-col-subtitle">On schedule & planning</p>
+          <p class="kanban-col-subtitle">On schedule &amp; planning</p>
         </div>
-        <div class="kanban-column-cards" id="cards-kanban-on-track" data-status="On Track"></div>
+        <div class="kanban-column-cards" id="cards-kanban-on-track" data-status="Active and Planning"></div>
       </div>
 
       <!-- Column 2: In Progress -->
@@ -393,45 +393,94 @@
       </div>
       <form id="project-form">
         <input type="hidden" id="form-id">
+        <!-- Project Title -->
         <div class="form-row">
-          <div class="form-group flex-2">
+          <div class="form-group flex-1">
             <label for="form-title">Project Name</label>
             <input type="text" id="form-title" required placeholder="e.g. CAR 398 Canvas fixes">
           </div>
-          <div class="form-group flex-1 combobox-wrapper">
-            <label for="form-owner">Owner (Accountable Lead)</label>
-            <div class="combobox-input-container">
-              <input type="text" id="form-owner" class="combobox-input" autocomplete="off" placeholder="Type to search team members..." required>
-              <button type="button" class="combobox-toggle-btn" id="owner-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
-            </div>
-            <ul id="owner-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
-          </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-1 combobox-wrapper">
-            <label for="form-delegated-owner">Delegated Lead (Driving Execution)</label>
-            <div class="combobox-input-container">
-              <input type="text" id="form-delegated-owner" class="combobox-input" autocomplete="off" placeholder="Leave blank if Rob, or pick coworker (e.g. Aqeel)...">
-              <button type="button" class="combobox-toggle-btn" id="delegated-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
-            </div>
-            <ul id="delegated-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
+        <!-- People & Perspective Quadrants Stack -->
+        <div class="people-quadrant-stack-container">
+          <div class="stack-section-header">
+            <span class="stack-section-title">👥 Team Roles &amp; Eisenhower Perspectives</span>
+            <span class="stack-section-hint">Each person sets their own priority quadrant (e.g. Owner Q3 · Delegated Lead Q1)</span>
           </div>
-          <div class="form-group flex-1 combobox-wrapper">
-            <label for="form-assisting">Assisting (Contributors)</label>
-            <div class="combobox-input-container">
-              <input type="text" id="form-assisting" class="combobox-input" autocomplete="off" placeholder="Pick or type coworker (e.g. Paula)...">
-              <button type="button" class="combobox-toggle-btn" id="assisting-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
+
+          <!-- Stack Item 1: Owner : Owner Quadrant -->
+          <div class="form-row stack-row">
+            <div class="form-group flex-2 combobox-wrapper">
+              <label for="form-owner">Owner (Accountable Lead)</label>
+              <div class="combobox-input-container">
+                <input type="text" id="form-owner" class="combobox-input" autocomplete="off" placeholder="Type to search team members..." required>
+                <button type="button" class="combobox-toggle-btn" id="owner-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
+              </div>
+              <ul id="owner-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
             </div>
-            <ul id="assisting-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
+            <div class="form-group flex-1">
+              <label for="form-owner-quadrant">Owner's Quadrant</label>
+              <select id="form-owner-quadrant" required>
+                <option value="Q1">Q1: Urgent &amp; Important (Do First)</option>
+                <option value="Q2" selected>Q2: Important, Not Urgent (Strategic Mission)</option>
+                <option value="Q3">Q3: Urgent, Not Important (Delegate/Routine)</option>
+                <option value="Q4">Q4: Not Urgent, Not Important (Triage)</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group" style="flex: 0 0 auto; display: flex; align-items: flex-end; padding-bottom: 0.5rem;">
+
+          <!-- Stack Item 2: Delegated Lead : Delegated Lead's Quadrant -->
+          <div class="form-row stack-row">
+            <div class="form-group flex-2 combobox-wrapper">
+              <label for="form-delegated-owner">Delegated Lead (Driving Execution)</label>
+              <div class="combobox-input-container">
+                <input type="text" id="form-delegated-owner" class="combobox-input" autocomplete="off" placeholder="Leave blank if Rob, or pick coworker (e.g. Rodrigo, Paula)...">
+                <button type="button" class="combobox-toggle-btn" id="delegated-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
+              </div>
+              <ul id="delegated-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
+            </div>
+            <div class="form-group flex-1">
+              <label for="form-delegated-quadrant">Delegated Lead's Quadrant</label>
+              <select id="form-delegated-quadrant">
+                <option value="">(None / Same as Owner)</option>
+                <option value="Q1" selected>Q1: Urgent &amp; Important (Do First)</option>
+                <option value="Q2">Q2: Important, Not Urgent (Strategic Mission)</option>
+                <option value="Q3">Q3: Urgent, Not Important (Delegate/Routine)</option>
+                <option value="Q4">Q4: Not Urgent, Not Important (Triage)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Stack Item 3: Assisting : Assisting Quadrant -->
+          <div class="form-row stack-row">
+            <div class="form-group flex-2 combobox-wrapper">
+              <label for="form-assisting">Assisting (Contributors)</label>
+              <div class="combobox-input-container">
+                <input type="text" id="form-assisting" class="combobox-input" autocomplete="off" placeholder="Pick or type coworker (e.g. Joel, Erere)...">
+                <button type="button" class="combobox-toggle-btn" id="assisting-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
+              </div>
+              <ul id="assisting-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>
+            </div>
+            <div class="form-group flex-1">
+              <label for="form-assisting-quadrant">Assisting Quadrant</label>
+              <select id="form-assisting-quadrant">
+                <option value="">(None / Same as Owner)</option>
+                <option value="Q1">Q1: Urgent &amp; Important (Do First)</option>
+                <option value="Q2">Q2: Important, Not Urgent (Strategic Mission)</option>
+                <option value="Q3">Q3: Urgent, Not Important (Delegate/Routine)</option>
+                <option value="Q4">Q4: Not Urgent, Not Important (Triage)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="stack-delegation-flag">
             <label class="checkbox-label" for="form-needs-delegation">
               <input type="checkbox" id="form-needs-delegation">
               <span>⚠️ Flag <strong>Needs Delegation</strong></span>
             </label>
           </div>
         </div>
+        <input type="hidden" id="form-quadrant" value="Q1">
 
         <div class="form-row">
           <div class="form-group flex-1">
@@ -454,15 +503,6 @@
 
         <div class="form-row">
           <div class="form-group flex-1">
-            <label for="form-quadrant">Eisenhower Quadrant</label>
-            <select id="form-quadrant" required>
-              <option value="Q1">Q1: Urgent & Important (Do First)</option>
-              <option value="Q2">Q2: Important, Not Urgent (Strategic Mission)</option>
-              <option value="Q3">Q3: Urgent, Not Important (Delegate/Automate)</option>
-              <option value="Q4">Q4: Not Urgent, Not Important (Triage)</option>
-            </select>
-          </div>
-          <div class="form-group flex-1">
             <label for="form-pillar">Mission Pillar</label>
             <select id="form-pillar" required>
               <option value="Capable">🎓 Capable Disciples</option>
@@ -474,7 +514,7 @@
             <label for="form-status">Status</label>
             <select id="form-status" required>
               <option value="Backlog">📥 Backlog</option>
-              <option value="On Track">🟢 On Track</option>
+              <option value="Active and Planning">🟢 Active and Planning</option>
               <option value="In Progress">🟡 In Progress</option>
               <option value="Blocked">🔴 Blocked / Waiting</option>
               <option value="Completed">✅ Completed</option>
