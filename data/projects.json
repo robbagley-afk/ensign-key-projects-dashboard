@@ -37,7 +37,8 @@
         "dateAdded": "2026-10-27T10:00:00Z"
       }
     ],
-    "inMikesReport": true
+    "inMikesReport": true,
+    "ownerQuadrant": "Q1"
   },
   {
     "id": "vmock-ingestion",
@@ -77,7 +78,8 @@
         "dateAdded": "2026-10-27T10:00:00Z"
       }
     ],
-    "inMikesReport": true
+    "inMikesReport": true,
+    "ownerQuadrant": "Q1"
   },
   {
     "id": "ens101-polish",
@@ -117,7 +119,9 @@
         "dateAdded": "2026-10-27T10:00:00Z"
       }
     ],
-    "inMikesReport": true
+    "inMikesReport": true,
+    "ownerQuadrant": "Q1",
+    "delegatedQuadrant": "Q1"
   },
   {
     "id": "internship-tool",
@@ -157,7 +161,9 @@
         "dateAdded": "2026-10-27T10:00:00Z"
       }
     ],
-    "inMikesReport": true
+    "inMikesReport": true,
+    "ownerQuadrant": "Q1",
+    "delegatedQuadrant": "Q1"
   },
   {
     "id": "career-ui-suite",
@@ -197,7 +203,8 @@
         "dateAdded": "2026-10-27T10:00:00Z"
       }
     ],
-    "inMikesReport": true
+    "inMikesReport": true,
+    "ownerQuadrant": "Q2"
   },
   {
     "id": "workshop-redesign",
@@ -236,7 +243,8 @@
         "url": "PROMPTS/workshop-redesign.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q2"
   },
   {
     "id": "peoplegrove-alumni",
@@ -245,7 +253,7 @@
     "quadrant": "Q2",
     "pillar": "Community",
     "department": "Alumni",
-    "status": "On Track",
+    "status": "Active and Planning",
     "progress": 75,
     "dueDate": "2027-01-15",
     "owner": "Gregory Fox",
@@ -275,7 +283,9 @@
         "url": "PROMPTS/peoplegrove-alumni.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q2",
+    "delegatedQuadrant": "Q2"
   },
   {
     "id": "employer-portal",
@@ -314,7 +324,9 @@
         "url": "PROMPTS/employer-portal.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q2",
+    "delegatedQuadrant": "Q2"
   },
   {
     "id": "prison-education",
@@ -353,7 +365,9 @@
         "url": "PROMPTS/prison-education.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q2",
+    "delegatedQuadrant": "Q2"
   },
   {
     "id": "fleet-infrastructure",
@@ -362,7 +376,7 @@
     "quadrant": "Q2",
     "pillar": "Capable",
     "department": "AI & Operations",
-    "status": "On Track",
+    "status": "Active and Planning",
     "progress": 90,
     "dueDate": "2026-11-30",
     "owner": "Rob Bagley",
@@ -392,7 +406,8 @@
         "url": "PROMPTS/fleet-infrastructure.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q2"
   },
   {
     "id": "appfix-dispatch",
@@ -404,7 +419,7 @@
     "status": "Completed",
     "progress": 100,
     "dueDate": "2026-11-10",
-    "owner": "Rodrigo Moll (Victor Mendoza)",
+    "owner": "Rob Bagley",
     "delegatedOwner": "Rodrigo Moll (Victor Mendoza)",
     "needsDelegation": true,
     "description": "Automated issue intake via /appfix-cis, live Kanban board on Vercel, and GitHub dispatch to Rodrigo.",
@@ -431,7 +446,9 @@
         "url": "PROMPTS/appfix-dispatch.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q3",
+    "delegatedQuadrant": "Q1"
   },
   {
     "id": "stale-tasks-triage",
@@ -470,7 +487,8 @@
         "url": "PROMPTS/stale-tasks-triage.md",
         "dateAdded": "2026-10-27T10:00:00Z"
       }
-    ]
+    ],
+    "ownerQuadrant": "Q4"
   },
   {
     "id": "edusourced-cost-per-student-byu-pathway",

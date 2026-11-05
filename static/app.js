@@ -458,6 +458,39 @@ function matchesUserView(project, userView) {
   }
 }
 
+function getEffectiveQuadrant(project, userView = state.userView) {
+  if (!project) return 'Q2';
+  const ownerQ = project.ownerQuadrant || project.quadrant || 'Q2';
+  const delegatedQ = project.delegatedQuadrant || (project.delegatedOwner ? 'Q1' : ownerQ);
+  const assistingQ = project.assistingQuadrant || ownerQ;
+
+  if (!userView || userView === 'all') {
+    return project.ownerQuadrant || project.quadrant || 'Q2';
+  }
+
+  const u = userView.toLowerCase();
+  const owner = (project.owner || '').toLowerCase();
+  const delegated = (project.delegatedLead || project.delegatedOwner || '').toLowerCase();
+  const assisting = (project.assisting || '').toLowerCase();
+
+  // If user is delegated lead, use their delegated quadrant
+  if (delegated && delegated.includes(u)) {
+    return project.delegatedQuadrant || 'Q1';
+  }
+
+  // If user is assisting contributor, use their assisting quadrant
+  if (assisting && assisting.includes(u)) {
+    return project.assistingQuadrant || ownerQ;
+  }
+
+  // If user is owner, use their owner quadrant
+  if (owner && owner.includes(u)) {
+    return project.ownerQuadrant || project.quadrant || 'Q3';
+  }
+
+  return project.ownerQuadrant || project.quadrant || 'Q2';
+}
+
 let state = {
   projects: loadProjects(),
   currentView: getLayoutViewFromURL(), // 'matrix', 'kanban', or 'list'
@@ -656,6 +689,9 @@ const assistingDropdownList = document.getElementById('assisting-dropdown-list')
 const assistingToggleBtn = document.getElementById('assisting-toggle-btn');
 const formDepartment = document.getElementById('form-department');
 const formDueDate = document.getElementById('form-due-date');
+const formOwnerQuadrant = document.getElementById('form-owner-quadrant');
+const formDelegatedQuadrant = document.getElementById('form-delegated-quadrant');
+const formAssistingQuadrant = document.getElementById('form-assisting-quadrant');
 const formQuadrant = document.getElementById('form-quadrant');
 const formPillar = document.getElementById('form-pillar');
 const formStatus = document.getElementById('form-status');
@@ -1288,14 +1324,17 @@ function getOwnerDisplay(p) {
   const owner = p.owner || 'Rob Bagley';
   const lead = p.delegatedLead || p.delegatedOwner || '';
   const assisting = p.assisting || '';
+  const ownerQ = p.ownerQuadrant || p.quadrant || 'Q2';
+  const leadQ = p.delegatedQuadrant || (lead ? 'Q1' : '');
+  const assistingQ = p.assistingQuadrant || '';
 
   let html = `<div class="card-team-roles">`;
-  html += `<span class="card-role-badge card-role-owner" title="Accountable Project Owner">👤 <strong>Owner:</strong> ${escapeHTML(owner)}</span>`;
+  html += `<span class="card-role-badge card-role-owner" title="Accountable Project Owner perspective: ${ownerQ}">👤 <strong>Owner:</strong> ${escapeHTML(owner)} <span class="role-q-pill q-pill-${ownerQ.toLowerCase()}">${ownerQ}</span></span>`;
   if (lead && lead !== owner) {
-    html += `<span class="card-role-badge card-role-lead" title="Delegated Lead (Driving Execution)">🤝 <strong>Lead:</strong> ${escapeHTML(lead)}</span>`;
+    html += `<span class="card-role-badge card-role-lead" title="Delegated Lead perspective: ${leadQ || ownerQ}">🤝 <strong>Lead:</strong> ${escapeHTML(lead)}${leadQ ? ` <span class="role-q-pill q-pill-${leadQ.toLowerCase()}">${leadQ}</span>` : ''}</span>`;
   }
   if (assisting) {
-    html += `<span class="card-role-badge card-role-assisting" title="Assisting Team Member(s)">👥 <strong>Assisting:</strong> ${escapeHTML(assisting)}</span>`;
+    html += `<span class="card-role-badge card-role-assisting" title="Assisting Contributor perspective: ${assistingQ || 'Assisting'}">👥 <strong>Assisting:</strong> ${escapeHTML(assisting)}${assistingQ ? ` <span class="role-q-pill q-pill-${assistingQ.toLowerCase()}">${assistingQ}</span>` : ''}</span>`;
   }
   html += `</div>`;
   return html;
@@ -1310,7 +1349,7 @@ function getPillarBadge(pillar) {
 
 function getStatusBadge(status) {
   if (status === 'Backlog') return '<span class="badge" style="background:#E2E8F0; color:#334155; font-weight:700;">📥 Backlog</span>';
-  if (status === 'On Track') return '<span class="badge badge-status-ontrack">🟢 On Track</span>';
+  if (status === 'Active and Planning' || status === 'On Track') return '<span class="badge badge-status-ontrack">🟢 Active and Planning</span>';
   if (status === 'In Progress') return '<span class="badge badge-status-progress">🟡 In Progress</span>';
   if (status === 'Blocked') return '<span class="badge badge-status-blocked">🔴 Blocked</span>';
   if (status === 'Completed') return '<span class="badge badge-status-done">✅ Complete</span>';
@@ -1440,7 +1479,13 @@ function render() {
     if (state.filterPillar !== 'all' && p.pillar !== state.filterPillar) return false;
 
     // Status filter
-    if (state.filterStatus !== 'all' && p.status !== state.filterStatus) return false;
+    if (state.filterStatus !== 'all') {
+      if (state.filterStatus === 'Active and Planning' || state.filterStatus === 'On Track') {
+        if (p.status !== 'Active and Planning' && p.status !== 'On Track') return false;
+      } else if (p.status !== state.filterStatus) {
+        return false;
+      }
+    }
 
     // Search query
     if (state.searchQuery) {
@@ -1456,10 +1501,10 @@ function render() {
     return true;
   });
 
-  const q1 = filtered.filter(p => p.quadrant === 'Q1');
-  const q2 = filtered.filter(p => p.quadrant === 'Q2');
-  const q3 = filtered.filter(p => p.quadrant === 'Q3');
-  const q4 = filtered.filter(p => p.quadrant === 'Q4');
+  const q1 = filtered.filter(p => getEffectiveQuadrant(p, state.userView) === 'Q1');
+  const q2 = filtered.filter(p => getEffectiveQuadrant(p, state.userView) === 'Q2');
+  const q3 = filtered.filter(p => getEffectiveQuadrant(p, state.userView) === 'Q3');
+  const q4 = filtered.filter(p => getEffectiveQuadrant(p, state.userView) === 'Q4');
 
   countQ1.textContent = q1.length;
   countQ2.textContent = q2.length;
@@ -1577,7 +1622,7 @@ function render() {
     // List view: filter list if a specific quadrant is selected
     const listItems = state.filterQuadrant === 'all'
       ? filtered
-      : filtered.filter(p => p.quadrant === state.filterQuadrant);
+      : filtered.filter(p => getEffectiveQuadrant(p, state.userView) === state.filterQuadrant);
     renderList(allProjectsList, listItems);
   }
 }
@@ -1790,11 +1835,11 @@ function renderKanban(filteredItems) {
   // Respect quadrant filter if selected
   const items = state.filterQuadrant === 'all'
     ? filteredItems
-    : filteredItems.filter(p => p.quadrant === state.filterQuadrant);
+    : filteredItems.filter(p => getEffectiveQuadrant(p, state.userView) === state.filterQuadrant);
 
   const groups = {
     'Backlog': [],
-    'On Track': [],
+    'Active and Planning': [],
     'In Progress': [],
     'Blocked': [],
     'Completed': []
@@ -1810,25 +1855,25 @@ function renderKanban(filteredItems) {
       groups['Blocked'].push(p);
     } else if (s === 'Completed') {
       groups['Completed'].push(p);
-    } else if (s === 'On Track') {
-      groups['On Track'].push(p);
+    } else if (s === 'Active and Planning' || s === 'On Track') {
+      groups['Active and Planning'].push(p);
     } else {
       if ((p.progress || 0) === 0) {
         groups['Backlog'].push(p);
       } else {
-        groups['On Track'].push(p);
+        groups['Active and Planning'].push(p);
       }
     }
   });
 
   if (countBacklog) countBacklog.textContent = groups['Backlog'].length;
-  if (countOnTrack) countOnTrack.textContent = groups['On Track'].length;
+  if (countOnTrack) countOnTrack.textContent = groups['Active and Planning'].length;
   if (countInProgress) countInProgress.textContent = groups['In Progress'].length;
   if (countBlocked) countBlocked.textContent = groups['Blocked'].length;
   if (countCompleted) countCompleted.textContent = groups['Completed'].length;
 
   renderKanbanColumnCards(colBacklog, groups['Backlog'], 'Backlog');
-  renderKanbanColumnCards(colOnTrack, groups['On Track'], 'On Track');
+  renderKanbanColumnCards(colOnTrack, groups['Active and Planning'], 'Active and Planning');
   renderKanbanColumnCards(colInProgress, groups['In Progress'], 'In Progress');
   renderKanbanColumnCards(colBlocked, groups['Blocked'], 'Blocked');
   renderKanbanColumnCards(colCompleted, groups['Completed'], 'Completed');
@@ -1862,14 +1907,15 @@ function renderKanbanColumnCards(container, items, colStatus) {
       document.querySelectorAll('.kanban-column-cards').forEach(el => el.classList.remove('drag-over'));
     });
 
-    const qClass = (p.quadrant || 'q4').toLowerCase();
+    const effQ = getEffectiveQuadrant(p, state.userView);
+    const qClass = (effQ || 'q4').toLowerCase();
     const attCount = p.attachments ? p.attachments.length : 0;
     const attBtnClass = attCount > 0 ? 'btn-card-attachments has-attachments' : 'btn-card-attachments';
 
     card.innerHTML = `
       <div class="card-top">
         <div class="card-badges">
-          <span class="kanban-quadrant-tag tag-${qClass}" title="Eisenhower Matrix: ${p.quadrant}">${p.quadrant}</span>
+          <span class="kanban-quadrant-tag tag-${qClass}" title="Perspective Quadrant: ${effQ}">${effQ}</span>
           ${getDelegationBadge(p)}
           ${getDepartmentBadge(p.department)}
           ${getPillarBadge(p.pillar)}
@@ -1910,7 +1956,7 @@ function renderKanbanColumnCards(container, items, colStatus) {
         <span class="kanban-move-label">Stage:</span>
         <select class="kanban-move-select" onchange="window.moveProjectStatus('${p.id}', this.value)">
           <option value="Backlog" ${p.status === 'Backlog' ? 'selected' : ''}>📥 Backlog</option>
-          <option value="On Track" ${p.status === 'On Track' ? 'selected' : ''}>🟢 On Track</option>
+          <option value="Active and Planning" ${p.status === 'Active and Planning' || p.status === 'On Track' ? 'selected' : ''}>🟢 Active and Planning</option>
           <option value="In Progress" ${p.status === 'In Progress' ? 'selected' : ''}>🟡 In Progress</option>
           <option value="Blocked" ${p.status === 'Blocked' ? 'selected' : ''}>🔴 Blocked</option>
           <option value="Completed" ${p.status === 'Completed' ? 'selected' : ''}>✅ Completed</option>
@@ -1981,9 +2027,18 @@ function openEditModal(id) {
   if (formAssisting) formAssisting.value = p.assisting || '';
   formDepartment.value = p.department || 'Career Mentor';
   formDueDate.value = p.dueDate || '';
-  formQuadrant.value = p.quadrant;
+
+  const ownerQ = p.ownerQuadrant || p.quadrant || 'Q2';
+  const delQ = p.delegatedQuadrant || (p.delegatedOwner ? 'Q1' : '');
+  const assistQ = p.assistingQuadrant || '';
+
+  if (formOwnerQuadrant) formOwnerQuadrant.value = ownerQ;
+  if (formDelegatedQuadrant) formDelegatedQuadrant.value = delQ;
+  if (formAssistingQuadrant) formAssistingQuadrant.value = assistQ;
+  if (formQuadrant) formQuadrant.value = ownerQ;
+
   formPillar.value = p.pillar;
-  formStatus.value = p.status;
+  formStatus.value = (p.status === 'On Track') ? 'Active and Planning' : (p.status || 'Active and Planning');
   formProgress.value = p.progress;
   progressVal.textContent = `${p.progress}%`;
   formDescription.value = p.description || '';
@@ -2029,9 +2084,13 @@ function openAddModal() {
   d.setDate(d.getDate() + 30);
   formDueDate.value = d.toISOString().split('T')[0];
 
-  formQuadrant.value = 'Q1';
+  if (formOwnerQuadrant) formOwnerQuadrant.value = 'Q2';
+  if (formDelegatedQuadrant) formDelegatedQuadrant.value = 'Q1';
+  if (formAssistingQuadrant) formAssistingQuadrant.value = '';
+  if (formQuadrant) formQuadrant.value = 'Q2';
+
   formPillar.value = 'Capable';
-  formStatus.value = 'In Progress';
+  formStatus.value = 'Active and Planning';
   formProgress.value = 50;
   progressVal.textContent = '50%';
   formDescription.value = '';
@@ -2063,7 +2122,11 @@ projectForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const id = formId.value;
   const delegatedVal = formDelegatedOwner ? formDelegatedOwner.value.trim() : '';
-  const needsDelVal = formNeedsDelegation ? formNeedsDelegation.checked : (formQuadrant.value === 'Q3' || !!delegatedVal);
+  const ownerQVal = formOwnerQuadrant ? formOwnerQuadrant.value : (formQuadrant ? formQuadrant.value : 'Q2');
+  const delegatedQVal = formDelegatedQuadrant ? formDelegatedQuadrant.value : '';
+  const assistingQVal = formAssistingQuadrant ? formAssistingQuadrant.value : '';
+  const statusVal = formStatus ? formStatus.value : 'Active and Planning';
+  const needsDelVal = formNeedsDelegation ? formNeedsDelegation.checked : (ownerQVal === 'Q3' || !!delegatedVal);
 
   if (id) {
     // Edit existing project
@@ -2077,9 +2140,12 @@ projectForm.addEventListener('submit', (e) => {
       p.needsDelegation = needsDelVal;
       p.department = formDepartment.value;
       p.dueDate = formDueDate.value;
-      p.quadrant = formQuadrant.value;
+      p.quadrant = ownerQVal;
+      p.ownerQuadrant = ownerQVal;
+      p.delegatedQuadrant = delegatedQVal;
+      p.assistingQuadrant = assistingQVal;
       p.pillar = formPillar.value;
-      p.status = formStatus.value;
+      p.status = statusVal;
       p.progress = parseInt(formProgress.value, 10);
       p.description = formDescription.value;
       p.link = formLink.value;
@@ -2098,9 +2164,12 @@ projectForm.addEventListener('submit', (e) => {
       needsDelegation: needsDelVal,
       department: formDepartment.value,
       dueDate: formDueDate.value,
-      quadrant: formQuadrant.value,
+      quadrant: ownerQVal,
+      ownerQuadrant: ownerQVal,
+      delegatedQuadrant: delegatedQVal,
+      assistingQuadrant: assistingQVal,
       pillar: formPillar.value,
-      status: formStatus.value,
+      status: statusVal,
       progress: parseInt(formProgress.value, 10),
       description: formDescription.value,
       link: formLink.value,

@@ -89,6 +89,34 @@ function matchesUserView(project, userView) {
   }
 }
 
+function getEffectiveQuadrant(project, userView) {
+  if (!project) return 'Q2';
+  const ownerQ = project.ownerQuadrant || project.quadrant || 'Q2';
+  const delegatedQ = project.delegatedQuadrant || (project.delegatedOwner ? 'Q1' : ownerQ);
+  const assistingQ = project.assistingQuadrant || ownerQ;
+
+  if (!userView || userView === 'all') {
+    return project.ownerQuadrant || project.quadrant || 'Q2';
+  }
+
+  const u = userView.toLowerCase();
+  const owner = (project.owner || '').toLowerCase();
+  const delegated = (project.delegatedLead || project.delegatedOwner || '').toLowerCase();
+  const assisting = (project.assisting || '').toLowerCase();
+
+  if (delegated && delegated.includes(u)) {
+    return project.delegatedQuadrant || 'Q1';
+  }
+  if (assisting && assisting.includes(u)) {
+    return project.assistingQuadrant || ownerQ;
+  }
+  if (owner && owner.includes(u)) {
+    return project.ownerQuadrant || project.quadrant || 'Q3';
+  }
+
+  return project.ownerQuadrant || project.quadrant || 'Q2';
+}
+
 module.exports = async function handler(req, res) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -113,11 +141,12 @@ module.exports = async function handler(req, res) {
 
     let results = projects.filter(p => !p.isRemoved);
 
-    if (quadrant && quadrant !== 'all') {
-      results = results.filter(p => p.quadrant.toUpperCase() === quadrant.toUpperCase());
-    }
     if (user && user !== 'all') {
       results = results.filter(p => matchesUserView(p, user));
+    }
+    if (quadrant && quadrant !== 'all') {
+      const qUpper = quadrant.toUpperCase();
+      results = results.filter(p => getEffectiveQuadrant(p, user).toUpperCase() === qUpper);
     }
     if (owner && owner !== 'all') {
       const o = owner.toLowerCase();
@@ -127,7 +156,14 @@ module.exports = async function handler(req, res) {
                                      (p.assisting && p.assisting.toLowerCase().includes(o)));
     }
     if (status && status !== 'all') {
-      results = results.filter(p => p.status.toLowerCase() === status.toLowerCase());
+      const sLower = status.toLowerCase();
+      results = results.filter(p => {
+        const pStatus = (p.status || '').toLowerCase();
+        if (sLower === 'active and planning' || sLower === 'on track') {
+          return pStatus === 'active and planning' || pStatus === 'on track';
+        }
+        return pStatus === sLower;
+      });
     }
     if (pillar && pillar !== 'all') {
       results = results.filter(p => p.pillar.toLowerCase() === pillar.toLowerCase());
@@ -184,7 +220,10 @@ module.exports = async function handler(req, res) {
     const newProject = {
       id,
       title: body.title,
-      quadrant: body.quadrant || 'Q1',
+      quadrant: body.ownerQuadrant || body.quadrant || 'Q1',
+      ownerQuadrant: body.ownerQuadrant || body.quadrant || 'Q1',
+      delegatedQuadrant: body.delegatedQuadrant || (body.delegatedLead ? 'Q1' : ''),
+      assistingQuadrant: body.assistingQuadrant || '',
       pillar: body.pillar || 'Capable',
       department: body.department || 'AI & Operations',
       status: body.status || 'In Progress',
@@ -225,7 +264,8 @@ module.exports = async function handler(req, res) {
     }
 
     const updatableFields = [
-      'title', 'description', 'quadrant', 'pillar', 'department',
+      'title', 'description', 'quadrant', 'ownerQuadrant', 'delegatedQuadrant', 'assistingQuadrant',
+      'pillar', 'department',
       'status', 'progress', 'dueDate', 'owner', 'delegatedOwner', 'delegatedLead', 'assisting',
       'needsDelegation', 'link', 'promptDoc', 'inMikesReport',
       'attachments', 'milestones', 'isRemoved'
