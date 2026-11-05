@@ -13,7 +13,9 @@ module.exports = async function handler(req, res) {
   const dataPath = path.join(process.cwd(), 'data', 'projects.json');
   let projects = [];
   try {
-    if (fs.existsSync(dataPath)) {
+    if (global.__projectStore) {
+      projects = global.__projectStore.loadProjects();
+    } else if (fs.existsSync(dataPath)) {
       projects = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     }
   } catch (err) {

@@ -5,6 +5,7 @@ const path = require('path');
 let memoryProjects = null;
 
 function loadProjects() {
+  if (global.__projectStore) return global.__projectStore.loadProjects();
   if (memoryProjects) return memoryProjects;
   try {
     const dataPath = path.join(process.cwd(), 'data', 'projects.json');
@@ -20,6 +21,7 @@ function loadProjects() {
 }
 
 function saveProjects(projects) {
+  if (global.__projectStore) return global.__projectStore.saveProjects(projects);
   memoryProjects = projects;
   try {
     const dataPath = path.join(process.cwd(), 'data', 'projects.json');
@@ -139,7 +141,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json(proj);
     }
 
-    let results = projects.filter(p => !p.isRemoved);
+    let results = (req.query && (req.query.includeRemoved === '1' || req.query.all === '1')) ? projects.slice() : projects.filter(p => !p.isRemoved);
 
     if (user && user !== 'all') {
       results = results.filter(p => matchesUserView(p, user));

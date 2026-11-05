@@ -2892,3 +2892,67 @@ if (summaryPrintBtn) {
     window.print();
   });
 }
+
+// ---- Shared sync (Studio server). Falls back to localStorage-only if no server/passcode. ----
+(function sharedSync() {
+  const known = new Map(); // id -> { json, updatedAt } as last seen on server
+  let pushing = false, dirty = false, online = false;
+  const stripTs = p => { const { updatedAt, ...rest } = p; return rest; };
+
+  async function api(pathname, opts) {
+    const res = await fetch(pathname, Object.assign({ credentials: 'same-origin', cache: 'no-store' }, opts));
+    if (res.status === 401) { location.reload(); throw new Error('auth'); }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+  function applyServer(rows) {
+    const byId = new Map(state.projects.map(p => [p.id, p]));
+    const next = [];
+    let changed = false;
+    for (const r of rows) {
+      const local = byId.get(r.id);
+      const k = known.get(r.id);
+      const body = stripTs(r);
+      const bodyJson = JSON.stringify(body);
+      const localDirty = local && k && JSON.stringify(local) !== k.json;
+      if (local && localDirty) { next.push(local); byId.delete(r.id); continue; } // keep unsynced local edit, push below
+      if (!k || k.updatedAt !== r.updatedAt) { if (!local || JSON.stringify(local) !== bodyJson) changed = true; }
+      known.set(r.id, { json: bodyJson, updatedAt: r.updatedAt });
+      next.push(body); byId.delete(r.id);
+    }
+    // local-only projects (created offline / not pushed yet) stay and get pushed
+    byId.forEach(p => next.unshift(p));
+    if (changed) { state.projects = next; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch (e) {} render(); }
+    else state.projects = next;
+  }
+  async function pull() {
+    if (pushing) return;
+    const rows = await api('api/projects?rows=1');
+    online = true;
+    applyServer(rows);
+  }
+  async function push() {
+    if (pushing) { dirty = true; return; }
+    const changed = state.projects.filter(p => { const k = known.get(p.id); return !k || k.json !== JSON.stringify(p); });
+    if (!changed.length) return;
+    pushing = true;
+    try {
+      const payload = changed.map(p => Object.assign({}, p, { updatedAt: (known.get(p.id) || {}).updatedAt }));
+      const out = await api('api/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ projects: payload }) });
+      for (const r of out.results) {
+        if (r.conflict) { known.set(r.id, { json: JSON.stringify(stripTs(r.server)), updatedAt: r.server.updatedAt }); const i = state.projects.findIndex(p => p.id === r.id); if (i >= 0) state.projects[i] = stripTs(r.server); }
+        else { const p = state.projects.find(x => x.id === r.id); if (p) known.set(r.id, { json: JSON.stringify(p), updatedAt: r.updatedAt }); }
+      }
+      if (out.results.some(r => r.conflict)) render();
+    } catch (e) { console.warn('Shared sync push failed; kept locally', e); }
+    pushing = false;
+    if (dirty) { dirty = false; push(); }
+  }
+  const origSave = saveProjects;
+  saveProjects = function () { origSave(); if (online) push(); };
+  (async () => {
+    try { await pull(); await push(); } catch (e) { console.warn('Shared server unavailable; using local data only', e); return; }
+    setInterval(() => { pull().catch(() => {}); }, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) pull().catch(() => {}); });
+  })();
+})();
