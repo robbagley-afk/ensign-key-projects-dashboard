@@ -4,6 +4,7 @@
  * Rob Bagley, Associate Director Career Services
  */
 
+const APP_RELEASE = 'v1.1.0';
 const STORAGE_KEY = 'ensign_key_projects_data_v4';
 const LEGACY_STORAGE_KEY = 'ensign_key_projects_data_v3';
 const LEGACY_STORAGE_KEY_V2 = 'ensign_key_projects_data_v2';
@@ -2373,6 +2374,30 @@ if (attViewerModal) {
     if (e.target === attViewerModal) closeAttachmentViewer();
   });
 }
+
+const clearFiltersBtn = document.getElementById('clear-filters-btn');
+if (clearFiltersBtn) {
+  clearFiltersBtn.addEventListener('click', () => {
+    Object.assign(state, {
+      filterQuadrant: 'all', filterMikesReportOnly: false, filterDepartment: 'all',
+      filterOwner: 'all', filterPillar: 'all', filterStatus: 'all',
+      filterDelegation: 'all', searchQuery: '', myProjectsOnly: false,
+      userView: 'all', showRemoved: false
+    });
+    searchInput.value = '';
+    [filterQuadrantSelect, filterDepartment, filterOwner, filterPillar, filterStatus, userViewSelect]
+      .forEach(el => { if (el) el.value = 'all'; });
+    try {
+      const url = new URL(window.location);
+      url.searchParams.delete('user');
+      window.history.replaceState({}, '', url);
+    } catch (err) {}
+    render();
+  });
+}
+
+const releaseEl = document.getElementById('app-release');
+if (releaseEl) releaseEl.textContent = APP_RELEASE;
 
 resetStorageBtn.addEventListener('click', () => {
   if (confirm('Reset to standard canonical project defaults with updated delegation states?')) {
