@@ -471,5 +471,31 @@
         "dateAdded": "2026-10-27T10:00:00Z"
       }
     ]
+  },
+  {
+    "id": "edusourced-cost-per-student-byu-pathway",
+    "title": "EduSourced contract and cost per student for BYU-Pathway (Jon Fackrell)",
+    "quadrant": "Q2",
+    "pillar": "Trusted",
+    "department": "Training",
+    "status": "Backlog",
+    "progress": 0,
+    "dueDate": "",
+    "owner": "Rob Bagley",
+    "delegatedOwner": "Miguel (ecenter22)",
+    "delegatedLead": "Miguel (ecenter22)",
+    "assisting": "Kurt Jones",
+    "needsDelegation": false,
+    "description": "Jon Fackrell (BYU-Pathway Educational Resource Manager, fackrellj@byui.edu) asked for the EduSourced contract or cost per student so he can report cost per student per Block. Roger McCarty has left. Mike Ray asked Rob on 2026-11-05 to handle it with Jon. Next steps: find the EduSourced contract and pricing, work out cost per student (and per Block if possible), and reply to Jon.",
+    "link": "",
+    "isRemoved": false,
+    "milestones": [
+      "Find EduSourced contract and pricing",
+      "Calculate cost per student (and per Block if possible)",
+      "Reply to Jon Fackrell"
+    ],
+    "attachments": [],
+    "inMikesReport": true,
+    "ownerQuadrant": "Q2"
   }
 ]
