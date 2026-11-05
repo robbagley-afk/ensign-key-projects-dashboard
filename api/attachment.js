@@ -13,7 +13,9 @@ module.exports = async function handler(req, res) {
   const dataPath = path.join(process.cwd(), 'data', 'projects.json');
   let projects = [];
   try {
-    if (fs.existsSync(dataPath)) {
+    if (global.__projectStore) {
+      projects = global.__projectStore.loadProjects();
+    } else if (fs.existsSync(dataPath)) {
       projects = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     }
   } catch (err) {
@@ -48,6 +50,7 @@ module.exports = async function handler(req, res) {
     proj.attachments.push(newAtt);
 
     try {
+      if (global.__projectStore) { global.__projectStore.saveProjects(projects); } else
       fs.writeFileSync(dataPath, JSON.stringify(projects, null, 2), 'utf8');
     } catch (err) {
       console.warn('Could not write to file in current serverless execution');
