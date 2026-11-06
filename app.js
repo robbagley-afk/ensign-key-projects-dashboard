@@ -874,17 +874,31 @@ if (delegatedToggleBtn) {
   });
 }
 
-// Searchable Combobox for Assisting Coworker(s) in Project Edit Modal
+// Searchable multi-select Combobox for Assisting Contributors (comma-separated)
+function splitAssisting(v) {
+  return (v || '').split(',').map(x => x.trim()).filter(Boolean);
+}
 function renderAssistingDropdown(filterText = '') {
   if (!assistingDropdownList) return;
-  const query = filterText.toLowerCase().trim();
-  const filtered = CIS_TEAM_MEMBERS.filter(m => 
-    m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query))
+  // Filter on the text after the last comma; earlier entries are already chosen
+  const parts = (filterText || '').split(',');
+  const current = parts[parts.length - 1].trim();
+  const chosen = parts.slice(0, -1).map(x => x.trim()).filter(Boolean);
+  const chosenLc = chosen.map(x => x.toLowerCase());
+  const query = current.toLowerCase();
+  const filtered = CIS_TEAM_MEMBERS.filter(m =>
+    !chosenLc.includes(m.name.toLowerCase()) &&
+    (m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query)))
   );
+  const commit = (names) => {
+    if (!formAssisting) return;
+    formAssisting.value = names.length ? names.join(', ') + ', ' : '';
+    formAssisting.focus();
+    renderAssistingDropdown(formAssisting.value);
+  };
 
   assistingDropdownList.innerHTML = '';
 
-  // Clear option
   const clearLi = document.createElement('li');
   clearLi.className = 'combobox-option';
   clearLi.style.color = '#64748B';
@@ -899,21 +913,21 @@ function renderAssistingDropdown(filterText = '') {
   };
   assistingDropdownList.appendChild(clearLi);
 
-  if (filtered.length === 0) {
-    if (filterText.trim()) {
-      const li = document.createElement('li');
-      li.className = 'combobox-option';
-      li.style.color = '#94A3B8';
-      li.textContent = `Use custom: "${filterText}"`;
-      li.onmousedown = (e) => {
-        e.preventDefault();
-        if (formAssisting) formAssisting.value = filterText;
-        closeAssistingDropdown();
-      };
-      assistingDropdownList.appendChild(li);
-    }
-    assistingDropdownList.style.display = 'block';
-    return;
+  if (chosen.length) {
+    const doneLi = document.createElement('li');
+    doneLi.className = 'combobox-option';
+    doneLi.innerHTML = `<span>✓ Done (${chosen.length} selected)</span><span class="combobox-option-badge">Close</span>`;
+    doneLi.onmousedown = (e) => { e.preventDefault(); tidyAssisting(); closeAssistingDropdown(); };
+    assistingDropdownList.appendChild(doneLi);
+  }
+
+  if (current && !filtered.some(m => m.name.toLowerCase() === query)) {
+    const li = document.createElement('li');
+    li.className = 'combobox-option';
+    li.style.color = '#94A3B8';
+    li.textContent = `Add custom: "${current}"`;
+    li.onmousedown = (e) => { e.preventDefault(); commit([...chosen, current]); };
+    assistingDropdownList.appendChild(li);
   }
 
   filtered.forEach(m => {
@@ -923,23 +937,20 @@ function renderAssistingDropdown(filterText = '') {
       <span>👥 ${escapeHTML(m.name)}</span>
       <span class="combobox-option-badge">${escapeHTML(m.role || 'Team')}</span>
     `;
-    li.onmousedown = (e) => {
-      e.preventDefault();
-      if (formAssisting) {
-        // If already has text and does not include this name, append
-        const cur = formAssisting.value.trim();
-        if (cur && !cur.toLowerCase().includes(m.name.toLowerCase())) {
-          formAssisting.value = `${cur}, ${m.name}`;
-        } else {
-          formAssisting.value = m.name;
-        }
-      }
-      closeAssistingDropdown();
-    };
+    li.onmousedown = (e) => { e.preventDefault(); commit([...chosen, m.name]); };
     assistingDropdownList.appendChild(li);
   });
 
   assistingDropdownList.style.display = 'block';
+}
+
+// Drop trailing comma and duplicates when the field loses focus
+function tidyAssisting() {
+  if (!formAssisting) return;
+  const seen = new Set();
+  formAssisting.value = splitAssisting(formAssisting.value)
+    .filter(n => { const k = n.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+    .join(', ');
 }
 
 function closeAssistingDropdown() {
@@ -954,6 +965,8 @@ if (formAssisting) {
   formAssisting.addEventListener('focus', () => {
     renderAssistingDropdown(formAssisting.value);
   });
+
+  formAssisting.addEventListener('blur', () => { tidyAssisting(); });
 }
 
 if (assistingToggleBtn) {
@@ -962,7 +975,7 @@ if (assistingToggleBtn) {
     if (assistingDropdownList.style.display === 'block') {
       closeAssistingDropdown();
     } else {
-      renderAssistingDropdown('');
+      renderAssistingDropdown(formAssisting ? formAssisting.value : '');
       if (formAssisting) formAssisting.focus();
     }
   });
