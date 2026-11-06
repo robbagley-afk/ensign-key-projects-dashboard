@@ -1,5 +1,5 @@
 'use strict';
-// Shared Key Projects Dashboard server: static files + /api/* backed by SQLite, passcode gate.
+// Shared Key Projects - Career Services server: static files + /api/* backed by SQLite, passcode gate.
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -25,7 +25,9 @@ const STATIC_FILES = new Set(['index.html', 'app.js', 'style.css', 'site.webmani
 const sign = v => crypto.createHmac('sha256', SECRET).update(v).digest('hex');
 const eq = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };
 const COOKIE = 'kp_auth';
-const makeToken = () => { const exp = Date.now() + 30 * 864e5; return `${exp}.${sign('exp:' + exp)}`; };
+const COOKIE_DAYS = 400; // browser maximum: enter the passcode once per browser, then stay signed in
+const setAuthCookie = res => res.setHeader('Set-Cookie', `${COOKIE}=${makeToken()}; HttpOnly; Secure; SameSite=Lax; Max-Age=${COOKIE_DAYS * 86400}`);
+const makeToken = () => { const exp = Date.now() + COOKIE_DAYS * 864e5; return `${exp}.${sign('exp:' + exp)}`; };
 const tokenOk = t => { if (!t) return false; const [exp, sig] = t.split('.'); return Number(exp) > Date.now() && sig && eq(sig, sign('exp:' + exp)); };
 const cookies = req => Object.fromEntries((req.headers.cookie || '').split(';').map(c => c.trim().split(/=(.*)/s).slice(0, 2)).filter(a => a[0]));
 function authed(req) {
@@ -37,9 +39,9 @@ function authed(req) {
 let fails = [];
 const throttled = () => { const t = Date.now(); fails = fails.filter(x => t - x < 60000); return fails.length >= 10; };
 
-const loginPage = (msg) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Key Projects Dashboard</title>
+const loginPage = (msg) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Key Projects - Career Services</title>
 <style>body{font-family:Inter,system-ui,sans-serif;background:#f4f6fa;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0}form{background:#fff;padding:32px;border-radius:12px;box-shadow:0 2px 12px #0002;width:min(340px,90vw)}h1{font-size:20px;margin:0 0 16px;color:#002e5d}input,button{width:100%;box-sizing:border-box;padding:12px;font-size:16px;margin-top:10px;border-radius:8px}input{border:1px solid #9aa5b5}button{background:#002e5d;color:#fff;border:0;cursor:pointer}.e{color:#b00020;margin-top:10px}</style>
-<form method="POST" action="login"><h1>Key Projects Dashboard</h1><label>Team passcode<input name="passcode" type="password" autofocus autocomplete="current-password"></label><button>Open</button>${msg ? `<div class="e">${msg}</div>` : ''}</form>`;
+<form method="POST" action="login"><h1>Key Projects - Career Services</h1><label>Team passcode<input name="passcode" type="password" autofocus autocomplete="current-password"></label><button>Open</button>${msg ? `<div class="e">${msg}</div>` : ''}</form>`;
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
@@ -67,7 +69,7 @@ const server = http.createServer(async (req, res) => {
       if (throttled()) return res.status(429).end('Too many attempts. Wait a minute.');
       const form = new URLSearchParams(await readBody(req));
       if (eq(form.get('passcode') || '', PASSCODE)) {
-        res.setHeader('Set-Cookie', `${COOKIE}=${makeToken()}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 86400}`);
+        setAuthCookie(res);
         res.statusCode = 303; res.setHeader('Location', './'); return res.end();
       }
       fails.push(Date.now());
@@ -81,6 +83,7 @@ const server = http.createServer(async (req, res) => {
       return res.end(loginPage(''));
     }
 
+    if (req.method === 'GET' && (p === '/' || p === '/index.html')) setAuthCookie(res); // sliding renewal on each visit
     if (p.startsWith('/api/')) {
       const name = p.slice(5).replace(/\.js$/, '');
       if (name === 'sync' && req.method === 'POST') {

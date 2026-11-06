@@ -1,4 +1,4 @@
-# Ensign Key Projects & Eisenhower Situational Awareness Dashboard
+# Key Projects - Career Services (v1.0)
 
 An executive dashboard for tracking and updating progress, maintaining situational awareness, and prioritizing key strategic initiatives for Ensign College Career Services and AI Teams.
 
