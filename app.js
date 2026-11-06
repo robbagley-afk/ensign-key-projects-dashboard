@@ -1,5 +1,5 @@
 /**
- * Ensign Key Projects & Situational Awareness Dashboard
+ * Key Projects - Career Services v1.0
  * Eisenhower Matrix, Ensign College Mission Alignment & Department Categorization
  * Rob Bagley, Associate Director Career Services
  */
@@ -2561,7 +2561,7 @@ function generateExecutiveSummaryMarkdown(items) {
     let md = `# Completed & Archived Projects Report\n`;
     md += `**Date:** ${today}\n`;
     md += `**Prepared by:** Rob Bagley, Associate Director Career Services\n`;
-    md += `**Portfolio:** Ensign Key Projects & Situational Awareness Dashboard\n`;
+    md += `**Portfolio:** Key Projects - Career Services v1.0\n`;
     md += `**Scope:** 📦 Completed & Archived Projects (${items.length} projects)\n\n`;
     md += `---\n\n`;
 
@@ -2598,7 +2598,7 @@ function generateExecutiveSummaryMarkdown(items) {
   let md = `# Director 1:1 Briefing · Mike Ray\n`;
   md += `**Date:** ${today}\n`;
   md += `**Prepared by:** Rob Bagley, Associate Director Career Services\n`;
-  md += `**Portfolio:** Ensign Key Projects & Situational Awareness Dashboard\n`;
+  md += `**Portfolio:** Key Projects - Career Services v1.0\n`;
   md += `**Scope:** ${state.execSummaryScope === 'mikes' ? "Mike's 1:1 Focus Items" : 'All Active Key Projects'} (${items.length} projects)\n\n`;
   md += `---\n\n`;
 
