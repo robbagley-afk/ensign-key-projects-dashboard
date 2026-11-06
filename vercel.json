@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/(.*)", "destination": "https://mac-studio-2.tail299fc7.ts.net:8443/key-projects/", "permanent": false }
+  ]
+}
