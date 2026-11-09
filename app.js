@@ -1709,7 +1709,7 @@ if (promptCopyBtn) {
 function renderQuadrantCards(container, items, qClass) {
   container.innerHTML = '';
   if (items.length === 0) {
-    container.innerHTML = '<div style="text-align: center; color: #94A3B8; padding: 2rem; font-size: 0.85rem; font-style: italic;">No projects in this quadrant</div>';
+    container.innerHTML = '<div style="text-align: center; color: #94A3B8; padding: 2rem; font-size: 17px; font-style: italic;">No projects in this quadrant</div>';
     return;
   }
 
@@ -2402,8 +2402,8 @@ window.openAttachmentViewer = function(projectId) {
       attViewerList.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: #94A3B8;">
           <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">📎</span>
-          <p style="font-size: 0.95rem; font-weight: 600; color: #475569; margin-bottom: 0.25rem;">No attachments added yet</p>
-          <p style="font-size: 0.8rem; margin-bottom: 1rem;">Upload project PDFs, spreadsheets, screenshots, or link OneDrive documents.</p>
+          <p style="font-size: 17px; font-weight: 600; color: #475569; margin-bottom: 0.25rem;">No attachments added yet</p>
+          <p style="font-size: 17px; margin-bottom: 1rem;">Upload project PDFs, spreadsheets, screenshots, or link OneDrive documents.</p>
           <button type="button" class="btn btn-primary btn-sm" onclick="closeAttachmentViewer(); openEditModal('${p.id}')">➕ Add First Attachment</button>
         </div>
       `;
@@ -2684,7 +2684,7 @@ function renderExecutiveSummaryHTML(items) {
           <span>📦 Completed &amp; Archived Project Records</span>
           <span>${items.length} item(s)</span>
         </div>
-        ${items.length === 0 ? '<p style="color:#94A3B8; font-style:italic; font-size:0.85rem; padding: 0.5rem 0;">No completed or archived projects found.</p>' : 
+        ${items.length === 0 ? '<p style="color:#94A3B8; font-style:italic; font-size:17px; padding: 0.5rem 0;">No completed or archived projects found.</p>' : 
           items.map(p => {
             const owner = p.delegatedOwner ? `<span style="color:#007150; font-weight:700;">🤝 ${escapeHTML(p.delegatedOwner)}</span> (Delegated)` : `<span>👤 ${escapeHTML(p.owner || 'Rob Bagley')}</span>`;
             return `
@@ -2715,7 +2715,7 @@ function renderExecutiveSummaryHTML(items) {
   const q4 = items.filter(p => p.quadrant === 'Q4');
 
   function renderItemsHTML(list, qClass) {
-    if (list.length === 0) return '<p style="color:#94A3B8; font-style:italic; font-size:0.85rem; padding: 0.5rem 0;">No active projects in this section.</p>';
+    if (list.length === 0) return '<p style="color:#94A3B8; font-style:italic; font-size:17px; padding: 0.5rem 0;">No active projects in this section.</p>';
     return list.map(p => {
       const owner = p.delegatedOwner ? `<span style="color:#007150; font-weight:700;">🤝 ${escapeHTML(p.delegatedOwner)}</span> (Delegated)` : `<span>👤 ${escapeHTML(p.owner || 'Rob Bagley')}</span>`;
       return `
@@ -2800,8 +2800,8 @@ function renderExecutiveSummaryHTML(items) {
     ` : ''}
 
     <div class="briefing-section" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:1rem; margin-top:1.5rem;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#0F172A; margin-bottom:0.5rem;">📌 Discussion Topics for 1:1 Meeting with Mike Ray</h4>
-      <ul style="padding-left:1.25rem; font-size:0.85rem; color:#334155; line-height:1.6;">
+      <h4 style="font-size:17px; font-weight:700; color:#0F172A; margin-bottom:0.5rem;">📌 Discussion Topics for 1:1 Meeting with Mike Ray</h4>
+      <ul style="padding-left:1.25rem; font-size:17px; color:#334155; line-height:1.6;">
         <li><strong>Active Blockers &amp; Deadlines:</strong> Review status of urgent Q1 deliverables and Canvas/gradebook updates.</li>
         <li><strong>Coworker Delegation &amp; DevOps:</strong> Review projects delegated to Rodrigo, Karla, and the Career Mentor team.</li>
         <li><strong>AI Tools &amp; Student Readiness:</strong> Review deployment progress on PathwayU, ENS 101, and local model infrastructure.</li>
