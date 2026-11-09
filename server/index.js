@@ -20,7 +20,7 @@ const handlers = {
   summary: require('../api/summary.js')
 };
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.webmanifest': 'application/manifest+json', '.md': 'text/markdown; charset=utf-8' };
-const STATIC_FILES = new Set(['index.html', 'app.js', 'style.css', 'site.webmanifest', 'favicon.svg', 'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png', 'apple-touch-icon.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png']);
+const STATIC_FILES = new Set(['ecc-tokens.css', 'ecc-ces-compat.css', 'ecc-components.base.css', 'ecc-app.css', 'index.html', 'app.js', 'style.css', 'site.webmanifest', 'favicon.svg', 'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png', 'apple-touch-icon.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png']);
 
 const sign = v => crypto.createHmac('sha256', SECRET).update(v).digest('hex');
 const eq = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y); };

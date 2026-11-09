@@ -11,13 +11,17 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#004731">
+  <meta name="theme-color" content="#00382A">
 
-  <!-- Typography: Montserrat & Inter (Ensign Career Coach Design System) -->
+  <!-- Typography: Montserrat only (ECC) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <link rel="stylesheet" href="ecc-tokens.css">
+  <link rel="stylesheet" href="ecc-ces-compat.css">
+  <link rel="stylesheet" href="ecc-components.base.css">
+  <link rel="stylesheet" href="ecc-app.css">
   <link rel="stylesheet" href="style.css">
 
   <!-- Vercel Web Analytics -->
@@ -32,18 +36,6 @@
   <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
-  <!-- Mission & Strategic Banner -->
-  <div class="mission-banner">
-    <div class="mission-container">
-      <div class="mission-icon">✝️</div>
-      <div class="mission-text">
-        <span class="mission-label">Ensign College Mission & Strategy:</span>
-        <span class="mission-quote">"Develop Capable and Trusted Disciples of Jesus Christ who are dedicated to strengthening Church, family, and community."</span>
-        <span class="strategy-quote">Strategy: Enable Career Success to help disciples become self-reliant and stay on the covenant path.</span>
-      </div>
-    </div>
-  </div>
-
   <!-- Header -->
   <header class="app-header">
     <div class="header-container">
@@ -70,7 +62,7 @@
           </button>
         </div>
         <button id="exec-summary-btn" class="btn btn-secondary btn-exec-summary" title="Generate Executive Summary & 1:1 Report for Director Mike Ray">
-          <span class="btn-icon">👔</span> Mike's 1:1 Report
+          Mike's 1:1 Report
         </button>
         <button id="add-project-btn" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -81,6 +73,17 @@
   </header>
 
   <main class="dashboard-container">
+  <!-- Mission & Strategic Banner -->
+  <div class="mission-banner">
+    <div class="mission-container">
+      <div class="mission-text">
+        <span class="mission-label">Ensign College Mission & Strategy:</span>
+        <span class="mission-quote">"Develop Capable and Trusted Disciples of Jesus Christ who are dedicated to strengthening Church, family, and community."</span>
+        <span class="strategy-quote">Strategy: Enable Career Success to help disciples become self-reliant and stay on the covenant path.</span>
+      </div>
+    </div>
+  </div>
+
     <!-- Toolbar & Summary Metrics -->
     <section class="toolbar">
       <div class="metrics-grid">
@@ -456,7 +459,7 @@
             <div class="form-group flex-2 combobox-wrapper">
               <label for="form-assisting">Assisting (Contributors)</label>
               <div class="combobox-input-container">
-                <input type="text" id="form-assisting" class="combobox-input" autocomplete="off" placeholder="Pick or type coworker (e.g. Joel, Erere)...">
+                <input type="text" id="form-assisting" class="combobox-input" autocomplete="off" placeholder="Pick one or more coworkers, comma-separated...">
                 <button type="button" class="combobox-toggle-btn" id="assisting-toggle-btn" tabindex="-1" title="Show all team members">▾</button>
               </div>
               <ul id="assisting-dropdown-list" class="combobox-dropdown" style="display: none;"></ul>

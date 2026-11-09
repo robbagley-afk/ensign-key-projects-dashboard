@@ -874,17 +874,31 @@ if (delegatedToggleBtn) {
   });
 }
 
-// Searchable Combobox for Assisting Coworker(s) in Project Edit Modal
+// Searchable multi-select Combobox for Assisting Contributors (comma-separated)
+function splitAssisting(v) {
+  return (v || '').split(',').map(x => x.trim()).filter(Boolean);
+}
 function renderAssistingDropdown(filterText = '') {
   if (!assistingDropdownList) return;
-  const query = filterText.toLowerCase().trim();
-  const filtered = CIS_TEAM_MEMBERS.filter(m => 
-    m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query))
+  // Filter on the text after the last comma; earlier entries are already chosen
+  const parts = (filterText || '').split(',');
+  const current = parts[parts.length - 1].trim();
+  const chosen = parts.slice(0, -1).map(x => x.trim()).filter(Boolean);
+  const chosenLc = chosen.map(x => x.toLowerCase());
+  const query = current.toLowerCase();
+  const filtered = CIS_TEAM_MEMBERS.filter(m =>
+    !chosenLc.includes(m.name.toLowerCase()) &&
+    (m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query)))
   );
+  const commit = (names) => {
+    if (!formAssisting) return;
+    formAssisting.value = names.length ? names.join(', ') + ', ' : '';
+    formAssisting.focus();
+    renderAssistingDropdown(formAssisting.value);
+  };
 
   assistingDropdownList.innerHTML = '';
 
-  // Clear option
   const clearLi = document.createElement('li');
   clearLi.className = 'combobox-option';
   clearLi.style.color = '#64748B';
@@ -899,21 +913,21 @@ function renderAssistingDropdown(filterText = '') {
   };
   assistingDropdownList.appendChild(clearLi);
 
-  if (filtered.length === 0) {
-    if (filterText.trim()) {
-      const li = document.createElement('li');
-      li.className = 'combobox-option';
-      li.style.color = '#94A3B8';
-      li.textContent = `Use custom: "${filterText}"`;
-      li.onmousedown = (e) => {
-        e.preventDefault();
-        if (formAssisting) formAssisting.value = filterText;
-        closeAssistingDropdown();
-      };
-      assistingDropdownList.appendChild(li);
-    }
-    assistingDropdownList.style.display = 'block';
-    return;
+  if (chosen.length) {
+    const doneLi = document.createElement('li');
+    doneLi.className = 'combobox-option';
+    doneLi.innerHTML = `<span>✓ Done (${chosen.length} selected)</span><span class="combobox-option-badge">Close</span>`;
+    doneLi.onmousedown = (e) => { e.preventDefault(); tidyAssisting(); closeAssistingDropdown(); };
+    assistingDropdownList.appendChild(doneLi);
+  }
+
+  if (current && !filtered.some(m => m.name.toLowerCase() === query)) {
+    const li = document.createElement('li');
+    li.className = 'combobox-option';
+    li.style.color = '#94A3B8';
+    li.textContent = `Add custom: "${current}"`;
+    li.onmousedown = (e) => { e.preventDefault(); commit([...chosen, current]); };
+    assistingDropdownList.appendChild(li);
   }
 
   filtered.forEach(m => {
@@ -923,23 +937,20 @@ function renderAssistingDropdown(filterText = '') {
       <span>👥 ${escapeHTML(m.name)}</span>
       <span class="combobox-option-badge">${escapeHTML(m.role || 'Team')}</span>
     `;
-    li.onmousedown = (e) => {
-      e.preventDefault();
-      if (formAssisting) {
-        // If already has text and does not include this name, append
-        const cur = formAssisting.value.trim();
-        if (cur && !cur.toLowerCase().includes(m.name.toLowerCase())) {
-          formAssisting.value = `${cur}, ${m.name}`;
-        } else {
-          formAssisting.value = m.name;
-        }
-      }
-      closeAssistingDropdown();
-    };
+    li.onmousedown = (e) => { e.preventDefault(); commit([...chosen, m.name]); };
     assistingDropdownList.appendChild(li);
   });
 
   assistingDropdownList.style.display = 'block';
+}
+
+// Drop trailing comma and duplicates when the field loses focus
+function tidyAssisting() {
+  if (!formAssisting) return;
+  const seen = new Set();
+  formAssisting.value = splitAssisting(formAssisting.value)
+    .filter(n => { const k = n.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+    .join(', ');
 }
 
 function closeAssistingDropdown() {
@@ -954,6 +965,8 @@ if (formAssisting) {
   formAssisting.addEventListener('focus', () => {
     renderAssistingDropdown(formAssisting.value);
   });
+
+  formAssisting.addEventListener('blur', () => { tidyAssisting(); });
 }
 
 if (assistingToggleBtn) {
@@ -962,7 +975,7 @@ if (assistingToggleBtn) {
     if (assistingDropdownList.style.display === 'block') {
       closeAssistingDropdown();
     } else {
-      renderAssistingDropdown('');
+      renderAssistingDropdown(formAssisting ? formAssisting.value : '');
       if (formAssisting) formAssisting.focus();
     }
   });
@@ -1696,7 +1709,7 @@ if (promptCopyBtn) {
 function renderQuadrantCards(container, items, qClass) {
   container.innerHTML = '';
   if (items.length === 0) {
-    container.innerHTML = '<div style="text-align: center; color: #94A3B8; padding: 2rem; font-size: 0.85rem; font-style: italic;">No projects in this quadrant</div>';
+    container.innerHTML = '<div style="text-align: center; color: #94A3B8; padding: 2rem; font-size: 17px; font-style: italic;">No projects in this quadrant</div>';
     return;
   }
 
@@ -2389,8 +2402,8 @@ window.openAttachmentViewer = function(projectId) {
       attViewerList.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: #94A3B8;">
           <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">📎</span>
-          <p style="font-size: 0.95rem; font-weight: 600; color: #475569; margin-bottom: 0.25rem;">No attachments added yet</p>
-          <p style="font-size: 0.8rem; margin-bottom: 1rem;">Upload project PDFs, spreadsheets, screenshots, or link OneDrive documents.</p>
+          <p style="font-size: 17px; font-weight: 600; color: #475569; margin-bottom: 0.25rem;">No attachments added yet</p>
+          <p style="font-size: 17px; margin-bottom: 1rem;">Upload project PDFs, spreadsheets, screenshots, or link OneDrive documents.</p>
           <button type="button" class="btn btn-primary btn-sm" onclick="closeAttachmentViewer(); openEditModal('${p.id}')">➕ Add First Attachment</button>
         </div>
       `;
@@ -2671,7 +2684,7 @@ function renderExecutiveSummaryHTML(items) {
           <span>📦 Completed &amp; Archived Project Records</span>
           <span>${items.length} item(s)</span>
         </div>
-        ${items.length === 0 ? '<p style="color:#94A3B8; font-style:italic; font-size:0.85rem; padding: 0.5rem 0;">No completed or archived projects found.</p>' : 
+        ${items.length === 0 ? '<p style="color:#94A3B8; font-style:italic; font-size:17px; padding: 0.5rem 0;">No completed or archived projects found.</p>' : 
           items.map(p => {
             const owner = p.delegatedOwner ? `<span style="color:#007150; font-weight:700;">🤝 ${escapeHTML(p.delegatedOwner)}</span> (Delegated)` : `<span>👤 ${escapeHTML(p.owner || 'Rob Bagley')}</span>`;
             return `
@@ -2702,7 +2715,7 @@ function renderExecutiveSummaryHTML(items) {
   const q4 = items.filter(p => p.quadrant === 'Q4');
 
   function renderItemsHTML(list, qClass) {
-    if (list.length === 0) return '<p style="color:#94A3B8; font-style:italic; font-size:0.85rem; padding: 0.5rem 0;">No active projects in this section.</p>';
+    if (list.length === 0) return '<p style="color:#94A3B8; font-style:italic; font-size:17px; padding: 0.5rem 0;">No active projects in this section.</p>';
     return list.map(p => {
       const owner = p.delegatedOwner ? `<span style="color:#007150; font-weight:700;">🤝 ${escapeHTML(p.delegatedOwner)}</span> (Delegated)` : `<span>👤 ${escapeHTML(p.owner || 'Rob Bagley')}</span>`;
       return `
@@ -2787,8 +2800,8 @@ function renderExecutiveSummaryHTML(items) {
     ` : ''}
 
     <div class="briefing-section" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:1rem; margin-top:1.5rem;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#0F172A; margin-bottom:0.5rem;">📌 Discussion Topics for 1:1 Meeting with Mike Ray</h4>
-      <ul style="padding-left:1.25rem; font-size:0.85rem; color:#334155; line-height:1.6;">
+      <h4 style="font-size:17px; font-weight:700; color:#0F172A; margin-bottom:0.5rem;">📌 Discussion Topics for 1:1 Meeting with Mike Ray</h4>
+      <ul style="padding-left:1.25rem; font-size:17px; color:#334155; line-height:1.6;">
         <li><strong>Active Blockers &amp; Deadlines:</strong> Review status of urgent Q1 deliverables and Canvas/gradebook updates.</li>
         <li><strong>Coworker Delegation &amp; DevOps:</strong> Review projects delegated to Rodrigo, Karla, and the Career Mentor team.</li>
         <li><strong>AI Tools &amp; Student Readiness:</strong> Review deployment progress on PathwayU, ENS 101, and local model infrastructure.</li>
@@ -2892,3 +2905,67 @@ if (summaryPrintBtn) {
     window.print();
   });
 }
+
+// ---- Shared sync (Studio server). Falls back to localStorage-only if no server/passcode. ----
+(function sharedSync() {
+  const known = new Map(); // id -> { json, updatedAt } as last seen on server
+  let pushing = false, dirty = false, online = false;
+  const stripTs = p => { const { updatedAt, ...rest } = p; return rest; };
+
+  async function api(pathname, opts) {
+    const res = await fetch(pathname, Object.assign({ credentials: 'same-origin', cache: 'no-store' }, opts));
+    if (res.status === 401) { location.reload(); throw new Error('auth'); }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+  function applyServer(rows) {
+    const byId = new Map(state.projects.map(p => [p.id, p]));
+    const next = [];
+    let changed = false;
+    for (const r of rows) {
+      const local = byId.get(r.id);
+      const k = known.get(r.id);
+      const body = stripTs(r);
+      const bodyJson = JSON.stringify(body);
+      const localDirty = local && k && JSON.stringify(local) !== k.json;
+      if (local && localDirty) { next.push(local); byId.delete(r.id); continue; } // keep unsynced local edit, push below
+      if (!k || k.updatedAt !== r.updatedAt) { if (!local || JSON.stringify(local) !== bodyJson) changed = true; }
+      known.set(r.id, { json: bodyJson, updatedAt: r.updatedAt });
+      next.push(body); byId.delete(r.id);
+    }
+    // local-only projects (created offline / not pushed yet) stay and get pushed
+    byId.forEach(p => next.unshift(p));
+    if (changed) { state.projects = next; try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch (e) {} render(); }
+    else state.projects = next;
+  }
+  async function pull() {
+    if (pushing) return;
+    const rows = await api('api/projects?rows=1');
+    online = true;
+    applyServer(rows);
+  }
+  async function push() {
+    if (pushing) { dirty = true; return; }
+    const changed = state.projects.filter(p => { const k = known.get(p.id); return !k || k.json !== JSON.stringify(p); });
+    if (!changed.length) return;
+    pushing = true;
+    try {
+      const payload = changed.map(p => Object.assign({}, p, { updatedAt: (known.get(p.id) || {}).updatedAt }));
+      const out = await api('api/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ projects: payload }) });
+      for (const r of out.results) {
+        if (r.conflict) { known.set(r.id, { json: JSON.stringify(stripTs(r.server)), updatedAt: r.server.updatedAt }); const i = state.projects.findIndex(p => p.id === r.id); if (i >= 0) state.projects[i] = stripTs(r.server); }
+        else { const p = state.projects.find(x => x.id === r.id); if (p) known.set(r.id, { json: JSON.stringify(p), updatedAt: r.updatedAt }); }
+      }
+      if (out.results.some(r => r.conflict)) render();
+    } catch (e) { console.warn('Shared sync push failed; kept locally', e); }
+    pushing = false;
+    if (dirty) { dirty = false; push(); }
+  }
+  const origSave = saveProjects;
+  saveProjects = function () { origSave(); if (online) push(); };
+  (async () => {
+    try { await pull(); await push(); } catch (e) { console.warn('Shared server unavailable; using local data only', e); return; }
+    setInterval(() => { pull().catch(() => {}); }, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) pull().catch(() => {}); });
+  })();
+})();
